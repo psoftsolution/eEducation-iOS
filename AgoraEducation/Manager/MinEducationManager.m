@@ -371,9 +371,6 @@
     }
 }
 
-
-
-
 #pragma mark WhiteManager
 - (void)initWhiteSDK:(WhiteBoardView *)boardView dataSourceDelegate:(id<WhitePlayDelegate> _Nullable)whitePlayerDelegate {
     

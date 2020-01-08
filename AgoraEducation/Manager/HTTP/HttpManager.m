@@ -10,27 +10,36 @@
 #import <AFNetworking/AFNetworking.h>
 #import "KeyCenter.h"
 
+
 @interface HttpManager ()
 
-@property (nonatomic,strong) AFHTTPSessionManager * manager;
+@property (nonatomic,strong) AFHTTPSessionManager *sessionManager;
 
 @end
 
-@implementation HttpManager
+static HttpManager *manager = nil;
 
-- (AFHTTPSessionManager *)manager
-{
-    if (!_manager) {
-        _manager = [AFHTTPSessionManager manager];
+@implementation HttpManager
++ (instancetype)shareManager{
+    @synchronized(self){
+        if (!manager) {
+            manager = [[self alloc]init];
+            [manager initSessionManager];
+        }
+        return manager;
     }
-    return _manager;
 }
 
-+ (void)get:(NSString *)url params:(NSDictionary *)params success:(void (^)(id))success failure:(void (^)(NSError *))failure
-{
-    AFHTTPSessionManager *mgr = [AFHTTPSessionManager manager];
-    mgr.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [mgr GET:url parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
+- (void)initSessionManager {
+    self.sessionManager = [AFHTTPSessionManager manager];
+    self.sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
+    self.sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
+    self.sessionManager.requestSerializer.timeoutInterval = 30;
+}
+
++ (void)get:(NSString *)url params:(NSDictionary *)params success:(void (^)(id))success failure:(void (^)(NSError *))failure {
+
+    [manager.sessionManager GET:url parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
@@ -44,12 +53,9 @@
 
 }
 
-- (void)post:(NSString *)url params:(NSDictionary *)params success:(void (^)(id))success failure:(void (^)(NSError *))failure
-{
-    AFHTTPSessionManager *mgr = self.manager;
-    mgr.requestSerializer = [AFJSONRequestSerializer serializer];
-    mgr.requestSerializer.timeoutInterval = 10;
-    [mgr POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
++ (void)post:(NSString *)url params:(NSDictionary *)params success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
+
+    [manager.sessionManager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
                    success(responseObject);
                }
@@ -63,9 +69,8 @@
 + (void)POSTWhiteBoardRoomWithUuid:(NSString *)uuid token:(void (^)(NSString *token))token failure:(void (^)(NSString *msg))failure{
     
     NSString *urlString = @"https://cloudcapiv4.herewhite.com/room/join";
-    HttpManager *request = [[HttpManager alloc] init];
     NSString *url = [NSString stringWithFormat:@"%@?uuid=%@&token=%@",urlString, uuid, [KeyCenter whiteBoardToken]];
-    [request post:url params:nil success:^(id responseObj) {
+    [manager post:url params:nil success:^(id responseObj) {
         if ([responseObj[@"code"] integerValue] == 200) {
             if (token) {
                 token(responseObj[@"msg"][@"roomToken"]);

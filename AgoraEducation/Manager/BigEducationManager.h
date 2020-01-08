@@ -56,7 +56,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setupRTCVideoCanvas:(RTCVideoCanvasModel *) model;
 - (void)removeRTCVideoCanvas:(NSUInteger) uid;
 - (void)setRTCClientRole:(RTCClientRole)role;
-- (int)setRTCRemoteStreamWithUid:(NSUInteger)uid type:(RTCVideoStreamType)streamType;
 - (int)enableRTCLocalVideo:(BOOL) enabled;
 - (int)enableRTCLocalAudio:(BOOL) enabled;
 - (void)releaseRTCResources;
@@ -67,8 +66,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)joinWhiteRoomWithUuid:(NSString*)uuid completeSuccessBlock:(void (^) (WhiteRoom * _Nullable room))successBlock completeFailBlock:(void (^) (NSError * _Nullable error))failBlock;
 - (void)createWhiteReplayerWithModel:(ReplayerModel *)model completeSuccessBlock:(void (^) (WhitePlayer * _Nullable whitePlayer, AVPlayer * _Nullable avPlayer))successBlock completeFailBlock:(void (^) (NSError * _Nullable error))failBlock;
 - (void)disableWhiteDeviceInputs:(BOOL)disable;
-- (void)setWhiteStrokeColor:(NSArray<NSNumber *>*)strokeColor;
-- (void)setWhiteApplianceName:(NSString *)applianceName;
 - (void)refreshWhiteViewSize;
 - (void)moveWhiteToContainer:(NSInteger)sceneIndex;
 - (void)setWhiteSceneIndex:(NSUInteger)index completionHandler:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completionHandler;

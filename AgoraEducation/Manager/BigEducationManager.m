@@ -238,15 +238,6 @@
     return [self.rtcManager joinChannelByToken:token channelId:channelId info:info uid:uid joinSuccess:joinSuccessBlock];
 }
 
-- (int)setRTCRemoteStreamWithUid:(NSUInteger)uid type:(RTCVideoStreamType)streamType {
-    if(streamType == RTCVideoStreamTypeLow){
-        return [self.rtcManager setRemoteVideoStream:uid type:AgoraVideoStreamTypeLow];
-    } else if(streamType == RTCVideoStreamTypeHigh){
-        return [self.rtcManager setRemoteVideoStream:uid type:AgoraVideoStreamTypeHigh];
-    }
-    return -1;
-}
-
 - (void)setupRTCVideoCanvas:(RTCVideoCanvasModel *) model {
     
     AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc] init];
@@ -439,19 +430,6 @@
     [self.whiteManager disableDeviceInputs:disable];
 }
 
-- (void)setWhiteStrokeColor:(NSArray<NSNumber *>*)strokeColor {
-    self.whiteManager.whiteMemberState.strokeColor = strokeColor;
-    [self.whiteManager setMemberState:self.whiteManager.whiteMemberState];
-}
-
-- (void)setWhiteApplianceName:(NSString *)applianceName {
-    self.whiteManager.whiteMemberState.currentApplianceName = applianceName;
-    [self.whiteManager setMemberState:self.whiteManager.whiteMemberState];
-}
-
-- (void)setWhiteMemberInput:(nonnull WhiteMemberState *)memberState {
-    [self.whiteManager setMemberState:memberState];
-}
 - (void)refreshWhiteViewSize {
     [self.whiteManager refreshViewSize];
 }
