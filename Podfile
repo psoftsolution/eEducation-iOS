@@ -7,7 +7,7 @@ target 'AgoraEducation' do
   pod 'AFNetworking', '~> 3.2.1'
   pod 'MJExtension', '~> 3.0.16'
   pod 'Whiteboard', '2.5.4'
-  pod 'AgoraRtcEngine_iOS', '2.9.0'
+  pod 'AgoraRtcEngine_iOS', '2.9.1'
   pod 'AgoraRtm_iOS', '~> 1.2.2'
 end
 
