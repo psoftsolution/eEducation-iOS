@@ -29,7 +29,7 @@
 #import "KeyCenter.h"
 
 #define kLandscapeViewWidth    223
-@interface BCViewController ()<BCSegmentedDelegate, UITextFieldDelegate, RoomProtocol, SignalDelegate, RTCDelegate, EEPageControlDelegate, EEWhiteboardToolDelegate, WhitePlayDelegate>
+@interface BCViewController ()<BCSegmentedDelegate, UITextFieldDelegate, RoomProtocol, SignalDelegate, RTCDelegate, EEPageControlDelegate, WhitePlayDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *chatTextFiledRelativeTeacherViewLeftCon;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textFiledBottomConstraint;
@@ -45,9 +45,7 @@
 @property (weak, nonatomic) IBOutlet EEMessageView *messageView;
 
 // white
-@property (weak, nonatomic) IBOutlet EEWhiteboardTool *whiteboardTool;
 @property (weak, nonatomic) IBOutlet EEPageControlView *pageControlView;
-@property (weak, nonatomic) IBOutlet EEColorShowView *colorShowView;
 @property (weak, nonatomic) IBOutlet UIView *whiteboardView;
 @property (nonatomic, weak) WhiteBoardView *boardView;
 @property (nonatomic, assign) NSInteger sceneIndex;
@@ -73,14 +71,7 @@
 -(void)initData {
     
     self.pageControlView.delegate = self;
-    self.whiteboardTool.delegate = self;
-        
-    WEAK(self);
-    [self.colorShowView setSelectColor:^(NSString * _Nullable colorString) {
-        NSArray *colorArray = [UIColor convertColorToRGB:[UIColor colorWithHexString:colorString]];
-        [weakself.educationManager setWhiteStrokeColor:colorArray];
-    }];
-    
+
     self.segmentedView.delegate = self;
     self.studentVideoView.delegate = self;
     self.navigationView.delegate = self;
@@ -93,6 +84,11 @@
     
     [self setupRTC];
     [self setupSignal];
+    
+    self.isLandscape = NO;
+    if(![self isIpad]) {
+        [self selectedItemIndex:0];
+    }
 }
 
 - (void)setupRTC {
@@ -254,6 +250,7 @@
 
 - (void)updateStudentStatus:(StudentModel *)studentModel {
 
+//    if()
     BOOL muteChat = self.educationManager.teacherModel != nil ? self.educationManager.teacherModel.mute_chat : NO;
     self.chatTextFiled.contentTextFiled.enabled = muteChat ? NO : YES;
     self.chatTextFiled.contentTextFiled.placeholder = muteChat ? @" Prohibited post" : @" Input message";
@@ -304,13 +301,35 @@
     self.tipLabel.layer.cornerRadius = 6;
 }
 
-- (void)handleDeviceOrientationChange:(NSNotification *)notification{
+- (BOOL)isIpad
+{
+    NSString *deviceType = [UIDevice currentDevice].model;
+    
+    if([deviceType isEqualToString:@"iPhone"]) {
+        //iPhone
+        return NO;
+    }
+    else if([deviceType isEqualToString:@"iPod touch"]) {
+        //iPod Touch
+        return NO;
+    }
+    else if([deviceType isEqualToString:@"iPad"]) {
+        //iPad
+        return YES;
+    }
+    return NO;
 
+}
+
+- (void)handleDeviceOrientationChange:(NSNotification *)notification{
+    
     UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
     switch (deviceOrientation) {
         case UIDeviceOrientationPortrait:
         {
-            [self verticalScreenConstraints];
+            if(![self isIpad]) {
+               [self verticalScreenConstraints];
+            }
             [self.view layoutIfNeeded];
             [self.educationManager refreshWhiteViewSize];
         }
@@ -318,7 +337,9 @@
         case UIDeviceOrientationLandscapeLeft:
         case UIDeviceOrientationLandscapeRight:
         {
-            [self landscapeScreenConstraints];
+            if(![self isIpad]) {
+               [self landscapeScreenConstraints];
+            }
             [self.view layoutIfNeeded];
             [self.educationManager refreshWhiteViewSize];
         }
@@ -402,10 +423,10 @@
 
 - (void)verticalScreenConstraints {
     [self stateBarHidden:NO];
-    self.chatTextFiled.hidden = self.segmentedIndex == 0 ? YES : NO;
-    self.messageView.hidden = self.segmentedIndex == 0 ? YES : NO;
     self.pageControlView.hidden = self.educationManager.teacherModel.uid.integerValue > 0 ? NO : YES;
     self.handUpButton.hidden = self.educationManager.teacherModel.uid.integerValue > 0 ? NO : YES;
+    self.chatTextFiled.hidden = self.segmentedIndex == 0 ? YES : NO;
+    self.messageView.hidden = self.segmentedIndex == 0 ? YES : NO;
 }
 
 #pragma mark Notification
@@ -413,6 +434,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShow:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHidden:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
 }
 
 - (void)keyboardWasShow:(NSNotification *)notification {
@@ -461,7 +483,6 @@
         self.messageView.hidden = YES;
         self.chatTextFiled.hidden = YES;
         self.pageControlView.hidden = self.educationManager.teacherModel.uid.integerValue > 0 ? NO: YES;
-        self.whiteboardTool.hidden = YES;
         self.handUpButton.hidden = self.educationManager.teacherModel.uid.integerValue > 0 ? NO: YES;
     }else {
         self.segmentedIndex = 1;
@@ -469,7 +490,6 @@
         self.chatTextFiled.hidden = NO;
         self.pageControlView.hidden = YES;
         self.handUpButton.hidden = YES;
-        self.whiteboardTool.hidden = YES;
         self.unreadMessageCount = 0;
         [self.segmentedView hiddeBadge];
     }
@@ -544,7 +564,6 @@
             break;
         case SignalP2PTypeCancel:
         {
-            self.whiteboardTool.hidden = YES;
             self.linkState = StudentLinkStateIdle;
             [self removeStudentCanvas: self.educationManager.teacherModel.link_uid.integerValue];
             [self.handUpButton setBackgroundImage:[UIImage imageNamed:@"icon-handup"] forState:(UIControlStateNormal)];
@@ -584,15 +603,14 @@
     
     NSInteger sourceLink_uid = sourceInfoModel.teacherModel.link_uid.integerValue;
     NSInteger currentLink_uid = currentInfoModel.teacherModel.link_uid.integerValue;
-    if(sourceLink_uid != currentLink_uid) {
-        if(currentLink_uid > 0){
-            
+    if(currentLink_uid > 0){
+        if(sourceLink_uid != currentLink_uid) {
             NSString *uidStr = [NSString stringWithFormat:@"%lu", (unsigned long)currentLink_uid];
             [self.educationManager.rtcUids addObject:uidStr];
-            
-        } else if(sourceLink_uid > 0) {
-            [self removeStudentCanvas:sourceLink_uid];
+            self.linkState = StudentLinkStateAccept;
         }
+    } else {
+        [self removeStudentCanvas:sourceLink_uid];
     }
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"attrKey == %@", currentInfoModel.teacherModel.link_uid];
@@ -722,26 +740,6 @@
             NSLog(@"Set scene index err：%@", error);
         }
     }];
-}
-
-#pragma mark EEWhiteboardToolDelegate
-- (void)selectWhiteboardToolIndex:(NSInteger)index {
-    
-    NSArray<NSString *> *applianceNameArray = @[ApplianceSelector, AppliancePencil, ApplianceText, ApplianceEraser];
-    if(index < applianceNameArray.count) {
-        NSString *applianceName = [applianceNameArray objectAtIndex:index];
-        if(applianceName != nil) {
-            [self.educationManager setWhiteApplianceName:applianceName];
-        }
-    }
-    
-    BOOL bHidden = self.colorShowView.hidden;
-    // select color
-    if (index == 4) {
-        self.colorShowView.hidden = !bHidden;
-    } else if (!bHidden) {
-        self.colorShowView.hidden = YES;
-    }
 }
 
 #pragma mark WhitePlayDelegate
