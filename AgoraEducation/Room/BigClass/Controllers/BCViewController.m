@@ -46,9 +46,7 @@
 @property (weak, nonatomic) IBOutlet EEMessageView *messageView;
 
 // white
-@property (weak, nonatomic) IBOutlet EEWhiteboardTool *whiteboardTool;
 @property (weak, nonatomic) IBOutlet EEPageControlView *pageControlView;
-@property (weak, nonatomic) IBOutlet EEColorShowView *colorShowView;
 @property (weak, nonatomic) IBOutlet UIView *whiteboardView;
 @property (nonatomic, weak) WhiteBoardView *boardView;
 @property (nonatomic, assign) NSInteger sceneIndex;
@@ -74,13 +72,6 @@
 -(void)initData {
     
     self.pageControlView.delegate = self;
-    self.whiteboardTool.delegate = self;
-        
-    WEAK(self);
-    [self.colorShowView setSelectColor:^(NSString * _Nullable colorString) {
-        NSArray *colorArray = [UIColor convertColorToRGB:[UIColor colorWithHexString:colorString]];
-        [weakself.educationManager setWhiteStrokeColor:colorArray];
-    }];
     
     self.segmentedView.delegate = self;
     self.studentVideoView.delegate = self;
@@ -463,7 +454,6 @@
         self.messageView.hidden = YES;
         self.chatTextFiled.hidden = YES;
         self.pageControlView.hidden = self.educationManager.teacherModel.uid.integerValue > 0 ? NO: YES;
-        self.whiteboardTool.hidden = YES;
         self.handUpButton.hidden = self.educationManager.teacherModel.uid.integerValue > 0 ? NO: YES;
     }else {
         self.segmentedIndex = 1;
@@ -471,7 +461,6 @@
         self.chatTextFiled.hidden = NO;
         self.pageControlView.hidden = YES;
         self.handUpButton.hidden = YES;
-        self.whiteboardTool.hidden = YES;
         self.unreadMessageCount = 0;
         [self.segmentedView hiddeBadge];
     }
@@ -546,7 +535,6 @@
             break;
         case SignalP2PTypeCancel:
         {
-            self.whiteboardTool.hidden = YES;
             self.linkState = StudentLinkStateIdle;
             [self removeStudentCanvas: self.educationManager.teacherModel.link_uid.integerValue];
             [self.handUpButton setBackgroundImage:[UIImage imageNamed:@"icon-handup"] forState:(UIControlStateNormal)];
@@ -726,26 +714,6 @@
             NSLog(@"Set scene index err：%@", error);
         }
     }];
-}
-
-#pragma mark EEWhiteboardToolDelegate
-- (void)selectWhiteboardToolIndex:(NSInteger)index {
-    
-    NSArray<NSString *> *applianceNameArray = @[ApplianceSelector, AppliancePencil, ApplianceText, ApplianceEraser];
-    if(index < applianceNameArray.count) {
-        NSString *applianceName = [applianceNameArray objectAtIndex:index];
-        if(applianceName != nil) {
-            [self.educationManager setWhiteApplianceName:applianceName];
-        }
-    }
-    
-    BOOL bHidden = self.colorShowView.hidden;
-    // select color
-    if (index == 4) {
-        self.colorShowView.hidden = !bHidden;
-    } else if (!bHidden) {
-        self.colorShowView.hidden = YES;
-    }
 }
 
 #pragma mark WhitePlayDelegate

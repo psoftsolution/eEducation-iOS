@@ -28,6 +28,14 @@
 		787E7A3D23A9FE97005F8F0C /* EduButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 787E7A3023A9FE97005F8F0C /* EduButton.m */; };
 		787E7A3F23A9FE97005F8F0C /* ReplayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 787E7A3423A9FE97005F8F0C /* ReplayViewController.xib */; };
 		787E7A4023A9FE97005F8F0C /* ReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 787E7A3523A9FE97005F8F0C /* ReplayViewController.m */; };
+		78AED05C23C5A59C00A24DDB /* UIColor+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED04C23C5A59B00A24DDB /* UIColor+Addition.m */; };
+		78AED05D23C5A59C00A24DDB /* AlertViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED04F23C5A59B00A24DDB /* AlertViewUtil.m */; };
+		78AED05E23C5A59C00A24DDB /* JsonParseUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED05123C5A59B00A24DDB /* JsonParseUtil.m */; };
+		78AED05F23C5A59C00A24DDB /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED05523C5A59C00A24DDB /* NSString+MD5.m */; };
+		78AED06023C5A59C00A24DDB /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED05823C5A59C00A24DDB /* UIView+Toast.m */; };
+		78AED06123C5A59C00A24DDB /* UIView+EEBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED05B23C5A59C00A24DDB /* UIView+EEBadge.m */; };
+		78AED06723C5A65400A24DDB /* ConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED06523C5A65400A24DDB /* ConfigModel.m */; };
+		78AED06823C5A65400A24DDB /* EnterRoomModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED06623C5A65400A24DDB /* EnterRoomModel.m */; };
 		78D7307223B3638B00D2146C /* SignalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306423B3638B00D2146C /* SignalManager.m */; };
 		78D7307423B3638B00D2146C /* RTCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306723B3638B00D2146C /* RTCManager.m */; };
 		78D7307523B3638B00D2146C /* WhiteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306C23B3638B00D2146C /* WhiteManager.m */; };
@@ -42,10 +50,6 @@
 		78D730B223B383E600D2146C /* SignalModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D730B023B383E500D2146C /* SignalModel.m */; };
 		78D730B523B383FB00D2146C /* GenerateSignalBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D730B423B383FA00D2146C /* GenerateSignalBody.m */; };
 		78D730C323B384D400D2146C /* HttpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D730C223B384D400D2146C /* HttpManager.m */; };
-		78D730C923B3853200D2146C /* UIColor+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D730C723B3853200D2146C /* UIColor+Addition.m */; };
-		78D730CA23B3853200D2146C /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D730C823B3853200D2146C /* NSString+MD5.m */; };
-		78D730CD23B3857F00D2146C /* AlertViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D730CC23B3857F00D2146C /* AlertViewUtil.m */; };
-		78D730D023B3871900D2146C /* JsonParseUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D730CF23B3871900D2146C /* JsonParseUtil.m */; };
 		78D730E823B3889D00D2146C /* EEMessageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D730D223B3889D00D2146C /* EEMessageViewCell.m */; };
 		78D730E923B3889D00D2146C /* EEWhiteboardTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D730D323B3889D00D2146C /* EEWhiteboardTool.m */; };
 		78D730EA23B3889D00D2146C /* EEColorShowView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D730D923B3889D00D2146C /* EEColorShowView.xib */; };
@@ -79,7 +83,6 @@
 		78D7312523B388BE00D2146C /* BCSegmentedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7311B23B388BE00D2146C /* BCSegmentedView.m */; };
 		78D7312623B388BE00D2146C /* EETeacherVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7311F23B388BE00D2146C /* EETeacherVideoView.m */; };
 		78D7312723B388BE00D2146C /* EETeacherVideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D7312023B388BE00D2146C /* EETeacherVideoView.xib */; };
-		78D7312A23B388D200D2146C /* UIView+EEBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7312923B388D200D2146C /* UIView+EEBadge.m */; };
 		78D7312D23B3895800D2146C /* VCParamsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7312C23B3895800D2146C /* VCParamsModel.m */; };
 		78D7313E23B38B5700D2146C /* EEClassRoomTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7313723B38B5700D2146C /* EEClassRoomTypeView.m */; };
 		78D7313F23B38B5700D2146C /* EEClassRoomTypeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D7313823B38B5700D2146C /* EEClassRoomTypeView.xib */; };
@@ -161,6 +164,22 @@
 		787E7A3223A9FE97005F8F0C /* ReplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplayViewController.h; sourceTree = "<group>"; };
 		787E7A3423A9FE97005F8F0C /* ReplayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReplayViewController.xib; sourceTree = "<group>"; };
 		787E7A3523A9FE97005F8F0C /* ReplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplayViewController.m; sourceTree = "<group>"; };
+		78AED04B23C5A59B00A24DDB /* UIColor+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Addition.h"; sourceTree = "<group>"; };
+		78AED04C23C5A59B00A24DDB /* UIColor+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Addition.m"; sourceTree = "<group>"; };
+		78AED04E23C5A59B00A24DDB /* AlertViewUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewUtil.h; sourceTree = "<group>"; };
+		78AED04F23C5A59B00A24DDB /* AlertViewUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewUtil.m; sourceTree = "<group>"; };
+		78AED05123C5A59B00A24DDB /* JsonParseUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JsonParseUtil.m; sourceTree = "<group>"; };
+		78AED05223C5A59B00A24DDB /* JsonParseUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonParseUtil.h; sourceTree = "<group>"; };
+		78AED05423C5A59C00A24DDB /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
+		78AED05523C5A59C00A24DDB /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		78AED05723C5A59C00A24DDB /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Toast.h"; sourceTree = "<group>"; };
+		78AED05823C5A59C00A24DDB /* UIView+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Toast.m"; sourceTree = "<group>"; };
+		78AED05A23C5A59C00A24DDB /* UIView+EEBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+EEBadge.h"; sourceTree = "<group>"; };
+		78AED05B23C5A59C00A24DDB /* UIView+EEBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+EEBadge.m"; sourceTree = "<group>"; };
+		78AED06323C5A65400A24DDB /* EnterRoomModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterRoomModel.h; sourceTree = "<group>"; };
+		78AED06423C5A65400A24DDB /* ConfigModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigModel.h; sourceTree = "<group>"; };
+		78AED06523C5A65400A24DDB /* ConfigModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigModel.m; sourceTree = "<group>"; };
+		78AED06623C5A65400A24DDB /* EnterRoomModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterRoomModel.m; sourceTree = "<group>"; };
 		78D7305B23B35ADB00D2146C /* AgoraEducation.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraEducation.pch; sourceTree = "<group>"; };
 		78D7306323B3638B00D2146C /* SignalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalManager.h; sourceTree = "<group>"; };
 		78D7306423B3638B00D2146C /* SignalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalManager.m; sourceTree = "<group>"; };
@@ -196,14 +215,6 @@
 		78D730B423B383FA00D2146C /* GenerateSignalBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenerateSignalBody.m; sourceTree = "<group>"; };
 		78D730C123B384D400D2146C /* HttpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpManager.h; sourceTree = "<group>"; };
 		78D730C223B384D400D2146C /* HttpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpManager.m; sourceTree = "<group>"; };
-		78D730C523B3853200D2146C /* UIColor+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Addition.h"; sourceTree = "<group>"; };
-		78D730C623B3853200D2146C /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
-		78D730C723B3853200D2146C /* UIColor+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Addition.m"; sourceTree = "<group>"; };
-		78D730C823B3853200D2146C /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
-		78D730CB23B3857F00D2146C /* AlertViewUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewUtil.h; sourceTree = "<group>"; };
-		78D730CC23B3857F00D2146C /* AlertViewUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewUtil.m; sourceTree = "<group>"; };
-		78D730CE23B3871900D2146C /* JsonParseUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonParseUtil.h; sourceTree = "<group>"; };
-		78D730CF23B3871900D2146C /* JsonParseUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JsonParseUtil.m; sourceTree = "<group>"; };
 		78D730D223B3889D00D2146C /* EEMessageViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEMessageViewCell.m; sourceTree = "<group>"; };
 		78D730D323B3889D00D2146C /* EEWhiteboardTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEWhiteboardTool.m; sourceTree = "<group>"; };
 		78D730D423B3889D00D2146C /* EEMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEMessageView.h; sourceTree = "<group>"; };
@@ -257,8 +268,6 @@
 		78D7311E23B388BE00D2146C /* EETeacherVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EETeacherVideoView.h; sourceTree = "<group>"; };
 		78D7311F23B388BE00D2146C /* EETeacherVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EETeacherVideoView.m; sourceTree = "<group>"; };
 		78D7312023B388BE00D2146C /* EETeacherVideoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EETeacherVideoView.xib; sourceTree = "<group>"; };
-		78D7312823B388D200D2146C /* UIView+EEBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+EEBadge.h"; sourceTree = "<group>"; };
-		78D7312923B388D200D2146C /* UIView+EEBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+EEBadge.m"; sourceTree = "<group>"; };
 		78D7312B23B3895800D2146C /* VCParamsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCParamsModel.h; sourceTree = "<group>"; };
 		78D7312C23B3895800D2146C /* VCParamsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCParamsModel.m; sourceTree = "<group>"; };
 		78D7313623B38B5700D2146C /* EEClassRoomTypeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEClassRoomTypeView.h; sourceTree = "<group>"; };
@@ -580,6 +589,71 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
+		78AED04A23C5A59B00A24DDB /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				78AED04B23C5A59B00A24DDB /* UIColor+Addition.h */,
+				78AED04C23C5A59B00A24DDB /* UIColor+Addition.m */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		78AED04D23C5A59B00A24DDB /* AlertView */ = {
+			isa = PBXGroup;
+			children = (
+				78AED04E23C5A59B00A24DDB /* AlertViewUtil.h */,
+				78AED04F23C5A59B00A24DDB /* AlertViewUtil.m */,
+			);
+			path = AlertView;
+			sourceTree = "<group>";
+		};
+		78AED05023C5A59B00A24DDB /* JsonParse */ = {
+			isa = PBXGroup;
+			children = (
+				78AED05123C5A59B00A24DDB /* JsonParseUtil.m */,
+				78AED05223C5A59B00A24DDB /* JsonParseUtil.h */,
+			);
+			path = JsonParse;
+			sourceTree = "<group>";
+		};
+		78AED05323C5A59C00A24DDB /* MD5 */ = {
+			isa = PBXGroup;
+			children = (
+				78AED05423C5A59C00A24DDB /* NSString+MD5.h */,
+				78AED05523C5A59C00A24DDB /* NSString+MD5.m */,
+			);
+			path = MD5;
+			sourceTree = "<group>";
+		};
+		78AED05623C5A59C00A24DDB /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				78AED05723C5A59C00A24DDB /* UIView+Toast.h */,
+				78AED05823C5A59C00A24DDB /* UIView+Toast.m */,
+			);
+			path = Toast;
+			sourceTree = "<group>";
+		};
+		78AED05923C5A59C00A24DDB /* Badge */ = {
+			isa = PBXGroup;
+			children = (
+				78AED05A23C5A59C00A24DDB /* UIView+EEBadge.h */,
+				78AED05B23C5A59C00A24DDB /* UIView+EEBadge.m */,
+			);
+			path = Badge;
+			sourceTree = "<group>";
+		};
+		78AED06223C5A65400A24DDB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				78AED06323C5A65400A24DDB /* EnterRoomModel.h */,
+				78AED06423C5A65400A24DDB /* ConfigModel.h */,
+				78AED06523C5A65400A24DDB /* ConfigModel.m */,
+				78AED06623C5A65400A24DDB /* EnterRoomModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		78D7306123B3638B00D2146C /* Signal */ = {
 			isa = PBXGroup;
 			children = (
@@ -657,16 +731,12 @@
 		78D730C423B3853200D2146C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				78D730C523B3853200D2146C /* UIColor+Addition.h */,
-				78D730C723B3853200D2146C /* UIColor+Addition.m */,
-				78D730C623B3853200D2146C /* NSString+MD5.h */,
-				78D730C823B3853200D2146C /* NSString+MD5.m */,
-				78D730CB23B3857F00D2146C /* AlertViewUtil.h */,
-				78D730CC23B3857F00D2146C /* AlertViewUtil.m */,
-				78D730CE23B3871900D2146C /* JsonParseUtil.h */,
-				78D730CF23B3871900D2146C /* JsonParseUtil.m */,
-				78D7312823B388D200D2146C /* UIView+EEBadge.h */,
-				78D7312923B388D200D2146C /* UIView+EEBadge.m */,
+				78AED04D23C5A59B00A24DDB /* AlertView */,
+				78AED05923C5A59C00A24DDB /* Badge */,
+				78AED04A23C5A59B00A24DDB /* Color */,
+				78AED05023C5A59B00A24DDB /* JsonParse */,
+				78AED05323C5A59C00A24DDB /* MD5 */,
+				78AED05623C5A59C00A24DDB /* Toast */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -703,6 +773,7 @@
 		78D7312E23B38B0A00D2146C /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				78AED06223C5A65400A24DDB /* Model */,
 				78D7313923B38B5700D2146C /* Controllers */,
 				78D7313523B38B5700D2146C /* View */,
 			);
@@ -951,7 +1022,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78D7312A23B388D200D2146C /* UIView+EEBadge.m in Sources */,
 				78D7311323B388B100D2146C /* MCStudentViewCell.m in Sources */,
 				78D7313E23B38B5700D2146C /* EEClassRoomTypeView.m in Sources */,
 				787E7A3823A9FE97005F8F0C /* LoadingView.m in Sources */,
@@ -975,18 +1045,20 @@
 				78D730AA23B3833500D2146C /* RTCVideoSessionModel.m in Sources */,
 				78D730F223B3889D00D2146C /* EENavigationView.m in Sources */,
 				78D731C023BB614D00D2146C /* OneToOneEducationManager.m in Sources */,
+				78AED05F23C5A59C00A24DDB /* NSString+MD5.m in Sources */,
+				78AED06023C5A59C00A24DDB /* UIView+Toast.m in Sources */,
 				78D730B223B383E600D2146C /* SignalModel.m in Sources */,
 				787E7A4023A9FE97005F8F0C /* ReplayViewController.m in Sources */,
 				78D7309423B36A0500D2146C /* SignalP2PModel.m in Sources */,
 				78D730FC23B388A400D2146C /* OTOStudentView.m in Sources */,
 				1A70AFB22359F17500942742 /* SettingViewCell.m in Sources */,
+				78AED06123C5A59C00A24DDB /* UIView+EEBadge.m in Sources */,
 				78D730A923B3833500D2146C /* ReplayerModel.m in Sources */,
 				78D7312223B388BE00D2146C /* BCStudentVideoView.m in Sources */,
-				78D730CD23B3857F00D2146C /* AlertViewUtil.m in Sources */,
+				78AED06823C5A65400A24DDB /* EnterRoomModel.m in Sources */,
 				78D7307523B3638B00D2146C /* WhiteManager.m in Sources */,
 				78D730E823B3889D00D2146C /* EEMessageViewCell.m in Sources */,
 				1A05ADA3237E4B3B0041F27B /* MCViewController.m in Sources */,
-				78D730CA23B3853200D2146C /* NSString+MD5.m in Sources */,
 				1AEDE5E32338CBBF0096ADEC /* SkinCoverWindow.m in Sources */,
 				78D7312123B388BE00D2146C /* BCNavigationView.m in Sources */,
 				1AEDE5E02338CB9E0096ADEC /* SkinCoverLayer.m in Sources */,
@@ -994,12 +1066,13 @@
 				78D731BA23BB610400D2146C /* MinEducationManager.m in Sources */,
 				78D7314023B38B5700D2146C /* MainViewController.m in Sources */,
 				78D731AA23BB103B00D2146C /* BigEducationManager.m in Sources */,
-				78D730D023B3871900D2146C /* JsonParseUtil.m in Sources */,
 				78D730F023B3889D00D2146C /* EEPageControlView.m in Sources */,
 				78D7310F23B388B100D2146C /* MCStudentVideoCell.m in Sources */,
 				787E7A3923A9FE97005F8F0C /* ReplayControlView.m in Sources */,
 				78D731C223BCE4EA00D2146C /* BCViewController.m in Sources */,
+				78AED06723C5A65400A24DDB /* ConfigModel.m in Sources */,
 				78D7314123B38B5700D2146C /* MainNavigationController.m in Sources */,
+				78AED05E23C5A59C00A24DDB /* JsonParseUtil.m in Sources */,
 				78D7311523B388B100D2146C /* MCSegmentedView.m in Sources */,
 				78D7314423B390DC00D2146C /* KeyCenter.m in Sources */,
 				78D730A723B3833500D2146C /* RolesInfoModel.m in Sources */,
@@ -1009,10 +1082,11 @@
 				78D7307423B3638B00D2146C /* RTCManager.m in Sources */,
 				78D7311123B388B100D2146C /* MCStudentListView.m in Sources */,
 				787E7A3A23A9FE97005F8F0C /* SliderView.m in Sources */,
-				78D730C923B3853200D2146C /* UIColor+Addition.m in Sources */,
 				78D730EC23B3889D00D2146C /* EEColorViewCell.m in Sources */,
 				1A44BE7A22BF863000766274 /* main.m in Sources */,
 				78D730F423B3889D00D2146C /* EEChatTextFiled.m in Sources */,
+				78AED05C23C5A59C00A24DDB /* UIColor+Addition.m in Sources */,
+				78AED05D23C5A59C00A24DDB /* AlertViewUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

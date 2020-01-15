@@ -22,6 +22,10 @@
 #import "NSString+MD5.h"
 #import "KeyCenter.h"
 
+#import "HttpManager.h"
+#import "ConfigModel.h"
+#import "UIView+Toast.h"
+
 @interface MainViewController ()<EEClassRoomTypeDelegate, SignalDelegate, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *baseView;
 @property (weak, nonatomic) IBOutlet UITextField *classNameTextFiled;
@@ -35,6 +39,8 @@
 
 @property (nonatomic, copy) NSString *uid;
 
+@property (nonatomic, strong) ConfigInfoModel *configInfoModel;
+
 @end
 
 @implementation MainViewController
@@ -44,14 +50,51 @@
     [super viewDidLoad];
     self.uid = [self generateUserID];
     [self setupView];
+    [self initData];
     [self addTouchedRecognizer];
     [self addNotification];
+}
+
+- (void)initData {
+    
+    WEAK(self);
+    [self.activityIndicator startAnimating];
+    [self.joinButton setEnabled:NO];
+    [HttpManager get:HTTP_GET_CONFIG params:nil success:^(id responseObj) {
+         
+        ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0){
+           
+            weakself.configInfoModel = model.data;
+            [KeyCenter setAgoraAppid:model.data.appId];
+
+        } else {
+            [weakself showHTTPToast:model.msg];
+        }
+        
+        [weakself.activityIndicator stopAnimating];
+        [weakself.joinButton setEnabled:YES];
+        
+    } failure:^(NSError *error) {
+        
+        [weakself.activityIndicator stopAnimating];
+        [weakself.joinButton setEnabled:YES];
+        
+        [weakself showHTTPToast:@"Network request failed"];
+        NSLog(@"HTTP GET CONFIG ERROR:%@", error.description);
+    }];
+}
+
+- (void)showHTTPToast:(NSString *)title {
+    if(title == nil || title.length == 0){
+        title = @"Network request failed";
+    }
+    [self.view makeToast:title];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-//    [self.educationManager setSignalDelegate:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -154,19 +197,54 @@
         return;
     }
     
+    [self.activityIndicator startAnimating];
+    [self.joinButton setEnabled:YES];
+    
+    WEAK(self);
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-extra-args"
+    NSString *url = [NSString stringWithFormat:@"%@", HTTP_POST_ENTER_ROOM, [KeyCenter agoraAppid]];
+#pragma clang diagnostic pop
+    
+    [HttpManager post:url params:nil success:^(id responseObj) {
+
+        ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0){
+           
+            weakself.configInfoModel = model.data;
+            [KeyCenter setAgoraAppid:model.data.appId];
+
+        } else {
+            [weakself showHTTPToast:model.msg];
+        }
+        
+        [weakself.activityIndicator stopAnimating];
+        [weakself.joinButton setEnabled:YES];
+    } failure:^(NSError *error) {
+        
+        [weakself.activityIndicator stopAnimating];
+        [weakself.joinButton setEnabled:YES];
+        
+        [weakself showHTTPToast:@"Network request failed"];
+        NSLog(@"HTTP GET CONFIG ERROR:%@", error.description);
+    }];
+    
+    
+    
     NSString *className = self.classNameTextFiled.text;
     if ([self.roomType.titleLabel.text isEqualToString:@"One-to-One"]) {
         
         NSString *channelName = [NSString stringWithFormat:@"0%@", className.md5];
-        [self join1V1RoomWithChannelName:channelName maxStudentCount:1 vcIdentifier:@"oneToOneRoom"];
+        [self join1V1RoomWithChannelName:channelName maxStudentCount:self.configInfoModel.oneToOneStudentLimit.integerValue vcIdentifier:@"oneToOneRoom"];
 
     } else if ([self.roomType.titleLabel.text isEqualToString:@"Small Class"]) {
 
         NSString *channelName = [NSString stringWithFormat:@"1%@", className.md5];
-        [self joinMinRoomWithChannelName:channelName maxStudentCount:16 vcIdentifier:@"mcRoom"];
+        [self joinMinRoomWithChannelName:channelName maxStudentCount:self.configInfoModel.smallClassStudentLimit.integerValue vcIdentifier:@"mcRoom"];
         
     } else if ([self.roomType.titleLabel.text isEqualToString:@"Large Class"]) {
-
+//self.configInfoModel.largeClassStudentLimit.integerValue
         NSString *channelName = [NSString stringWithFormat:@"2%@", className.md5];
         [self joinBigRoomWithChannelName:channelName vcIdentifier:@"bcroom"];
         
