@@ -23,6 +23,12 @@
 #import "RTCVideoCanvasModel.h"
 #import "RolesInfoModel.h"
 
+typedef NS_ENUM(NSInteger, UserRoleType) {
+    UserRoleTypeTeacher = 1,
+    UserRoleTypeStudent = 2,
+};
+
+
 typedef void(^QueryRolesInfoBlock)(RolesInfoModel * _Nullable);
 #define NOTICE_KEY_ON_MESSAGE_DISCONNECT @"NOTICE_KEY_ON_MESSAGE_DISCONNECT"
 
@@ -31,6 +37,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OneToOneEducationManager : NSObject
 
 /* ==================================>Session Model<================================ */
+#ifdef GLOBAL_STATE_RTM
+@property (nonatomic, copy) NSString *userToken;
+@property (nonatomic, copy) NSString *roomId;
+#endif
+
 @property (nonatomic, strong) TeacherModel * _Nullable teacherModel;
 @property (nonatomic, strong) StudentModel * _Nullable studentModel;
 @property (nonatomic, strong) NSMutableSet<NSString*> *rtcUids;
@@ -41,7 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)initSignalWithModel:(SignalModel*)model dataSourceDelegate:(id<SignalDelegate> _Nullable)signalDelegate completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
 - (void)setSignalDelegate:(id<SignalDelegate>)delegate;
 - (void)joinSignalWithChannelName:(NSString *)channelName completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
-- (void)updateGlobalStateWithValue:(NSString *)value completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
+- (void)updateGlobalStateWithValue:(StudentModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
+- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nonnull)block;
 - (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock;
 - (void)sendMessageWithContent:(NSString *)text userName:(NSString *)name;
  

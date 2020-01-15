@@ -35,7 +35,9 @@
 		78AED06023C5A59C00A24DDB /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED05823C5A59C00A24DDB /* UIView+Toast.m */; };
 		78AED06123C5A59C00A24DDB /* UIView+EEBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED05B23C5A59C00A24DDB /* UIView+EEBadge.m */; };
 		78AED06723C5A65400A24DDB /* ConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED06523C5A65400A24DDB /* ConfigModel.m */; };
-		78AED06823C5A65400A24DDB /* EnterRoomModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED06623C5A65400A24DDB /* EnterRoomModel.m */; };
+		78AED06823C5A65400A24DDB /* EnterRoomAllModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED06623C5A65400A24DDB /* EnterRoomAllModel.m */; };
+		78AED0EA23C5D01000A24DDB /* RoomAllModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED0E923C5D01000A24DDB /* RoomAllModel.m */; };
+		78AED0ED23C5FD8B00A24DDB /* CommonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED0EC23C5FD8B00A24DDB /* CommonModel.m */; };
 		78D7307223B3638B00D2146C /* SignalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306423B3638B00D2146C /* SignalManager.m */; };
 		78D7307423B3638B00D2146C /* RTCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306723B3638B00D2146C /* RTCManager.m */; };
 		78D7307523B3638B00D2146C /* WhiteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306C23B3638B00D2146C /* WhiteManager.m */; };
@@ -176,10 +178,14 @@
 		78AED05823C5A59C00A24DDB /* UIView+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Toast.m"; sourceTree = "<group>"; };
 		78AED05A23C5A59C00A24DDB /* UIView+EEBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+EEBadge.h"; sourceTree = "<group>"; };
 		78AED05B23C5A59C00A24DDB /* UIView+EEBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+EEBadge.m"; sourceTree = "<group>"; };
-		78AED06323C5A65400A24DDB /* EnterRoomModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterRoomModel.h; sourceTree = "<group>"; };
+		78AED06323C5A65400A24DDB /* EnterRoomAllModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterRoomAllModel.h; sourceTree = "<group>"; };
 		78AED06423C5A65400A24DDB /* ConfigModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigModel.h; sourceTree = "<group>"; };
 		78AED06523C5A65400A24DDB /* ConfigModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigModel.m; sourceTree = "<group>"; };
-		78AED06623C5A65400A24DDB /* EnterRoomModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterRoomModel.m; sourceTree = "<group>"; };
+		78AED06623C5A65400A24DDB /* EnterRoomAllModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterRoomAllModel.m; sourceTree = "<group>"; };
+		78AED0E823C5D01000A24DDB /* RoomAllModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomAllModel.h; sourceTree = "<group>"; };
+		78AED0E923C5D01000A24DDB /* RoomAllModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomAllModel.m; sourceTree = "<group>"; };
+		78AED0EB23C5FD8B00A24DDB /* CommonModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonModel.h; sourceTree = "<group>"; };
+		78AED0EC23C5FD8B00A24DDB /* CommonModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommonModel.m; sourceTree = "<group>"; };
 		78D7305B23B35ADB00D2146C /* AgoraEducation.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraEducation.pch; sourceTree = "<group>"; };
 		78D7306323B3638B00D2146C /* SignalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalManager.h; sourceTree = "<group>"; };
 		78D7306423B3638B00D2146C /* SignalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalManager.m; sourceTree = "<group>"; };
@@ -376,6 +382,10 @@
 			children = (
 				1A399E5223697E9000F5A40F /* OneToOneViewController.h */,
 				1A399E5323697E9000F5A40F /* OneToOneViewController.m */,
+				78AED0E823C5D01000A24DDB /* RoomAllModel.h */,
+				78AED0E923C5D01000A24DDB /* RoomAllModel.m */,
+				78AED0EB23C5FD8B00A24DDB /* CommonModel.h */,
+				78AED0EC23C5FD8B00A24DDB /* CommonModel.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -646,10 +656,10 @@
 		78AED06223C5A65400A24DDB /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				78AED06323C5A65400A24DDB /* EnterRoomModel.h */,
 				78AED06423C5A65400A24DDB /* ConfigModel.h */,
 				78AED06523C5A65400A24DDB /* ConfigModel.m */,
-				78AED06623C5A65400A24DDB /* EnterRoomModel.m */,
+				78AED06323C5A65400A24DDB /* EnterRoomAllModel.h */,
+				78AED06623C5A65400A24DDB /* EnterRoomAllModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1055,7 +1065,7 @@
 				78AED06123C5A59C00A24DDB /* UIView+EEBadge.m in Sources */,
 				78D730A923B3833500D2146C /* ReplayerModel.m in Sources */,
 				78D7312223B388BE00D2146C /* BCStudentVideoView.m in Sources */,
-				78AED06823C5A65400A24DDB /* EnterRoomModel.m in Sources */,
+				78AED06823C5A65400A24DDB /* EnterRoomAllModel.m in Sources */,
 				78D7307523B3638B00D2146C /* WhiteManager.m in Sources */,
 				78D730E823B3889D00D2146C /* EEMessageViewCell.m in Sources */,
 				1A05ADA3237E4B3B0041F27B /* MCViewController.m in Sources */,
@@ -1063,6 +1073,7 @@
 				78D7312123B388BE00D2146C /* BCNavigationView.m in Sources */,
 				1AEDE5E02338CB9E0096ADEC /* SkinCoverLayer.m in Sources */,
 				78D7312523B388BE00D2146C /* BCSegmentedView.m in Sources */,
+				78AED0ED23C5FD8B00A24DDB /* CommonModel.m in Sources */,
 				78D731BA23BB610400D2146C /* MinEducationManager.m in Sources */,
 				78D7314023B38B5700D2146C /* MainViewController.m in Sources */,
 				78D731AA23BB103B00D2146C /* BigEducationManager.m in Sources */,
@@ -1082,6 +1093,7 @@
 				78D7307423B3638B00D2146C /* RTCManager.m in Sources */,
 				78D7311123B388B100D2146C /* MCStudentListView.m in Sources */,
 				787E7A3A23A9FE97005F8F0C /* SliderView.m in Sources */,
+				78AED0EA23C5D01000A24DDB /* RoomAllModel.m in Sources */,
 				78D730EC23B3889D00D2146C /* EEColorViewCell.m in Sources */,
 				1A44BE7A22BF863000766274 /* main.m in Sources */,
 				78D730F423B3889D00D2146C /* EEChatTextFiled.m in Sources */,

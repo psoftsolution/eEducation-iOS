@@ -15,9 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *account;
 @property (nonatomic, copy) NSString *uid;
 @property (nonatomic, copy) NSString *whiteboard_uid;
+@property (nonatomic, copy) NSString *whiteboard_token;
 @property (nonatomic, copy) NSString *link_uid;
 @property (nonatomic, copy) NSString *shared_uid;
 
+// mute all chat
 @property (nonatomic, assign) BOOL mute_chat;
 @property (nonatomic, assign) BOOL video;
 @property (nonatomic, assign) BOOL audio;

@@ -16,6 +16,9 @@
 // http: get global state when enter room
 #define HTTP_POST_ENTER_ROOM @""HTTP_BASE_URL"/v1/apps/%@/room/entry"
 
+// http: get global state
+#define HTTP_GET_ROOM_INFO @""HTTP_BASE_URL"/v1/apps/%@/room/%@"
+
 @interface HttpManager : NSObject
 
 + (void)get:(NSString *)url params:(NSDictionary *)params success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure;

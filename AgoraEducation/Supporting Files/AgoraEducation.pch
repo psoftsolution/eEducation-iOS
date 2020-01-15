@@ -19,6 +19,9 @@
 
 #define kShareScreenUid 7
 
+//#define GLOBAL_STATE_RTM
+#define GLOBAL_STATE_API
+
 #endif /* AgoraSmallClass_pch */
 
 
