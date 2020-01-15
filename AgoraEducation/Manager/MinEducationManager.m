@@ -60,12 +60,11 @@
     [self.signalManager joinChannelWithName:channelName completeSuccessBlock:successBlock completeFailBlock:failBlock];
 }
 
-- (void)updateGlobalStateWithValue:(NSString *)value completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock {
+- (void)updateGlobalStateWithValue:(StudentModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock {
     
     AgoraRtmChannelAttribute *setAttr = [[AgoraRtmChannelAttribute alloc] init];
     setAttr.key = self.signalManager.messageModel.uid;
-    setAttr.value = value;
-    
+    setAttr.value = [GenerateSignalBody channelAttrsWithValue:model];
     NSString *channelName = self.signalManager.channelName;
     [self.signalManager updateChannelAttributesWithChannelName:channelName channelAttribute:setAttr completeSuccessBlock:successBlock completeFailBlock:failBlock];
 }
@@ -85,8 +84,10 @@
 
 - (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock {
     
-    [self queryGlobalStateWithChannelName:channelName completeBlock:^(RolesInfoModel * _Nullable rolesInfoModel) {
+    WEAK(self);
+    [self.signalManager getChannelAllAttributes:channelName completeBlock:^(NSArray<AgoraRtmChannelAttribute *> * _Nullable attributes) {
         
+        RolesInfoModel *rolesInfoModel = [weakself filterRolesInfoModelWithAttributes:attributes];
         if(rolesInfoModel == nil || rolesInfoModel.studentModels == nil) {
             if(failBlock != nil){
                 failBlock();
@@ -100,7 +101,7 @@
             for(RolesStudentInfoModel *model in rolesInfoModel.studentModels){
                 [uIds addObject:model.attrKey];
             }
-            [self.signalManager queryPeersOnlineStatus:uIds completion:^(NSArray<AgoraRtmPeerOnlineStatus *> *peerOnlineStatus, AgoraRtmQueryPeersOnlineErrorCode errorCode) {
+            [weakself.signalManager queryPeersOnlineStatus:uIds completion:^(NSArray<AgoraRtmPeerOnlineStatus *> *peerOnlineStatus, AgoraRtmQueryPeersOnlineErrorCode errorCode) {
                 
                 if(errorCode == AgoraRtmQueryPeersOnlineErrorOk) {
                     

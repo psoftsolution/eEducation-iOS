@@ -15,6 +15,13 @@
 #import "WhiteManager.h"
 #import "RTCManager.h"
 
+#import "HttpManager.h"
+#import "KeyCenter.h"
+#import "RoomAllModel.h"
+#import "CommonModel.h"
+
+#import "KeyCenter.h"
+
 @interface OneToOneEducationManager()<SignalManagerDelegate, WhiteManagerDelegate, RTCManagerDelegate>
 
 @property (nonatomic, strong) SignalManager *signalManager;
@@ -58,18 +65,52 @@
     [self.signalManager joinChannelWithName:channelName completeSuccessBlock:successBlock completeFailBlock:failBlock];
 }
 
-- (void)updateGlobalStateWithValue:(NSString *)value completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock {
+- (void)updateGlobalStateWithValue:(StudentModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock {
     
+#ifdef GLOBAL_STATE_RTM
     AgoraRtmChannelAttribute *setAttr = [[AgoraRtmChannelAttribute alloc] init];
     setAttr.key = self.signalManager.messageModel.uid;
-    setAttr.value = value;
+    setAttr.value = [GenerateSignalBody channelAttrsWithValue:model];
     
     NSString *channelName = self.signalManager.channelName;
     [self.signalManager updateChannelAttributesWithChannelName:channelName channelAttribute:setAttr completeSuccessBlock:successBlock completeFailBlock:failBlock];
+#endif
+    
+#ifdef GLOBAL_STATE_API
+
+    NSString *url = [NSString stringWithFormat:HTTP_GET_ROOM_INFO, [KeyCenter agoraAppid], self.roomId];
+    
+    NSMutableDictionary *userParams = [NSMutableDictionary dictionary];
+    userParams[@"userId"] = model.uid;
+    userParams[@"enableChat"] = @(model.chat);
+    userParams[@"enableVideo"] = @(model.video);
+    userParams[@"enableAudio"] = @(model.audio);
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"users"] = @[userParams];
+    [HttpManager post:url params:params success:^(id responseObj) {
+        
+        CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0) {
+            if(successBlock != nil){
+                successBlock();
+            }
+        } else {
+            if(failBlock != nil){
+                failBlock();
+            }
+        }
+        
+    } failure:^(NSError *error) {
+        if(failBlock != nil){
+            failBlock();
+        }
+    }];
+#endif
 }
 
 - (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nonnull)block {
     
+#ifdef GLOBAL_STATE_RTM
     WEAK(self);
     [self.signalManager getChannelAllAttributes:channelName completeBlock:^(NSArray<AgoraRtmChannelAttribute *> * _Nullable attributes) {
         
@@ -79,12 +120,36 @@
             return;
         }
     }];
+#endif
+    
+#ifdef GLOBAL_STATE_API
+    WEAK(self);
+    NSString *url = [NSString stringWithFormat:HTTP_GET_ROOM_INFO, [KeyCenter agoraAppid], self.roomId];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"token"] = self.userToken;
+    [HttpManager get:url params:params success:^(id responseObj) {
+        
+        RoomAllModel *model = [RoomAllModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0) {
+            RolesInfoModel *rolesInfoModel = [weakself filterRolesInfoModelWithRoomModel:model];
+            if(block != nil){
+                block(rolesInfoModel);
+            }
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+#endif
 }
 
 - (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock {
     
-    [self queryGlobalStateWithChannelName:channelName completeBlock:^(RolesInfoModel * _Nullable rolesInfoModel) {
+    WEAK(self);
+    [self.signalManager getChannelAllAttributes:channelName completeBlock:^(NSArray<AgoraRtmChannelAttribute *> * _Nullable attributes) {
         
+        RolesInfoModel *rolesInfoModel = [weakself filterRolesInfoModelWithAttributes:attributes];
         if(rolesInfoModel == nil || rolesInfoModel.studentModels == nil) {
             if(failBlock != nil){
                 failBlock();
@@ -98,7 +163,7 @@
             for(RolesStudentInfoModel *model in rolesInfoModel.studentModels){
                 [uIds addObject:model.attrKey];
             }
-            [self.signalManager queryPeersOnlineStatus:uIds completion:^(NSArray<AgoraRtmPeerOnlineStatus *> *peerOnlineStatus, AgoraRtmQueryPeersOnlineErrorCode errorCode) {
+            [weakself.signalManager queryPeersOnlineStatus:uIds completion:^(NSArray<AgoraRtmPeerOnlineStatus *> *peerOnlineStatus, AgoraRtmQueryPeersOnlineErrorCode errorCode) {
                 
                 if(errorCode == AgoraRtmQueryPeersOnlineErrorOk) {
                     
@@ -180,6 +245,57 @@
     }
     
     self.teacherModel = teaModel;
+    
+    RolesInfoModel *rolesInfoModel = [RolesInfoModel new];
+    rolesInfoModel.teacherModel = teaModel;
+    rolesInfoModel.studentModels = stuArray;
+    
+    return rolesInfoModel;
+}
+
+- (RolesInfoModel *)filterRolesInfoModelWithRoomModel:(RoomAllModel * _Nullable) roomAllModel {
+
+    if(roomAllModel == nil){
+        RolesInfoModel *rolesInfoModel = [RolesInfoModel new];
+        return rolesInfoModel;
+    }
+    
+    TeacherModel *teaModel;
+    NSMutableArray<RolesStudentInfoModel*> *stuArray = [NSMutableArray array];
+
+    for (UserModel *userModel in roomAllModel.data.users) {
+        
+        if (userModel.role == UserRoleTypeTeacher) {
+            teaModel = [TeacherModel new];
+            teaModel.account = userModel.userName;
+            teaModel.uid = @(userModel.uid).stringValue;
+            teaModel.whiteboard_uid = roomAllModel.data.room.whiteID;
+            teaModel.whiteboard_token = roomAllModel.data.room.whiteToken;
+            teaModel.link_uid = [userModel.linkUsers firstObject];
+            teaModel.shared_uid = @(userModel.screenID).stringValue;
+            teaModel.mute_chat = roomAllModel.data.room.muteAllChat;
+            teaModel.video = userModel.enableVideo;
+            teaModel.audio = userModel.enableAudio;
+
+//            teaModel.class_state
+        } else if (userModel.role == UserRoleTypeStudent) {
+            StudentModel *model = [StudentModel new];
+            model.account = userModel.userName;
+            model.uid = @(userModel.uid).stringValue;
+            model.chat = userModel.enableChat;
+            model.video = userModel.enableVideo;
+            model.audio = userModel.enableAudio;
+
+            RolesStudentInfoModel *infoModel = [RolesStudentInfoModel new];
+            infoModel.studentModel = model;
+            infoModel.attrKey = model.uid;
+            [stuArray addObject:infoModel];
+            
+            if ([model.uid isEqualToString: self.signalManager.messageModel.uid]) {
+                self.studentModel = model;
+            }
+        }
+    }
     
     RolesInfoModel *rolesInfoModel = [RolesInfoModel new];
     rolesInfoModel.teacherModel = teaModel;

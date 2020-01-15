@@ -104,8 +104,7 @@
         model.video = 1;
         model.audio = 1;
         model.chat = 1;
-        NSString *value = [GenerateSignalBody channelAttrsWithValue: model];
-        [weakself.educationManager updateGlobalStateWithValue:value completeSuccessBlock:^{
+        [weakself.educationManager updateGlobalStateWithValue:model completeSuccessBlock:^{
             
         } completeFailBlock:nil];
         
@@ -115,15 +114,13 @@
 - (void)muteVideoStream:(BOOL)stream {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
     currentStuModel.video = !stream ? 1 : 0;
-    NSString *value = [GenerateSignalBody channelAttrsWithValue:currentStuModel];
-    [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
 }
 
 - (void)muteAudioStream:(BOOL)stream {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
     currentStuModel.audio = !stream ? 1 : 0;
-    NSString *value = [GenerateSignalBody channelAttrsWithValue:currentStuModel];
-    [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
 }
 
 - (void)checkNeedRender {
@@ -371,8 +368,7 @@
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
     currentStuModel.audio = 1;
     currentStuModel.video = 1;
-    NSString *value = [GenerateSignalBody channelAttrsWithValue:currentStuModel];
-    [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:^{
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:^{
         
         weakself.linkState = StudentLinkStateAccept;
         
@@ -497,29 +493,25 @@
         case SignalP2PTypeMuteAudio:
         {
             currentStuModel.audio = 0;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue: currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeUnMuteAudio:
         {
             currentStuModel.audio = 1;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue: currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeMuteVideo:
         {
             currentStuModel.video = 0;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue: currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeUnMuteVideo:
         {
             currentStuModel.video = 1;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue: currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeApply:
@@ -543,15 +535,13 @@
         case SignalP2PTypeMuteChat:
         {
             currentStuModel.chat = 0;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue:currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeUnMuteChat:
         {
             currentStuModel.chat = 1;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue:currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         default:

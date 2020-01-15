@@ -25,6 +25,10 @@
 
 #import "KeyCenter.h"
 
+#import "HttpManager.h"
+#import "UIView+Toast.h"
+#import "RoomAllModel.h"
+
 @interface OneToOneViewController ()<UITextFieldDelegate, RoomProtocol, SignalDelegate, RTCDelegate, EEPageControlDelegate, EEWhiteboardToolDelegate, WhitePlayDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *chatRoomViewWidthCon;
@@ -67,12 +71,6 @@
     
     self.pageControlView.delegate = self;
     self.whiteboardTool.delegate = self;
-        
-    WEAK(self);
-    [self.colorShowView setSelectColor:^(NSString * _Nullable colorString) {
-        NSArray *colorArray = [UIColor convertColorToRGB:[UIColor colorWithHexString:colorString]];
-        [weakself.educationManager setWhiteStrokeColor:colorArray];
-    }];
     
     self.studentView.delegate = self;
     self.navigationView.delegate = self;
@@ -81,9 +79,32 @@
     
     [self.educationManager initSessionModel];
     [self.educationManager setSignalDelegate:self];
+#ifdef GLOBAL_STATE_API
+    self.educationManager.roomId = self.paramsModel.roomId;
+    self.educationManager.userToken = self.paramsModel.userToken;
+#endif
+    
+    WEAK(self);
+    [self.colorShowView setSelectColor:^(NSString * _Nullable colorString) {
+        NSArray *colorArray = [UIColor convertColorToRGB:[UIColor colorWithHexString:colorString]];
+        [weakself.educationManager setWhiteStrokeColor:colorArray];
+    }];
 
-    [self setupRTC];
-    [self setupSignal];
+    [self.educationManager queryGlobalStateWithChannelName:self.paramsModel.channelName completeBlock:^(RolesInfoModel *infoModel) {
+        
+        [weakself signalDidUpdateGlobalStateWithSourceModel:[RolesInfoModel new] currentModel:infoModel];
+    }];
+    
+
+//    [self setupRTC];
+//    [self setupSignal];
+}
+
+- (void)showHTTPToast:(NSString *)title {
+    if(title == nil || title.length == 0){
+        title = @"Network request failed";
+    }
+    [self.view makeToast:title];
 }
 
 - (void)setupView {
@@ -190,17 +211,8 @@
 - (void)setupSignal {
     WEAK(self);
     [self.educationManager joinSignalWithChannelName:self.paramsModel.channelName completeSuccessBlock:^{
+        [weakself setupRTC];
         
-        StudentModel *model = [StudentModel new];
-        model.uid = weakself.paramsModel.userId;
-        model.account = weakself.paramsModel.userName;
-        model.video = 1;
-        model.audio = 1;
-        model.chat = 1;
-        NSString *value = [GenerateSignalBody channelAttrsWithValue: model];
-        [weakself.educationManager updateGlobalStateWithValue:value completeSuccessBlock:^{
-            
-        } completeFailBlock:nil];
         
     } completeFailBlock:nil];
 }
@@ -307,15 +319,13 @@
 - (void)muteVideoStream:(BOOL)stream {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
     currentStuModel.video = !stream ? 1 : 0;
-    NSString *value = [GenerateSignalBody channelAttrsWithValue:currentStuModel];
-    [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
 }
 
 - (void)muteAudioStream:(BOOL)stream {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
     currentStuModel.audio = !stream ? 1 : 0;
-    NSString *value = [GenerateSignalBody channelAttrsWithValue:currentStuModel];
-    [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
 }
 
 
@@ -349,29 +359,25 @@
         case SignalP2PTypeMuteAudio:
         {
             currentStuModel.audio = 0;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue: currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeUnMuteAudio:
         {
             currentStuModel.audio = 1;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue: currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeMuteVideo:
         {
             currentStuModel.video = 0;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue: currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeUnMuteVideo:
         {
             currentStuModel.video = 1;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue: currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeApply:
@@ -382,15 +388,13 @@
         case SignalP2PTypeMuteChat:
         {
             currentStuModel.chat = 0;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue:currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         case SignalP2PTypeUnMuteChat:
         {
             currentStuModel.chat = 1;
-            NSString *value = [GenerateSignalBody channelAttrsWithValue:currentStuModel];
-            [self.educationManager updateGlobalStateWithValue:value completeSuccessBlock:nil completeFailBlock:nil];
+            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
         }
             break;
         default:
@@ -399,6 +403,11 @@
 }
 
 - (void)signalDidUpdateMessage:(SignalRoomModel *_Nonnull)roomMessageModel {
+    
+#ifdef GLOBAL_STATE_API
+    // check roomMessageModel
+#endif
+    
     [self.messageListView addMessageModel:roomMessageModel];
 }
 

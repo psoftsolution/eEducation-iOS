@@ -59,11 +59,11 @@
     [self.signalManager joinChannelWithName:channelName completeSuccessBlock:successBlock completeFailBlock:failBlock];
 }
 
-- (void)updateGlobalStateWithValue:(NSString *)value completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock {
+- (void)updateGlobalStateWithValue:(StudentModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock {
     
     AgoraRtmChannelAttribute *setAttr = [[AgoraRtmChannelAttribute alloc] init];
     setAttr.key = self.signalManager.messageModel.uid;
-    setAttr.value = value;
+    setAttr.value = [GenerateSignalBody channelAttrsWithValue:model];
     
     NSString *channelName = self.signalManager.channelName;
     [self.signalManager updateChannelAttributesWithChannelName:channelName channelAttribute:setAttr completeSuccessBlock:successBlock completeFailBlock:failBlock];
@@ -78,6 +78,54 @@
             RolesInfoModel *rolesInfoModel = [weakself filterRolesInfoModelWithAttributes:attributes];
             block(rolesInfoModel);
             return;
+        }
+    }];
+    
+    
+}
+
+- (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock {
+    
+    WEAK(self);
+    [self.signalManager getChannelAllAttributes:channelName completeBlock:^(NSArray<AgoraRtmChannelAttribute *> * _Nullable attributes) {
+        
+        RolesInfoModel *rolesInfoModel = [weakself filterRolesInfoModelWithAttributes:attributes];
+        if(rolesInfoModel == nil || rolesInfoModel.studentModels == nil) {
+            if(failBlock != nil){
+                failBlock();
+            }
+        }
+        
+        NSInteger studentCount = rolesInfoModel.studentModels.count;
+        if(studentCount >= maxCount){
+            
+            NSMutableArray<NSString *> *uIds = [NSMutableArray array];
+            for(RolesStudentInfoModel *model in rolesInfoModel.studentModels){
+                [uIds addObject:model.attrKey];
+            }
+            [weakself.signalManager queryPeersOnlineStatus:uIds completion:^(NSArray<AgoraRtmPeerOnlineStatus *> *peerOnlineStatus, AgoraRtmQueryPeersOnlineErrorCode errorCode) {
+                
+                if(errorCode == AgoraRtmQueryPeersOnlineErrorOk) {
+                    
+                    NSInteger count = 0;
+                    for (AgoraRtmPeerOnlineStatus *status in peerOnlineStatus){
+                        if(status.isOnline) {
+                            count++;
+                        }
+                    }
+                    if(successBlock != nil){
+                        successBlock(count);
+                    }
+                } else {
+                    if(failBlock != nil){
+                        failBlock();
+                    }
+                }
+            }];
+        } else {
+            if(successBlock != nil){
+                successBlock(studentCount);
+            }
         }
     }];
 }
