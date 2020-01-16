@@ -8,6 +8,8 @@
 
 #import "EEMessageView.h"
 #import "EEMessageViewCell.h"
+#import "OneToOneReplayViewController.h"
+
 #import "ReplayViewController.h"
 
 @interface EEMessageView ()<UITableViewDelegate,UITableViewDataSource>
@@ -113,22 +115,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    SignalRoomModel *messageModel = self.messageArray[indexPath.row];
-    if(messageModel.roomid == nil){
-        return;
-    }
+//    SignalRoomModel *messageModel = self.messageArray[indexPath.row];
+//    if(messageModel.roomid == nil){
+//        return;
+//    }
     
-    ReplayViewController *vc = [[ReplayViewController alloc] initWithNibName:@"ReplayViewController" bundle:nil];
-    vc.roomid = messageModel.roomid;
-    vc.startTime = messageModel.startTime;
-    vc.endTime = messageModel.endTime;
-    vc.videoPath = messageModel.url;
+    OneToOneReplayViewController *vc = [[OneToOneReplayViewController alloc] initWithNibName:@"OneToOneReplayViewController" bundle:nil];
+//    vc.roomId = 22570882304049152;
     vc.modalPresentationStyle = UIModalPresentationFullScreen;
     UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
     UINavigationController *nvc = (UINavigationController*)window.rootViewController;
     if(nvc != nil){
         [nvc.visibleViewController presentViewController:vc animated:YES completion:nil];
     }
-    return;
 }
 @end

@@ -111,10 +111,41 @@
     } completeFailBlock:nil];
 }
 
+
 - (void)muteVideoStream:(BOOL)stream {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
     currentStuModel.video = !stream ? 1 : 0;
-    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
+    
+    // update mute states
+    WEAK(self);
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:^{
+        
+//        weakself.educationManager.studentModel.video = currentStuModel.video;
+//        [weakself updateStudentViews:weakself.educationManager.studentModel];
+        
+    } completeFailBlock:^{
+        
+//        [weakself updateStudentViews:weakself.educationManager.studentModel];
+    }];
+    
+    
+//    NSString *studentUid = self.educationManager.teacherModel.link_uid;
+//    if([self.educationManager.rtcUids containsObject:studentUid]){
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uid == %d", studentUid.integerValue];
+//        NSArray<RTCVideoSessionModel *> *filteredArray = [self.educationManager.rtcVideoSessionModels filteredArrayUsingPredicate:predicate];
+//
+//        BOOL remote = NO;
+//        if(filteredArray.count == 0){
+//            if (studentUid.integerValue == self.paramsModel.userId.integerValue) {
+//                [self renderStudentCanvas:studentUid.integerValue remoteVideo:remote];
+//            } else {
+//                remote = YES;
+//                [self renderStudentCanvas:studentUid.integerValue remoteVideo:remote];
+//            }
+//        }
+//        [self updateStudentViews:self.educationManager.renderStudentModel remoteVideo:remote];
+//    }
+    
 }
 
 - (void)muteAudioStream:(BOOL)stream {

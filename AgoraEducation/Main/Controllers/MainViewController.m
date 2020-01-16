@@ -50,17 +50,20 @@
     [super viewDidLoad];
     
     [self setupView];
-    [self initData];
+    [self setupConfigWithSuccessBolck:nil];
     [self addTouchedRecognizer];
     [self addNotification];
 }
 
-- (void)initData {
+- (void)setupConfigWithSuccessBolck:(void (^)(void))successBlock {
     
     WEAK(self);
     [self.activityIndicator startAnimating];
     [self.joinButton setEnabled:NO];
-    [HttpManager get:HTTP_GET_CONFIG params:nil success:^(id responseObj) {
+    [HttpManager get:HTTP_GET_CONFIG params:nil headers:nil success:^(id responseObj) {
+        
+        [weakself.activityIndicator stopAnimating];
+        [weakself.joinButton setEnabled:YES];
         
         ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
         if(model.code == 0){
@@ -68,26 +71,26 @@
             weakself.configInfoModel = model.data;
             [KeyCenter setAgoraAppid:model.data.appId];
             
+            if(successBlock != nil){
+                successBlock();
+            }
         } else {
             [weakself showHTTPToast:model.msg];
         }
-        
-        [weakself.activityIndicator stopAnimating];
-        [weakself.joinButton setEnabled:YES];
         
     } failure:^(NSError *error) {
         
         [weakself.activityIndicator stopAnimating];
         [weakself.joinButton setEnabled:YES];
         
-        [weakself showHTTPToast:@"Network request failed"];
+        [weakself showHTTPToast:@"network request failed"];
         NSLog(@"HTTP GET CONFIG ERROR:%@", error.description);
     }];
 }
 
 - (void)showHTTPToast:(NSString *)title {
     if(title == nil || title.length == 0){
-        title = @"Network request failed";
+        title = @"network request failed";
     }
     [self.view makeToast:title];
 }
@@ -184,7 +187,7 @@
 
 - (IBAction)joinRoom:(UIButton *)sender {
     
-    self.classNameTextFiled.text = @"Test1";
+    self.classNameTextFiled.text = @"test1";
     self.userNameTextFiled.text = @"Jerry";
     
     if (self.classNameTextFiled.text.length <= 0 || self.userNameTextFiled.text.length <= 0 || ![self checkClassRoomText:self.classNameTextFiled.text] || ![self checkClassRoomText:self.userNameTextFiled.text]) {
@@ -199,20 +202,35 @@
         return;
     }
     
+    NSString *roomType = self.roomType.titleLabel.text;
+    NSInteger typeIndex = [roomTypeStrings indexOfObject:roomType] + 1;
+    
+    WEAK(self);
+    if([KeyCenter agoraAppid].length == 0){
+        [self setupConfigWithSuccessBolck:^{
+            [weakself enterRoomWithTypeIndex:typeIndex];
+        }];
+    } else {
+        [self enterRoomWithTypeIndex:typeIndex];
+    }
+}
+
+- (void)enterRoomWithTypeIndex:(NSInteger) index {
+    
     [self.activityIndicator startAnimating];
     [self.joinButton setEnabled:YES];
     
     NSString *url = [NSString stringWithFormat:HTTP_POST_ENTER_ROOM, [KeyCenter agoraAppid]];
-    
-    NSString *roomType = self.roomType.titleLabel.text;
+
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"userName"] = self.userNameTextFiled.text;
     params[@"roomName"] = self.classNameTextFiled.text;
-    params[@"type"] = @([roomTypeStrings indexOfObject:roomType] + 1);
+    params[@"type"] = @(index);
+
     params[@"role"] = @(2);
     
     WEAK(self);
-    [HttpManager post:url params:params success:^(id responseObj) {
+    [HttpManager post:url params:params headers:nil success:^(id responseObj) {
         
         EnterRoomAllModel *model = [EnterRoomAllModel yy_modelWithDictionary:responseObj];
         if(model.code == 0){
@@ -222,11 +240,11 @@
             [KeyCenter setAgoraRTMToken:weakself.enterRoomInfoModel.user.rtmToken];
             [KeyCenter setAgoraRTCToken:weakself.enterRoomInfoModel.user.rtcToken];
         
-            if ([roomTypeStrings indexOfObject:roomType] == 0 ){
+            if (index == 1) {
                 [weakself join1V1RoomWithIdentifier:@"oneToOneRoom"];
-            } else if ([roomTypeStrings indexOfObject:roomType] == 1 ){
+            } else if (index == 2){
                 [weakself joinMinRoomWithIdentifier:@"mcRoom"];
-            } else if ([roomTypeStrings indexOfObject:roomType] == 2 ){
+            } else if (index == 3){
                 [weakself joinBigRoomWithIdentifier:@"bcroom"];
             }
             
@@ -242,7 +260,7 @@
         [weakself.activityIndicator stopAnimating];
         [weakself.joinButton setEnabled:YES];
         
-        [weakself showHTTPToast:@"Network request failed"];
+        [weakself showHTTPToast:@"network request failed"];
         NSLog(@"HTTP GET CONFIG ERROR:%@", error.description);
     }];
 }
@@ -284,7 +302,7 @@
                 [weakself presentViewController:vc animated:YES completion:nil];
                 
             } else {
-                [AlertViewUtil showAlertWithController:self title:@"The number is full, please change room name"];
+                [AlertViewUtil showAlertWithController:self title:@"room is full, please change another room"];
             }
             
         } completeFailBlock:^{
@@ -356,7 +374,7 @@
                 [weakself presentViewController:vc animated:YES completion:nil];
                 
             } else {
-                [AlertViewUtil showAlertWithController:self title:@"Room is full, please change another room"];
+                [AlertViewUtil showAlertWithController:self title:@"room is full, please change another room"];
             }
             
         } completeFailBlock:^{
@@ -407,7 +425,7 @@
                 [weakself presentViewController:vc animated:YES completion:nil];
                 
             } else {
-                [AlertViewUtil showAlertWithController:self title:@"The number is full, please change room name"];
+                [AlertViewUtil showAlertWithController:self title:@"room is full, please change another room"];
             }
             
         } completeFailBlock:^{

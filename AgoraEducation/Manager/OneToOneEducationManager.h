@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OneToOneEducationManager : NSObject
 
 /* ==================================>Session Model<================================ */
-#ifdef GLOBAL_STATE_RTM
+#ifdef GLOBAL_STATE_API
 @property (nonatomic, copy) NSString *userToken;
 @property (nonatomic, copy) NSString *roomId;
 #endif
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setSignalDelegate:(id<SignalDelegate>)delegate;
 - (void)joinSignalWithChannelName:(NSString *)channelName completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
 - (void)updateGlobalStateWithValue:(StudentModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
-- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nonnull)block;
+- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nullable)block;
 - (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock;
 - (void)sendMessageWithContent:(NSString *)text userName:(NSString *)name;
  

@@ -18,6 +18,9 @@
 
 @implementation RoomInfoModel
 
++ (NSDictionary *)modelContainerPropertyGenericClass {
+    return @{@"users" : [UserModel class]};
+}
 @end
 
 @implementation RoomAllModel

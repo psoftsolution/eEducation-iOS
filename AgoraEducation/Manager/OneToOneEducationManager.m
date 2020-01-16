@@ -87,7 +87,11 @@
     userParams[@"enableAudio"] = @(model.audio);
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"users"] = @[userParams];
-    [HttpManager post:url params:params success:^(id responseObj) {
+    
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    headers[@"token"] = self.userToken;
+    
+    [HttpManager post:url params:params headers:headers success:^(id responseObj) {
         
         CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];
         if(model.code == 0) {
@@ -108,7 +112,7 @@
 #endif
 }
 
-- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nonnull)block {
+- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nullable)block {
     
 #ifdef GLOBAL_STATE_RTM
     WEAK(self);
@@ -125,10 +129,10 @@
 #ifdef GLOBAL_STATE_API
     WEAK(self);
     NSString *url = [NSString stringWithFormat:HTTP_GET_ROOM_INFO, [KeyCenter agoraAppid], self.roomId];
-    
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"token"] = self.userToken;
-    [HttpManager get:url params:params success:^(id responseObj) {
+
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    headers[@"token"] = self.userToken;
+    [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
         RoomAllModel *model = [RoomAllModel yy_modelWithDictionary:responseObj];
         if(model.code == 0) {
@@ -136,10 +140,16 @@
             if(block != nil){
                 block(rolesInfoModel);
             }
+        } else {
+            if(block != nil){
+                block(nil);
+            }
         }
         
     } failure:^(NSError *error) {
-        
+        if(block != nil){
+            block(nil);
+        }
     }];
 #endif
 }
@@ -260,24 +270,24 @@
         return rolesInfoModel;
     }
     
-    TeacherModel *teaModel;
+    TeacherModel *teaModel = [TeacherModel new];
+    //            teaModel.class_state
+    teaModel.whiteboard_uid = roomAllModel.data.room.whiteId;
+    teaModel.whiteboard_token = roomAllModel.data.room.whiteToken;
+    teaModel.mute_chat = roomAllModel.data.room.muteAllChat;
+    
     NSMutableArray<RolesStudentInfoModel*> *stuArray = [NSMutableArray array];
 
     for (UserModel *userModel in roomAllModel.data.users) {
         
         if (userModel.role == UserRoleTypeTeacher) {
-            teaModel = [TeacherModel new];
             teaModel.account = userModel.userName;
             teaModel.uid = @(userModel.uid).stringValue;
-            teaModel.whiteboard_uid = roomAllModel.data.room.whiteID;
-            teaModel.whiteboard_token = roomAllModel.data.room.whiteToken;
             teaModel.link_uid = [userModel.linkUsers firstObject];
-            teaModel.shared_uid = @(userModel.screenID).stringValue;
-            teaModel.mute_chat = roomAllModel.data.room.muteAllChat;
+            teaModel.shared_uid = @(userModel.screenId).stringValue;
             teaModel.video = userModel.enableVideo;
             teaModel.audio = userModel.enableAudio;
 
-//            teaModel.class_state
         } else if (userModel.role == UserRoleTypeStudent) {
             StudentModel *model = [StudentModel new];
             model.account = userModel.userName;
@@ -330,6 +340,8 @@
         messageModel.isSelfSend = NO;
         [self.signalDelegate signalDidUpdateMessage:messageModel];
     }
+    
+    // check signalDidUpdateGlobalStateWithSourceModel
 }
 - (void)channel:(AgoraRtmChannel * _Nonnull)channel attributeUpdate:(NSArray< AgoraRtmChannelAttribute *> * _Nonnull)attributes {
     

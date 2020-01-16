@@ -69,7 +69,7 @@
     [self.signalManager updateChannelAttributesWithChannelName:channelName channelAttribute:setAttr completeSuccessBlock:successBlock completeFailBlock:failBlock];
 }
 
-- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nonnull)block {
+- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nullable)block {
     
     WEAK(self);
     [self.signalManager getChannelAllAttributes:channelName completeBlock:^(NSArray<AgoraRtmChannelAttribute *> * _Nullable attributes) {

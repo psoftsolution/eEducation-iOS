@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-
 @interface EnterUserModel :NSObject
 @property (nonatomic, copy) NSString *userToken;
 @property (nonatomic, assign) NSInteger roomId;

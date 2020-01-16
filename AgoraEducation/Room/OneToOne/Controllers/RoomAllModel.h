@@ -15,22 +15,22 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger type;
 @property (nonatomic, assign) NSInteger muteAllChat;
 @property (nonatomic, assign) NSInteger isRecording;
-@property (nonatomic, copy)   NSString *whiteID;
+@property (nonatomic, copy)   NSString *whiteId;
 @property (nonatomic, copy)   NSString *whiteToken;
-@property (nonatomic, assign) NSInteger roomID;
+@property (nonatomic, assign) NSInteger roomId;
 @property (nonatomic, copy)   NSString *roomName;
 @end
 
 @interface UserModel : NSObject
-@property (nonatomic, assign) NSInteger roomID;
+@property (nonatomic, assign) NSInteger roomId;
 @property (nonatomic, assign) NSInteger uid;
 @property (nonatomic, assign) NSInteger role;
 @property (nonatomic, assign) NSInteger enableChat;
 @property (nonatomic, assign) NSInteger enableVideo;
 @property (nonatomic, assign) NSInteger enableAudio;
 @property (nonatomic, copy)   NSArray *linkUsers;
-@property (nonatomic, assign) NSInteger screenID;
-@property (nonatomic, assign) NSInteger userID;
+@property (nonatomic, assign) NSInteger screenId;
+@property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, copy)   NSString *userName;
 @end
 

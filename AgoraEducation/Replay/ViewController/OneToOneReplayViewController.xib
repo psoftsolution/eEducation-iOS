@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="landscape" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OneToOneReplayViewController">
+            <connections>
+                <outlet property="controlView" destination="ZmR-wk-9aj" id="vVg-SH-1LV"/>
+                <outlet property="loadingView" destination="8ck-y4-UAO" id="5RX-oS-jro"/>
+                <outlet property="playBackgroundView" destination="qce-v7-xdX" id="9UZ-OC-Cf0"/>
+                <outlet property="playButton" destination="Vca-rg-xg6" id="YTN-nI-kRX"/>
+                <outlet property="studentView" destination="dIf-hb-9gL" id="iXy-bT-Xrb"/>
+                <outlet property="teacherView" destination="zLA-JS-BqT" id="4sC-QP-WaJ"/>
+                <outlet property="view" destination="vcI-Cv-c6L" id="mtI-vF-who"/>
+                <outlet property="whiteboardBaseView" destination="o5L-3h-m1S" id="sR7-sV-PaZ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="vcI-Cv-c6L">
+            <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f2P-zP-7E6" customClass="ReplayNavigationView">
+                    <rect key="frame" x="44" y="0.0" width="808" height="30"/>
+                    <color key="backgroundColor" red="0.96078431369999995" green="0.96862745100000003" blue="0.97254901959999995" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="MTH-2C-4X2"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o5L-3h-m1S">
+                    <rect key="frame" x="236" y="30" width="616" height="384"/>
+                    <subviews>
+                        <view alpha="0.40000000596046448" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qce-v7-xdX">
+                            <rect key="frame" x="0.0" y="0.0" width="616" height="384"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Lo-96-1SI">
+                            <rect key="frame" x="0.0" y="0.0" width="616" height="384"/>
+                            <connections>
+                                <action selector="onWhiteBoardClick:" destination="-1" eventType="touchUpInside" id="9xy-kE-iVh"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vca-rg-xg6">
+                            <rect key="frame" x="268" y="152" width="80" height="80"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="80" id="9Dk-u9-mca"/>
+                                <constraint firstAttribute="width" constant="80" id="maU-fv-2A6"/>
+                            </constraints>
+                            <state key="normal" backgroundImage="big_play"/>
+                            <connections>
+                                <action selector="onPlayClick:" destination="-1" eventType="touchUpInside" id="9WU-IU-YEa"/>
+                            </connections>
+                        </button>
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ck-y4-UAO" customClass="LoadingView">
+                            <rect key="frame" x="246" y="130" width="124" height="124"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="124" id="Syr-Ry-MUN"/>
+                                <constraint firstAttribute="height" constant="124" id="Y8R-8V-21c"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="4Lo-96-1SI" secondAttribute="bottom" id="7xt-GY-nmS"/>
+                        <constraint firstItem="8ck-y4-UAO" firstAttribute="centerX" secondItem="o5L-3h-m1S" secondAttribute="centerX" id="EJJ-Lf-tpP"/>
+                        <constraint firstItem="4Lo-96-1SI" firstAttribute="leading" secondItem="o5L-3h-m1S" secondAttribute="leading" id="GLi-OX-zRA"/>
+                        <constraint firstItem="Vca-rg-xg6" firstAttribute="centerX" secondItem="o5L-3h-m1S" secondAttribute="centerX" id="Ij0-ov-80Q"/>
+                        <constraint firstItem="Vca-rg-xg6" firstAttribute="centerY" secondItem="o5L-3h-m1S" secondAttribute="centerY" id="KsM-3i-mnX"/>
+                        <constraint firstItem="qce-v7-xdX" firstAttribute="top" secondItem="o5L-3h-m1S" secondAttribute="top" id="aix-5P-qvV"/>
+                        <constraint firstItem="8ck-y4-UAO" firstAttribute="centerY" secondItem="o5L-3h-m1S" secondAttribute="centerY" id="gPi-Mn-SJd"/>
+                        <constraint firstItem="4Lo-96-1SI" firstAttribute="top" secondItem="o5L-3h-m1S" secondAttribute="top" id="ljQ-LR-19q"/>
+                        <constraint firstAttribute="bottom" secondItem="qce-v7-xdX" secondAttribute="bottom" id="mOQ-qx-5ap"/>
+                        <constraint firstAttribute="trailing" secondItem="qce-v7-xdX" secondAttribute="trailing" id="ssW-iR-lSL"/>
+                        <constraint firstItem="qce-v7-xdX" firstAttribute="leading" secondItem="o5L-3h-m1S" secondAttribute="leading" id="x7h-xW-hSF"/>
+                        <constraint firstAttribute="trailing" secondItem="4Lo-96-1SI" secondAttribute="trailing" id="zXX-aR-gyX"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZmR-wk-9aj" customClass="ReplayControlView">
+                    <rect key="frame" x="244" y="358" width="600" height="35"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="AI3-ED-6L2"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zLA-JS-BqT" customClass="OTOTeacherView">
+                    <rect key="frame" x="44" y="30" width="192" height="192"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="zLA-JS-BqT" secondAttribute="height" multiplier="1:1" id="luo-d3-496"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dIf-hb-9gL" customClass="OTOStudentView">
+                    <rect key="frame" x="44" y="222" width="192" height="192"/>
+                    <color key="backgroundColor" systemColor="tertiaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="dIf-hb-9gL" secondAttribute="height" multiplier="1:1" id="G1C-CW-JB8"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="ZmR-wk-9aj" firstAttribute="leading" secondItem="o5L-3h-m1S" secondAttribute="leading" constant="8" id="2dr-jY-oO2"/>
+                <constraint firstItem="dIf-hb-9gL" firstAttribute="top" secondItem="zLA-JS-BqT" secondAttribute="bottom" id="4PI-GH-wuA"/>
+                <constraint firstAttribute="bottom" secondItem="o5L-3h-m1S" secondAttribute="bottom" id="6tH-XG-KSv"/>
+                <constraint firstAttribute="bottom" secondItem="dIf-hb-9gL" secondAttribute="bottom" id="AMd-RO-6pr"/>
+                <constraint firstItem="dIf-hb-9gL" firstAttribute="leading" secondItem="U1g-9k-LX6" secondAttribute="leading" id="C8X-nf-EnR"/>
+                <constraint firstItem="o5L-3h-m1S" firstAttribute="leading" secondItem="zLA-JS-BqT" secondAttribute="trailing" id="D5i-Dk-Ubx"/>
+                <constraint firstItem="U1g-9k-LX6" firstAttribute="trailing" secondItem="f2P-zP-7E6" secondAttribute="trailing" id="XfG-o8-uqJ"/>
+                <constraint firstItem="dIf-hb-9gL" firstAttribute="width" secondItem="zLA-JS-BqT" secondAttribute="width" id="XjB-6m-Oph"/>
+                <constraint firstItem="o5L-3h-m1S" firstAttribute="top" secondItem="f2P-zP-7E6" secondAttribute="bottom" id="ZOE-fn-Jh1"/>
+                <constraint firstItem="zLA-JS-BqT" firstAttribute="leading" secondItem="U1g-9k-LX6" secondAttribute="leading" id="a14-rc-IUU"/>
+                <constraint firstItem="U1g-9k-LX6" firstAttribute="trailing" secondItem="o5L-3h-m1S" secondAttribute="trailing" id="fBC-TS-vWU"/>
+                <constraint firstItem="ZmR-wk-9aj" firstAttribute="trailing" secondItem="o5L-3h-m1S" secondAttribute="trailing" constant="-8" id="jid-4U-Yqq"/>
+                <constraint firstItem="U1g-9k-LX6" firstAttribute="bottom" secondItem="ZmR-wk-9aj" secondAttribute="bottom" id="knN-Ha-c9T"/>
+                <constraint firstItem="f2P-zP-7E6" firstAttribute="leading" secondItem="U1g-9k-LX6" secondAttribute="leading" id="smR-Or-LHX"/>
+                <constraint firstItem="zLA-JS-BqT" firstAttribute="top" secondItem="f2P-zP-7E6" secondAttribute="bottom" id="t6D-87-yWh"/>
+                <constraint firstItem="f2P-zP-7E6" firstAttribute="top" secondItem="U1g-9k-LX6" secondAttribute="top" id="zZx-K0-O5E"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="U1g-9k-LX6"/>
+            <point key="canvasLocation" x="2255" y="851"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="big_play" width="40" height="40"/>
+    </resources>
+</document>

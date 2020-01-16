@@ -36,8 +36,15 @@ static HttpManager *manager = nil;
     self.sessionManager.requestSerializer.timeoutInterval = 30;
 }
 
-+ (void)get:(NSString *)url params:(NSDictionary *)params success:(void (^)(id))success failure:(void (^)(NSError *))failure {
-
++ (void)get:(NSString *)url params:(NSDictionary *)params headers:(NSDictionary<NSString*, NSString*> *)headers success:(void (^)(id))success failure:(void (^)(NSError *))failure {
+    
+    if(headers != nil && headers.allKeys.count > 0){
+        NSArray<NSString*> *keys = headers.allKeys;
+        for(NSString *key in keys){
+            [HttpManager.shareManager.sessionManager.requestSerializer setValue:headers[key] forHTTPHeaderField:key];
+        }
+    }
+    
     [HttpManager.shareManager.sessionManager GET:url parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -52,8 +59,15 @@ static HttpManager *manager = nil;
 
 }
 
-+ (void)post:(NSString *)url params:(NSDictionary *)params success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
++ (void)post:(NSString *)url params:(NSDictionary *)params headers:(NSDictionary<NSString*, NSString*> *)headers success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
 
+    if(headers != nil && headers.allKeys.count > 0){
+        NSArray<NSString*> *keys = headers.allKeys;
+        for(NSString *key in keys){
+            [HttpManager.shareManager.sessionManager.requestSerializer setValue:headers[key] forHTTPHeaderField:key];
+        }
+    }
+    
     [HttpManager.shareManager.sessionManager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
                    success(responseObject);
@@ -65,11 +79,11 @@ static HttpManager *manager = nil;
     }];
 }
 
-+ (void)POSTWhiteBoardRoomWithUuid:(NSString *)uuid token:(void (^)(NSString *token))token failure:(void (^)(NSString *msg))failure{
++ (void)POSTWhiteBoardRoomWithUuid:(NSString *)uuid token:(void (^)(NSString *token))token failure:(void (^)(NSString *msg))failure {
     
     NSString *urlString = @"https://cloudcapiv4.herewhite.com/room/join";
-    NSString *url = [NSString stringWithFormat:@"%@?uuid=%@&token=%@",urlString, uuid, [KeyCenter whiteBoardToken]];
-    [HttpManager post:url params:nil success:^(id responseObj) {
+    NSString *url = [NSString stringWithFormat:@"%@?uuid=%@&token=%@", urlString, uuid, [KeyCenter whiteBoardToken]];
+    [HttpManager post:url params:nil headers:nil success:^(id responseObj) {
         if ([responseObj[@"code"] integerValue] == 200) {
             if (token) {
                 token(responseObj[@"msg"][@"roomToken"]);

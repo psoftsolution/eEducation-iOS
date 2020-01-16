@@ -20,6 +20,11 @@
 		1AEDE5DD2338C0B40096ADEC /* EyeCareModeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDE5DC2338C0B40096ADEC /* EyeCareModeUtil.m */; };
 		1AEDE5E02338CB9E0096ADEC /* SkinCoverLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDE5DF2338CB9E0096ADEC /* SkinCoverLayer.m */; };
 		1AEDE5E32338CBBF0096ADEC /* SkinCoverWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDE5E22338CBBF0096ADEC /* SkinCoverWindow.m */; };
+		7818739123D0419B00905852 /* Replay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7818739023D0419B00905852 /* Replay.storyboard */; };
+		7818739423D041F100905852 /* OneToOneReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7818739323D041F100905852 /* OneToOneReplayViewController.m */; };
+		7818739823D0427500905852 /* ReplayNavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7818739523D0427500905852 /* ReplayNavigationView.xib */; };
+		7818739923D0427500905852 /* ReplayNavigationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7818739723D0427500905852 /* ReplayNavigationView.m */; };
+		7818739B23D04B8400905852 /* OneToOneReplayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7818739A23D04B8400905852 /* OneToOneReplayViewController.xib */; };
 		787E7A3823A9FE97005F8F0C /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 787E7A2723A9FE97005F8F0C /* LoadingView.m */; };
 		787E7A3923A9FE97005F8F0C /* ReplayControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 787E7A2823A9FE97005F8F0C /* ReplayControlView.m */; };
 		787E7A3A23A9FE97005F8F0C /* SliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 787E7A2923A9FE97005F8F0C /* SliderView.m */; };
@@ -153,6 +158,13 @@
 		40B28313D80C71B4DA8D643D /* Pods-AgoraEducation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraEducation.debug.xcconfig"; path = "Target Support Files/Pods-AgoraEducation/Pods-AgoraEducation.debug.xcconfig"; sourceTree = "<group>"; };
 		4EAA54960A24224AEAEC570D /* Pods-AgoraEducation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraEducation.release.xcconfig"; path = "Target Support Files/Pods-AgoraEducation/Pods-AgoraEducation.release.xcconfig"; sourceTree = "<group>"; };
 		76A4F1D25B13050F999DB322 /* Pods_AgoraEducation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AgoraEducation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7818739023D0419B00905852 /* Replay.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Replay.storyboard; sourceTree = "<group>"; };
+		7818739223D041F100905852 /* OneToOneReplayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OneToOneReplayViewController.h; sourceTree = "<group>"; };
+		7818739323D041F100905852 /* OneToOneReplayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OneToOneReplayViewController.m; sourceTree = "<group>"; };
+		7818739523D0427500905852 /* ReplayNavigationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReplayNavigationView.xib; sourceTree = "<group>"; };
+		7818739623D0427500905852 /* ReplayNavigationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplayNavigationView.h; sourceTree = "<group>"; };
+		7818739723D0427500905852 /* ReplayNavigationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplayNavigationView.m; sourceTree = "<group>"; };
+		7818739A23D04B8400905852 /* OneToOneReplayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OneToOneReplayViewController.xib; sourceTree = "<group>"; };
 		787E7A2723A9FE97005F8F0C /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
 		787E7A2823A9FE97005F8F0C /* ReplayControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplayControlView.m; sourceTree = "<group>"; };
 		787E7A2923A9FE97005F8F0C /* SliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderView.m; sourceTree = "<group>"; };
@@ -545,6 +557,10 @@
 		787E7A2523A9FE97005F8F0C /* Replay */ = {
 			isa = PBXGroup;
 			children = (
+				7818739623D0427500905852 /* ReplayNavigationView.h */,
+				7818739723D0427500905852 /* ReplayNavigationView.m */,
+				7818739523D0427500905852 /* ReplayNavigationView.xib */,
+				7818739023D0419B00905852 /* Replay.storyboard */,
 				787E7A2623A9FE97005F8F0C /* Widget */,
 				787E7A3123A9FE97005F8F0C /* ViewController */,
 			);
@@ -574,6 +590,9 @@
 				787E7A3223A9FE97005F8F0C /* ReplayViewController.h */,
 				787E7A3523A9FE97005F8F0C /* ReplayViewController.m */,
 				787E7A3423A9FE97005F8F0C /* ReplayViewController.xib */,
+				7818739223D041F100905852 /* OneToOneReplayViewController.h */,
+				7818739323D041F100905852 /* OneToOneReplayViewController.m */,
+				7818739A23D04B8400905852 /* OneToOneReplayViewController.xib */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -953,9 +972,12 @@
 				78D730FD23B388A400D2146C /* OTOStudentView.xib in Resources */,
 				1A05ADA7237E55630041F27B /* Room.storyboard in Resources */,
 				78D7311423B388B100D2146C /* MCStudentViewCell.xib in Resources */,
+				7818739823D0427500905852 /* ReplayNavigationView.xib in Resources */,
 				78D730EB23B3889D00D2146C /* EENavigationView.xib in Resources */,
 				787E7A3F23A9FE97005F8F0C /* ReplayViewController.xib in Resources */,
 				78D7313F23B38B5700D2146C /* EEClassRoomTypeView.xib in Resources */,
+				7818739B23D04B8400905852 /* OneToOneReplayViewController.xib in Resources */,
+				7818739123D0419B00905852 /* Replay.storyboard in Resources */,
 				787E7A3C23A9FE97005F8F0C /* LoadingView.xib in Resources */,
 				1A44BE7522BF863000766274 /* Assets.xcassets in Resources */,
 				78D730EA23B3889D00D2146C /* EEColorShowView.xib in Resources */,
@@ -1060,6 +1082,7 @@
 				78D730B223B383E600D2146C /* SignalModel.m in Sources */,
 				787E7A4023A9FE97005F8F0C /* ReplayViewController.m in Sources */,
 				78D7309423B36A0500D2146C /* SignalP2PModel.m in Sources */,
+				7818739423D041F100905852 /* OneToOneReplayViewController.m in Sources */,
 				78D730FC23B388A400D2146C /* OTOStudentView.m in Sources */,
 				1A70AFB22359F17500942742 /* SettingViewCell.m in Sources */,
 				78AED06123C5A59C00A24DDB /* UIView+EEBadge.m in Sources */,
@@ -1085,6 +1108,7 @@
 				78D7314123B38B5700D2146C /* MainNavigationController.m in Sources */,
 				78AED05E23C5A59C00A24DDB /* JsonParseUtil.m in Sources */,
 				78D7311523B388B100D2146C /* MCSegmentedView.m in Sources */,
+				7818739923D0427500905852 /* ReplayNavigationView.m in Sources */,
 				78D7314423B390DC00D2146C /* KeyCenter.m in Sources */,
 				78D730A723B3833500D2146C /* RolesInfoModel.m in Sources */,
 				1AEDE5DD2338C0B40096ADEC /* EyeCareModeUtil.m in Sources */,

@@ -90,14 +90,18 @@
         [weakself.educationManager setWhiteStrokeColor:colorArray];
     }];
 
+    // api -> init rtm -> rtc & white
     [self.educationManager queryGlobalStateWithChannelName:self.paramsModel.channelName completeBlock:^(RolesInfoModel *infoModel) {
         
-        [weakself signalDidUpdateGlobalStateWithSourceModel:[RolesInfoModel new] currentModel:infoModel];
+        if(infoModel == nil) {
+            return;
+        }
+        
+        [weakself setupSignalWithSuccessBolck:^{
+            [weakself setupRTC];
+            [weakself signalDidUpdateGlobalStateWithSourceModel:[RolesInfoModel new] currentModel:infoModel];
+        }];
     }];
-    
-
-//    [self setupRTC];
-//    [self setupSignal];
 }
 
 - (void)showHTTPToast:(NSString *)title {
@@ -203,16 +207,18 @@
     self.studentView.defaultImageView.hidden = studentModel.video == 0 ? NO : YES;
     [self.studentView updateCameraImageWithLocalVideoMute:studentModel.video == 0 ? YES : NO];
     [self.studentView updateMicImageWithLocalVideoMute:studentModel.audio == 0 ? YES : NO];
+    [self.studentView updateUserName:studentModel.account];
     
     [self.educationManager enableRTCLocalVideo:studentModel.video == 0 ? NO : YES];
     [self.educationManager enableRTCLocalAudio:studentModel.audio == 0 ? NO : YES];
 }
 
-- (void)setupSignal {
-    WEAK(self);
+- (void)setupSignalWithSuccessBolck:(void (^)(void))successBlock {
+
     [self.educationManager joinSignalWithChannelName:self.paramsModel.channelName completeSuccessBlock:^{
-        [weakself setupRTC];
-        
+        if(successBlock != nil){
+            successBlock();
+        }
         
     } completeFailBlock:nil];
 }
@@ -319,13 +325,35 @@
 - (void)muteVideoStream:(BOOL)stream {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
     currentStuModel.video = !stream ? 1 : 0;
-    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
+    
+    // update mute states
+    WEAK(self);
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:^{
+        
+        weakself.educationManager.studentModel.video = currentStuModel.video;
+        [weakself updateStudentViews:weakself.educationManager.studentModel];
+        
+    } completeFailBlock:^{
+        
+        [weakself updateStudentViews:weakself.educationManager.studentModel];
+    }];
 }
 
 - (void)muteAudioStream:(BOOL)stream {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
     currentStuModel.audio = !stream ? 1 : 0;
-    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
+
+    // update mute states
+    WEAK(self);
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:^{
+        
+        weakself.educationManager.studentModel.audio = currentStuModel.audio;
+        [weakself updateStudentViews:weakself.educationManager.studentModel];
+        
+    } completeFailBlock:^{
+        
+        [weakself updateStudentViews:weakself.educationManager.studentModel];
+    }];
 }
 
 
@@ -403,18 +431,14 @@
 }
 
 - (void)signalDidUpdateMessage:(SignalRoomModel *_Nonnull)roomMessageModel {
-    
-#ifdef GLOBAL_STATE_API
-    // check roomMessageModel
-#endif
-    
+
     [self.messageListView addMessageModel:roomMessageModel];
 }
 
 -(void)signalDidUpdateGlobalStateWithSourceModel:(RolesInfoModel *)sourceInfoModel currentModel:(RolesInfoModel *)currentInfoModel {
     
     // teacher
-    {
+    if(currentInfoModel != nil && currentInfoModel.teacherModel != nil){
         TeacherModel *sourceModel = sourceInfoModel.teacherModel;
         TeacherModel *currentModel = currentInfoModel.teacherModel;
         if(![sourceModel.whiteboard_uid isEqualToString:currentModel.whiteboard_uid]) {
@@ -426,7 +450,7 @@
         }
     }
     
-    [self updateChatViews];
+//    [self updateChatViews];
     [self checkNeedRender];
 }
 
