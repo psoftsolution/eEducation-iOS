@@ -30,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface BigEducationManager : NSObject
 
 /* ==================================>Session Model<================================ */
+@property (nonatomic, copy) NSString *userToken;
+@property (nonatomic, copy) NSString *roomId;
+
 @property (nonatomic, strong) TeacherModel * _Nullable teacherModel;
 @property (nonatomic, strong) StudentModel * _Nullable studentModel;
 @property (nonatomic, strong) StudentModel * _Nullable renderStudentModel;

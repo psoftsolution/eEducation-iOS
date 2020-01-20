@@ -20,8 +20,6 @@
 #import "RoomAllModel.h"
 #import "CommonModel.h"
 
-#import "KeyCenter.h"
-
 @interface OneToOneEducationManager()<SignalManagerDelegate, WhiteManagerDelegate, RTCManagerDelegate>
 
 @property (nonatomic, strong) SignalManager *signalManager;
@@ -114,19 +112,6 @@
 
 - (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nullable)block {
     
-#ifdef GLOBAL_STATE_RTM
-    WEAK(self);
-    [self.signalManager getChannelAllAttributes:channelName completeBlock:^(NSArray<AgoraRtmChannelAttribute *> * _Nullable attributes) {
-        
-        if(block != nil){
-            RolesInfoModel *rolesInfoModel = [weakself filterRolesInfoModelWithAttributes:attributes];
-            block(rolesInfoModel);
-            return;
-        }
-    }];
-#endif
-    
-#ifdef GLOBAL_STATE_API
     WEAK(self);
     NSString *url = [NSString stringWithFormat:HTTP_GET_ROOM_INFO, [KeyCenter agoraAppid], self.roomId];
 
@@ -151,7 +136,6 @@
             block(nil);
         }
     }];
-#endif
 }
 
 - (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock {

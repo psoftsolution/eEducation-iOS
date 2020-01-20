@@ -22,6 +22,7 @@
 #import "RTCVideoCanvasModel.h"
 #import "RolesInfoModel.h"
 
+
 typedef void(^QueryRolesInfoBlock)(RolesInfoModel * _Nullable);
 #define NOTICE_KEY_ON_MESSAGE_DISCONNECT @"NOTICE_KEY_ON_MESSAGE_DISCONNECT"
 
@@ -30,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MinEducationManager : NSObject
 
 /* ==================================>Session Model<================================ */
+@property (nonatomic, copy) NSString *userToken;
+@property (nonatomic, copy) NSString *roomId;
+
 @property (nonatomic, strong) TeacherModel * _Nullable teacherModel;
 @property (nonatomic, strong) StudentModel * _Nullable studentModel;
 @property (nonatomic, strong) NSArray<RolesStudentInfoModel*> *studentTotleListArray;
@@ -43,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setSignalDelegate:(id<SignalDelegate>)delegate;
 - (void)joinSignalWithChannelName:(NSString *)channelName completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
 - (void)updateGlobalStateWithValue:(StudentModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
+- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nullable)block;
 - (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock;
 - (void)sendMessageWithContent:(NSString *)text userName:(NSString *)name;
  

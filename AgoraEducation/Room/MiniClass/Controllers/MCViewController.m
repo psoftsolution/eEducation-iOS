@@ -89,11 +89,24 @@
     [self.educationManager setSignalDelegate:self];
     [self.educationManager initSessionModel];
     
-    [self setupRTC];
-    [self setupSignal];
-    
     [self initSelectSegmentBlock];
     [self initStudentRenderBlock];
+
+    self.educationManager.roomId = self.paramsModel.roomId;
+    self.educationManager.userToken = self.paramsModel.userToken;
+
+//     api -> init rtm -> rtc & white
+    [self.educationManager queryGlobalStateWithChannelName:self.paramsModel.channelName completeBlock:^(RolesInfoModel *infoModel) {
+
+        if(infoModel == nil) {
+            return;
+        }
+
+        [weakself setupSignalWithSuccessBolck:^{
+            [weakself setupRTC];
+            [weakself signalDidUpdateGlobalStateWithSourceModel:[RolesInfoModel new] currentModel:infoModel];
+        }];
+    }];
 }
 
 - (void)setupRTC {
@@ -110,19 +123,12 @@
     }];
 }
 
-- (void)setupSignal {
-    WEAK(self);
+- (void)setupSignalWithSuccessBolck:(void (^)(void))successBlock {
+
     [self.educationManager joinSignalWithChannelName:self.paramsModel.channelName completeSuccessBlock:^{
-        
-        StudentModel *model = [StudentModel new];
-        model.uid = weakself.paramsModel.userId;
-        model.account = weakself.paramsModel.userName;
-        model.video = 1;
-        model.audio = 1;
-        model.chat = 1;
-        [weakself.educationManager updateGlobalStateWithValue:model completeSuccessBlock:^{
-            
-        } completeFailBlock:nil];
+        if(successBlock != nil){
+            successBlock();
+        }
         
     } completeFailBlock:nil];
 }
@@ -331,16 +337,36 @@
     }];
 }
 
-- (void)muteVideoStream:(BOOL)stream {
+- (void)muteVideoStream:(BOOL)mute {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
-    currentStuModel.video = !stream ? 1 : 0;
-    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
+    currentStuModel.video = mute ? 0 : 1;
+    
+    // update mute states
+    WEAK(self);
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:^{
+        
+        weakself.educationManager.studentModel.video = currentStuModel.video;
+        [weakself reloadStudentViews];
+        
+    } completeFailBlock:^{
+       [weakself reloadStudentViews];
+    }];
 }
 
-- (void)muteAudioStream:(BOOL)stream {
+- (void)muteAudioStream:(BOOL)mute {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
-    currentStuModel.audio = !stream ? 1 : 0;
-    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
+    currentStuModel.audio = mute ? 0 : 1;
+    
+    // update mute states
+    WEAK(self);
+    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:^{
+        
+        weakself.educationManager.studentModel.audio = currentStuModel.audio;
+        [weakself reloadStudentViews];
+        
+    } completeFailBlock:^{
+       [weakself reloadStudentViews];
+    }];
 }
 
 #pragma mark  --------  Mandatory landscape -------
@@ -442,7 +468,7 @@
 -(void)signalDidUpdateGlobalStateWithSourceModel:(RolesInfoModel *)sourceInfoModel currentModel:(RolesInfoModel *)currentInfoModel {
     
     // teacher
-    {
+    if (currentInfoModel != nil && currentInfoModel.teacherModel != nil) {
         TeacherModel *sourceModel = sourceInfoModel.teacherModel;
         TeacherModel *currentModel = currentInfoModel.teacherModel;
         if(![sourceModel.whiteboard_uid isEqualToString:currentModel.whiteboard_uid]) {
@@ -455,9 +481,7 @@
     }
     
     // student
-    {
-        self.educationManager.studentTotleListArray = currentInfoModel.studentModels;
-    }
+    self.educationManager.studentTotleListArray = currentInfoModel.studentModels;
 
     [self updateChatViews];
     [self checkNeedRender];

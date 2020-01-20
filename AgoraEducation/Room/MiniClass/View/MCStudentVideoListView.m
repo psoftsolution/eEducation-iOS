@@ -82,6 +82,7 @@
     if(studentArray.count == 0 || self.studentArray.count != studentArray.count) {
         self.studentArray = [NSArray arrayWithArray:studentArray];
         [self.videoListView reloadData];
+        
     } else {
 
         NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
@@ -98,7 +99,9 @@
         }
 
         self.studentArray = [NSArray arrayWithArray:studentArray];
-        [self.videoListView reloadItemsAtIndexPaths:indexPaths];
+        if(indexPaths.count > 0){
+            [self.videoListView reloadItemsAtIndexPaths:indexPaths];
+        }
     }
 }
 

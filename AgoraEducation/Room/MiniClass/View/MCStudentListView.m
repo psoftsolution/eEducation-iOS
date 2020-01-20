@@ -84,12 +84,13 @@
 
 - (void)muteVideo:(UIButton *)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(muteVideoStream:)]) {
-           [self.delegate muteVideoStream:sender.selected];
-       }
+        [self.delegate muteVideoStream:sender.selected];
+    }
     sender.selected = !sender.selected;
     NSString *imageName = sender.selected ? @"roomCameraOn":@"roomCameraOff";
     [sender setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];
 }
+
 
 - (void)setUserId:(NSString *)userId {
     _userId = userId;

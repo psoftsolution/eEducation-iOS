@@ -15,6 +15,16 @@
 #import "WhiteManager.h"
 #import "RTCManager.h"
 
+#import "HttpManager.h"
+#import "KeyCenter.h"
+#import "RoomAllModel.h"
+#import "CommonModel.h"
+
+typedef NS_ENUM(NSInteger, UserRoleType) {
+    UserRoleTypeTeacher = 1,
+    UserRoleTypeStudent = 2,
+};
+
 @interface BigEducationManager()<SignalManagerDelegate, WhiteManagerDelegate, RTCManagerDelegate>
 
 @property (nonatomic, strong) SignalManager *signalManager;
@@ -72,16 +82,80 @@
 - (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nullable)block {
     
     WEAK(self);
-    [self.signalManager getChannelAllAttributes:channelName completeBlock:^(NSArray<AgoraRtmChannelAttribute *> * _Nullable attributes) {
+    NSString *url = [NSString stringWithFormat:HTTP_GET_ROOM_INFO, [KeyCenter agoraAppid], self.roomId];
+
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    headers[@"token"] = self.userToken;
+    [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
+        RoomAllModel *model = [RoomAllModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0) {
+            RolesInfoModel *rolesInfoModel = [weakself filterRolesInfoModelWithRoomModel:model];
+            if(block != nil){
+                block(rolesInfoModel);
+            }
+        } else {
+            if(block != nil){
+                block(nil);
+            }
+        }
+        
+    } failure:^(NSError *error) {
         if(block != nil){
-            RolesInfoModel *rolesInfoModel = [weakself filterRolesInfoModelWithAttributes:attributes];
-            block(rolesInfoModel);
-            return;
+            block(nil);
         }
     }];
+}
+
+- (RolesInfoModel *)filterRolesInfoModelWithRoomModel:(RoomAllModel * _Nullable) roomAllModel {
+
+    if(roomAllModel == nil){
+        RolesInfoModel *rolesInfoModel = [RolesInfoModel new];
+        return rolesInfoModel;
+    }
     
+    TeacherModel *teaModel = [TeacherModel new];
+    //            teaModel.class_state
+    teaModel.whiteboard_uid = roomAllModel.data.room.whiteId;
+    teaModel.whiteboard_token = roomAllModel.data.room.whiteToken;
+    teaModel.mute_chat = roomAllModel.data.room.muteAllChat;
     
+    NSMutableArray<RolesStudentInfoModel*> *stuArray = [NSMutableArray array];
+
+    for (UserModel *userModel in roomAllModel.data.users) {
+        
+        if (userModel.role == UserRoleTypeTeacher) {
+            teaModel.account = userModel.userName;
+            teaModel.uid = @(userModel.uid).stringValue;
+            teaModel.link_uid = [userModel.linkUsers firstObject];
+            teaModel.shared_uid = @(userModel.screenId).stringValue;
+            teaModel.video = userModel.enableVideo;
+            teaModel.audio = userModel.enableAudio;
+
+        } else if (userModel.role == UserRoleTypeStudent) {
+            StudentModel *model = [StudentModel new];
+            model.account = userModel.userName;
+            model.uid = @(userModel.uid).stringValue;
+            model.chat = userModel.enableChat;
+            model.video = userModel.enableVideo;
+            model.audio = userModel.enableAudio;
+
+            RolesStudentInfoModel *infoModel = [RolesStudentInfoModel new];
+            infoModel.studentModel = model;
+            infoModel.attrKey = model.uid;
+            [stuArray addObject:infoModel];
+            
+            if ([model.uid isEqualToString: self.signalManager.messageModel.uid]) {
+                self.studentModel = model;
+            }
+        }
+    }
+    
+    RolesInfoModel *rolesInfoModel = [RolesInfoModel new];
+    rolesInfoModel.teacherModel = teaModel;
+    rolesInfoModel.studentModels = stuArray;
+    
+    return rolesInfoModel;
 }
 
 - (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock {

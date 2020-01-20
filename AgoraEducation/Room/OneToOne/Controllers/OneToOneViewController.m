@@ -204,7 +204,6 @@
         return;
     }
     
-    self.studentView.defaultImageView.hidden = studentModel.video == 0 ? NO : YES;
     [self.studentView updateCameraImageWithLocalVideoMute:studentModel.video == 0 ? YES : NO];
     [self.studentView updateMicImageWithLocalVideoMute:studentModel.audio == 0 ? YES : NO];
     [self.studentView updateUserName:studentModel.account];
@@ -322,9 +321,9 @@
     }];
 }
 
-- (void)muteVideoStream:(BOOL)stream {
+- (void)muteVideoStream:(BOOL)mute {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
-    currentStuModel.video = !stream ? 1 : 0;
+    currentStuModel.video = mute ? 0 : 1;
     
     // update mute states
     WEAK(self);
@@ -339,10 +338,10 @@
     }];
 }
 
-- (void)muteAudioStream:(BOOL)stream {
+- (void)muteAudioStream:(BOOL)mute {
     StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
-    currentStuModel.audio = !stream ? 1 : 0;
-
+    currentStuModel.audio = mute ? 0 : 1;
+    
     // update mute states
     WEAK(self);
     [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:^{
@@ -450,7 +449,7 @@
         }
     }
     
-//    [self updateChatViews];
+    [self updateChatViews];
     [self checkNeedRender];
 }
 

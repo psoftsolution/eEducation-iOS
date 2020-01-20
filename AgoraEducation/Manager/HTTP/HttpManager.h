@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define HTTP_BASE_URL @"http://115.231.168.26:8080"
+#define HTTP_BASE_URL @"http://115.231.168.26:8080/edu"
 
 // http: get app config
 #define HTTP_GET_CONFIG @""HTTP_BASE_URL"/v1/room/config"

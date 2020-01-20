@@ -47,5 +47,4 @@
     self.muteAudioButton.hidden = studentModel.uid != self.userId ? YES : NO;
 }
 
-
 @end

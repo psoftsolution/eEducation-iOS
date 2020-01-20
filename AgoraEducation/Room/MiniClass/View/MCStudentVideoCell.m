@@ -42,6 +42,7 @@
     backImageView.frame = self.contentView.bounds;
     [self.contentView addSubview:backImageView];
     backImageView.image = [UIImage imageNamed:@"icon-student"];
+    backImageView.contentMode = UIViewContentModeScaleAspectFill;
     backImageView.backgroundColor = [UIColor colorWithHexString:@"DBE2E5"];
     self.backImageView = backImageView;
 
