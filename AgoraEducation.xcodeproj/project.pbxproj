@@ -577,15 +577,15 @@
 			isa = PBXGroup;
 			children = (
 				78565C8623E301B900D2A8DE /* BaseEducationManager.h */,
-				78565C8723E301B900D2A8DE /* BaseEducationManager+RTC.m */,
-				78565C8823E301B900D2A8DE /* BaseEducationManager+GlobalStates.m */,
+				78565C8E23E301B900D2A8DE /* BaseEducationManager.m */,
+				78565C8B23E301B900D2A8DE /* BaseEducationManager+WhiteBoard.h */,
 				78565C8923E301B900D2A8DE /* BaseEducationManager+WhiteBoard.m */,
 				78565C8A23E301B900D2A8DE /* BaseEducationManager+Signal.h */,
-				78565C8B23E301B900D2A8DE /* BaseEducationManager+WhiteBoard.h */,
-				78565C8C23E301B900D2A8DE /* BaseEducationManager+GlobalStates.h */,
-				78565C8D23E301B900D2A8DE /* BaseEducationManager+RTC.h */,
-				78565C8E23E301B900D2A8DE /* BaseEducationManager.m */,
 				78565C8F23E301B900D2A8DE /* BaseEducationManager+Signal.m */,
+				78565C8C23E301B900D2A8DE /* BaseEducationManager+GlobalStates.h */,
+				78565C8823E301B900D2A8DE /* BaseEducationManager+GlobalStates.m */,
+				78565C8D23E301B900D2A8DE /* BaseEducationManager+RTC.h */,
+				78565C8723E301B900D2A8DE /* BaseEducationManager+RTC.m */,
 			);
 			path = BaseManager;
 			sourceTree = "<group>";
@@ -593,11 +593,11 @@
 		78565C9823E301C900D2A8DE /* RTCModel */ = {
 			isa = PBXGroup;
 			children = (
+				78565C9C23E301C900D2A8DE /* RTCVideoCanvasModel.h */,
 				78565C9923E301C900D2A8DE /* RTCVideoCanvasModel.m */,
+				78565C9D23E301C900D2A8DE /* RTCVideoSessionModel.h */,
 				78565C9A23E301C900D2A8DE /* RTCVideoSessionModel.m */,
 				78565C9B23E301C900D2A8DE /* RTCEnum.h */,
-				78565C9C23E301C900D2A8DE /* RTCVideoCanvasModel.h */,
-				78565C9D23E301C900D2A8DE /* RTCVideoSessionModel.h */,
 			);
 			path = RTCModel;
 			sourceTree = "<group>";
@@ -605,14 +605,14 @@
 		78565C9E23E301C900D2A8DE /* SignalModel */ = {
 			isa = PBXGroup;
 			children = (
+				78565CA323E301C900D2A8DE /* SignalEnum.h */,
 				78565C9F23E301C900D2A8DE /* SignalEnum.m */,
+				78565CA423E301C900D2A8DE /* SignalMessageModel.h */,
 				78565CA023E301C900D2A8DE /* SignalMessageModel.m */,
+				78565CA623E301C900D2A8DE /* MessageModel.h */,
 				78565CA123E301C900D2A8DE /* MessageModel.m */,
 				78565CA223E301C900D2A8DE /* SignalP2PModel.h */,
-				78565CA323E301C900D2A8DE /* SignalEnum.h */,
-				78565CA423E301C900D2A8DE /* SignalMessageModel.h */,
 				78565CA523E301C900D2A8DE /* SignalP2PModel.m */,
-				78565CA623E301C900D2A8DE /* MessageModel.h */,
 			);
 			path = SignalModel;
 			sourceTree = "<group>";
