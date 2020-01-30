@@ -25,6 +25,19 @@
 		7818739823D0427500905852 /* ReplayNavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7818739523D0427500905852 /* ReplayNavigationView.xib */; };
 		7818739923D0427500905852 /* ReplayNavigationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7818739723D0427500905852 /* ReplayNavigationView.m */; };
 		7818739B23D04B8400905852 /* OneToOneReplayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7818739A23D04B8400905852 /* OneToOneReplayViewController.xib */; };
+		781873B223D6AC4900905852 /* BaseEducationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873B123D6AC4900905852 /* BaseEducationManager.m */; };
+		781873C223D6C59F00905852 /* EnterRoomAllModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873BE23D6C59F00905852 /* EnterRoomAllModel.m */; };
+		781873C323D6C59F00905852 /* ConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873C123D6C59F00905852 /* ConfigModel.m */; };
+		781873C623D6C5C900905852 /* EduConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873C523D6C5C900905852 /* EduConfigModel.m */; };
+		781873CB23D6D1A000905852 /* CommonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873C823D6D19F00905852 /* CommonModel.m */; };
+		781873CC23D6D1A000905852 /* RoomAllModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873C923D6D19F00905852 /* RoomAllModel.m */; };
+		781873CF23D6E5DA00905852 /* BaseEducationManager+GlobalStates.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873CE23D6E5DA00905852 /* BaseEducationManager+GlobalStates.m */; };
+		78565C6123E1AB7900D2A8DE /* BaseEducationManager+Signal.m in Sources */ = {isa = PBXBuildFile; fileRef = 78565C6023E1AB7900D2A8DE /* BaseEducationManager+Signal.m */; };
+		78565C6423E1AF0900D2A8DE /* MessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78565C6323E1AF0900D2A8DE /* MessageModel.m */; };
+		78565C6A23E1AFCE00D2A8DE /* SignalMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78565C6923E1AFCE00D2A8DE /* SignalMessageModel.m */; };
+		78565C6F23E1B22D00D2A8DE /* SignalEnum.m in Sources */ = {isa = PBXBuildFile; fileRef = 78565C6E23E1B22D00D2A8DE /* SignalEnum.m */; };
+		78565C7223E279F000D2A8DE /* BaseEducationManager+WhiteBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 78565C7123E279F000D2A8DE /* BaseEducationManager+WhiteBoard.m */; };
+		78565C7823E27E1E00D2A8DE /* BaseEducationManager+RTC.m in Sources */ = {isa = PBXBuildFile; fileRef = 78565C7723E27E1E00D2A8DE /* BaseEducationManager+RTC.m */; };
 		787E7A3823A9FE97005F8F0C /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 787E7A2723A9FE97005F8F0C /* LoadingView.m */; };
 		787E7A3923A9FE97005F8F0C /* ReplayControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 787E7A2823A9FE97005F8F0C /* ReplayControlView.m */; };
 		787E7A3A23A9FE97005F8F0C /* SliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 787E7A2923A9FE97005F8F0C /* SliderView.m */; };
@@ -39,10 +52,6 @@
 		78AED05F23C5A59C00A24DDB /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED05523C5A59C00A24DDB /* NSString+MD5.m */; };
 		78AED06023C5A59C00A24DDB /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED05823C5A59C00A24DDB /* UIView+Toast.m */; };
 		78AED06123C5A59C00A24DDB /* UIView+EEBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED05B23C5A59C00A24DDB /* UIView+EEBadge.m */; };
-		78AED06723C5A65400A24DDB /* ConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED06523C5A65400A24DDB /* ConfigModel.m */; };
-		78AED06823C5A65400A24DDB /* EnterRoomAllModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED06623C5A65400A24DDB /* EnterRoomAllModel.m */; };
-		78AED0EA23C5D01000A24DDB /* RoomAllModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED0E923C5D01000A24DDB /* RoomAllModel.m */; };
-		78AED0ED23C5FD8B00A24DDB /* CommonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AED0EC23C5FD8B00A24DDB /* CommonModel.m */; };
 		78D7307223B3638B00D2146C /* SignalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306423B3638B00D2146C /* SignalManager.m */; };
 		78D7307423B3638B00D2146C /* RTCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306723B3638B00D2146C /* RTCManager.m */; };
 		78D7307523B3638B00D2146C /* WhiteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306C23B3638B00D2146C /* WhiteManager.m */; };
@@ -90,7 +99,6 @@
 		78D7312523B388BE00D2146C /* BCSegmentedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7311B23B388BE00D2146C /* BCSegmentedView.m */; };
 		78D7312623B388BE00D2146C /* EETeacherVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7311F23B388BE00D2146C /* EETeacherVideoView.m */; };
 		78D7312723B388BE00D2146C /* EETeacherVideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D7312023B388BE00D2146C /* EETeacherVideoView.xib */; };
-		78D7312D23B3895800D2146C /* VCParamsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7312C23B3895800D2146C /* VCParamsModel.m */; };
 		78D7313E23B38B5700D2146C /* EEClassRoomTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7313723B38B5700D2146C /* EEClassRoomTypeView.m */; };
 		78D7313F23B38B5700D2146C /* EEClassRoomTypeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D7313823B38B5700D2146C /* EEClassRoomTypeView.xib */; };
 		78D7314023B38B5700D2146C /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7313B23B38B5700D2146C /* MainViewController.m */; };
@@ -165,6 +173,33 @@
 		7818739623D0427500905852 /* ReplayNavigationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplayNavigationView.h; sourceTree = "<group>"; };
 		7818739723D0427500905852 /* ReplayNavigationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplayNavigationView.m; sourceTree = "<group>"; };
 		7818739A23D04B8400905852 /* OneToOneReplayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OneToOneReplayViewController.xib; sourceTree = "<group>"; };
+		781873B023D6AC4900905852 /* BaseEducationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseEducationManager.h; sourceTree = "<group>"; };
+		781873B123D6AC4900905852 /* BaseEducationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseEducationManager.m; sourceTree = "<group>"; };
+		781873BE23D6C59F00905852 /* EnterRoomAllModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterRoomAllModel.m; sourceTree = "<group>"; };
+		781873BF23D6C59F00905852 /* ConfigModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigModel.h; sourceTree = "<group>"; };
+		781873C023D6C59F00905852 /* EnterRoomAllModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterRoomAllModel.h; sourceTree = "<group>"; };
+		781873C123D6C59F00905852 /* ConfigModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigModel.m; sourceTree = "<group>"; };
+		781873C423D6C5C900905852 /* EduConfigModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EduConfigModel.h; sourceTree = "<group>"; };
+		781873C523D6C5C900905852 /* EduConfigModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EduConfigModel.m; sourceTree = "<group>"; };
+		781873C723D6D19F00905852 /* RoomAllModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomAllModel.h; sourceTree = "<group>"; };
+		781873C823D6D19F00905852 /* CommonModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonModel.m; sourceTree = "<group>"; };
+		781873C923D6D19F00905852 /* RoomAllModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomAllModel.m; sourceTree = "<group>"; };
+		781873CA23D6D1A000905852 /* CommonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonModel.h; sourceTree = "<group>"; };
+		781873CD23D6E5DA00905852 /* BaseEducationManager+GlobalStates.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BaseEducationManager+GlobalStates.h"; sourceTree = "<group>"; };
+		781873CE23D6E5DA00905852 /* BaseEducationManager+GlobalStates.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "BaseEducationManager+GlobalStates.m"; sourceTree = "<group>"; };
+		78565C5F23E1AB7900D2A8DE /* BaseEducationManager+Signal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BaseEducationManager+Signal.h"; sourceTree = "<group>"; };
+		78565C6023E1AB7900D2A8DE /* BaseEducationManager+Signal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "BaseEducationManager+Signal.m"; sourceTree = "<group>"; };
+		78565C6223E1AF0900D2A8DE /* MessageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageModel.h; sourceTree = "<group>"; };
+		78565C6323E1AF0900D2A8DE /* MessageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageModel.m; sourceTree = "<group>"; };
+		78565C6823E1AFCE00D2A8DE /* SignalMessageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMessageModel.h; sourceTree = "<group>"; };
+		78565C6923E1AFCE00D2A8DE /* SignalMessageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignalMessageModel.m; sourceTree = "<group>"; };
+		78565C6B23E1B16C00D2A8DE /* SignalEnum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalEnum.h; sourceTree = "<group>"; };
+		78565C6E23E1B22D00D2A8DE /* SignalEnum.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignalEnum.m; sourceTree = "<group>"; };
+		78565C7023E279F000D2A8DE /* BaseEducationManager+WhiteBoard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BaseEducationManager+WhiteBoard.h"; sourceTree = "<group>"; };
+		78565C7123E279F000D2A8DE /* BaseEducationManager+WhiteBoard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "BaseEducationManager+WhiteBoard.m"; sourceTree = "<group>"; };
+		78565C7323E27D9900D2A8DE /* RTCEnum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCEnum.h; sourceTree = "<group>"; };
+		78565C7623E27E1E00D2A8DE /* BaseEducationManager+RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BaseEducationManager+RTC.h"; sourceTree = "<group>"; };
+		78565C7723E27E1E00D2A8DE /* BaseEducationManager+RTC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "BaseEducationManager+RTC.m"; sourceTree = "<group>"; };
 		787E7A2723A9FE97005F8F0C /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
 		787E7A2823A9FE97005F8F0C /* ReplayControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplayControlView.m; sourceTree = "<group>"; };
 		787E7A2923A9FE97005F8F0C /* SliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderView.m; sourceTree = "<group>"; };
@@ -190,14 +225,6 @@
 		78AED05823C5A59C00A24DDB /* UIView+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Toast.m"; sourceTree = "<group>"; };
 		78AED05A23C5A59C00A24DDB /* UIView+EEBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+EEBadge.h"; sourceTree = "<group>"; };
 		78AED05B23C5A59C00A24DDB /* UIView+EEBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+EEBadge.m"; sourceTree = "<group>"; };
-		78AED06323C5A65400A24DDB /* EnterRoomAllModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnterRoomAllModel.h; sourceTree = "<group>"; };
-		78AED06423C5A65400A24DDB /* ConfigModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigModel.h; sourceTree = "<group>"; };
-		78AED06523C5A65400A24DDB /* ConfigModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigModel.m; sourceTree = "<group>"; };
-		78AED06623C5A65400A24DDB /* EnterRoomAllModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnterRoomAllModel.m; sourceTree = "<group>"; };
-		78AED0E823C5D01000A24DDB /* RoomAllModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RoomAllModel.h; sourceTree = "<group>"; };
-		78AED0E923C5D01000A24DDB /* RoomAllModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RoomAllModel.m; sourceTree = "<group>"; };
-		78AED0EB23C5FD8B00A24DDB /* CommonModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonModel.h; sourceTree = "<group>"; };
-		78AED0EC23C5FD8B00A24DDB /* CommonModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommonModel.m; sourceTree = "<group>"; };
 		78D7305B23B35ADB00D2146C /* AgoraEducation.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraEducation.pch; sourceTree = "<group>"; };
 		78D7306323B3638B00D2146C /* SignalManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalManager.h; sourceTree = "<group>"; };
 		78D7306423B3638B00D2146C /* SignalManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignalManager.m; sourceTree = "<group>"; };
@@ -286,8 +313,6 @@
 		78D7311E23B388BE00D2146C /* EETeacherVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EETeacherVideoView.h; sourceTree = "<group>"; };
 		78D7311F23B388BE00D2146C /* EETeacherVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EETeacherVideoView.m; sourceTree = "<group>"; };
 		78D7312023B388BE00D2146C /* EETeacherVideoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EETeacherVideoView.xib; sourceTree = "<group>"; };
-		78D7312B23B3895800D2146C /* VCParamsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCParamsModel.h; sourceTree = "<group>"; };
-		78D7312C23B3895800D2146C /* VCParamsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCParamsModel.m; sourceTree = "<group>"; };
 		78D7313623B38B5700D2146C /* EEClassRoomTypeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEClassRoomTypeView.h; sourceTree = "<group>"; };
 		78D7313723B38B5700D2146C /* EEClassRoomTypeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEClassRoomTypeView.m; sourceTree = "<group>"; };
 		78D7313823B38B5700D2146C /* EEClassRoomTypeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EEClassRoomTypeView.xib; sourceTree = "<group>"; };
@@ -394,10 +419,6 @@
 			children = (
 				1A399E5223697E9000F5A40F /* OneToOneViewController.h */,
 				1A399E5323697E9000F5A40F /* OneToOneViewController.m */,
-				78AED0E823C5D01000A24DDB /* RoomAllModel.h */,
-				78AED0E923C5D01000A24DDB /* RoomAllModel.m */,
-				78AED0EB23C5FD8B00A24DDB /* CommonModel.h */,
-				78AED0EC23C5FD8B00A24DDB /* CommonModel.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -428,8 +449,6 @@
 				1A399E4F236975F900F5A40F /* MiniClass */,
 				1A399E4C236975AD00F5A40F /* BigClass */,
 				1A05ADA6237E55630041F27B /* Room.storyboard */,
-				78D7312B23B3895800D2146C /* VCParamsModel.h */,
-				78D7312C23B3895800D2146C /* VCParamsModel.m */,
 				1A61CB762386303B003D9E81 /* RoomProtocol.h */,
 			);
 			path = Room;
@@ -554,6 +573,21 @@
 			path = EyeCare;
 			sourceTree = "<group>";
 		};
+		781873BD23D6C59F00905852 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				781873BF23D6C59F00905852 /* ConfigModel.h */,
+				781873C123D6C59F00905852 /* ConfigModel.m */,
+				781873C023D6C59F00905852 /* EnterRoomAllModel.h */,
+				781873BE23D6C59F00905852 /* EnterRoomAllModel.m */,
+				781873CA23D6D1A000905852 /* CommonModel.h */,
+				781873C823D6D19F00905852 /* CommonModel.m */,
+				781873C723D6D19F00905852 /* RoomAllModel.h */,
+				781873C923D6D19F00905852 /* RoomAllModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		787E7A2523A9FE97005F8F0C /* Replay */ = {
 			isa = PBXGroup;
 			children = (
@@ -602,6 +636,19 @@
 			children = (
 				78D731A823BB103B00D2146C /* BigEducationManager.h */,
 				78D731A923BB103B00D2146C /* BigEducationManager.m */,
+				781873B023D6AC4900905852 /* BaseEducationManager.h */,
+				781873B123D6AC4900905852 /* BaseEducationManager.m */,
+				781873CD23D6E5DA00905852 /* BaseEducationManager+GlobalStates.h */,
+				781873CE23D6E5DA00905852 /* BaseEducationManager+GlobalStates.m */,
+				78565C5F23E1AB7900D2A8DE /* BaseEducationManager+Signal.h */,
+				78565C6023E1AB7900D2A8DE /* BaseEducationManager+Signal.m */,
+				78565C7023E279F000D2A8DE /* BaseEducationManager+WhiteBoard.h */,
+				78565C7123E279F000D2A8DE /* BaseEducationManager+WhiteBoard.m */,
+				78565C7623E27E1E00D2A8DE /* BaseEducationManager+RTC.h */,
+				78565C7723E27E1E00D2A8DE /* BaseEducationManager+RTC.m */,
+				78565C6B23E1B16C00D2A8DE /* SignalEnum.h */,
+				78565C6E23E1B22D00D2A8DE /* SignalEnum.m */,
+				78565C7323E27D9900D2A8DE /* RTCEnum.h */,
 				78D731B823BB610400D2146C /* MinEducationManager.h */,
 				78D731B923BB610400D2146C /* MinEducationManager.m */,
 				78D731BE23BB614D00D2146C /* OneToOneEducationManager.h */,
@@ -675,10 +722,6 @@
 		78AED06223C5A65400A24DDB /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				78AED06423C5A65400A24DDB /* ConfigModel.h */,
-				78AED06523C5A65400A24DDB /* ConfigModel.m */,
-				78AED06323C5A65400A24DDB /* EnterRoomAllModel.h */,
-				78AED06623C5A65400A24DDB /* EnterRoomAllModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -738,12 +781,18 @@
 				78D7309D23B3833500D2146C /* RTCVideoCanvasModel.m */,
 				78D7309823B3833500D2146C /* RTCVideoSessionModel.h */,
 				78D7309F23B3833500D2146C /* RTCVideoSessionModel.m */,
+				78565C6223E1AF0900D2A8DE /* MessageModel.h */,
+				78565C6323E1AF0900D2A8DE /* MessageModel.m */,
+				78565C6823E1AFCE00D2A8DE /* SignalMessageModel.h */,
+				78565C6923E1AFCE00D2A8DE /* SignalMessageModel.m */,
 				78D730A523B3833500D2146C /* SignalRoomModel.h */,
 				78D7309923B3833500D2146C /* SignalRoomModel.m */,
 				78D7309C23B3833500D2146C /* StudentModel.h */,
 				78D730A123B3833500D2146C /* StudentModel.m */,
 				78D730A323B3833500D2146C /* TeacherModel.h */,
 				78D730A023B3833500D2146C /* TeacherModel.m */,
+				781873C423D6C5C900905852 /* EduConfigModel.h */,
+				781873C523D6C5C900905852 /* EduConfigModel.m */,
 			);
 			path = EduModel;
 			sourceTree = "<group>";
@@ -751,6 +800,7 @@
 		78D730B623B3847400D2146C /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
+				781873BD23D6C59F00905852 /* Model */,
 				78D730C123B384D400D2146C /* HttpManager.h */,
 				78D730C223B384D400D2146C /* HttpManager.m */,
 			);
@@ -1057,6 +1107,7 @@
 				78D7311323B388B100D2146C /* MCStudentViewCell.m in Sources */,
 				78D7313E23B38B5700D2146C /* EEClassRoomTypeView.m in Sources */,
 				787E7A3823A9FE97005F8F0C /* LoadingView.m in Sources */,
+				78565C6F23E1B22D00D2A8DE /* SignalEnum.m in Sources */,
 				78D730FE23B388A400D2146C /* OTOTeacherView.m in Sources */,
 				78D730E923B3889D00D2146C /* EEWhiteboardTool.m in Sources */,
 				78D730A823B3833500D2146C /* RTCVideoCanvasModel.m in Sources */,
@@ -1064,8 +1115,9 @@
 				78D7310E23B388B100D2146C /* MCStudentVideoListView.m in Sources */,
 				78D730EE23B3889D00D2146C /* EEMessageView.m in Sources */,
 				1A44BE7B22BF863000766274 /* AppDelegate.m in Sources */,
+				78565C7223E279F000D2A8DE /* BaseEducationManager+WhiteBoard.m in Sources */,
+				78565C6A23E1AFCE00D2A8DE /* SignalMessageModel.m in Sources */,
 				787E7A3D23A9FE97005F8F0C /* EduButton.m in Sources */,
-				78D7312D23B3895800D2146C /* VCParamsModel.m in Sources */,
 				78D730C323B384D400D2146C /* HttpManager.m in Sources */,
 				1A87571223571CFE009C55A8 /* SettingViewController.m in Sources */,
 				1A399E5423697E9000F5A40F /* OneToOneViewController.m in Sources */,
@@ -1081,6 +1133,7 @@
 				78AED06023C5A59C00A24DDB /* UIView+Toast.m in Sources */,
 				78D730B223B383E600D2146C /* SignalModel.m in Sources */,
 				787E7A4023A9FE97005F8F0C /* ReplayViewController.m in Sources */,
+				78565C6123E1AB7900D2A8DE /* BaseEducationManager+Signal.m in Sources */,
 				78D7309423B36A0500D2146C /* SignalP2PModel.m in Sources */,
 				7818739423D041F100905852 /* OneToOneReplayViewController.m in Sources */,
 				78D730FC23B388A400D2146C /* OTOStudentView.m in Sources */,
@@ -1088,7 +1141,7 @@
 				78AED06123C5A59C00A24DDB /* UIView+EEBadge.m in Sources */,
 				78D730A923B3833500D2146C /* ReplayerModel.m in Sources */,
 				78D7312223B388BE00D2146C /* BCStudentVideoView.m in Sources */,
-				78AED06823C5A65400A24DDB /* EnterRoomAllModel.m in Sources */,
+				781873CB23D6D1A000905852 /* CommonModel.m in Sources */,
 				78D7307523B3638B00D2146C /* WhiteManager.m in Sources */,
 				78D730E823B3889D00D2146C /* EEMessageViewCell.m in Sources */,
 				1A05ADA3237E4B3B0041F27B /* MCViewController.m in Sources */,
@@ -1096,31 +1149,36 @@
 				78D7312123B388BE00D2146C /* BCNavigationView.m in Sources */,
 				1AEDE5E02338CB9E0096ADEC /* SkinCoverLayer.m in Sources */,
 				78D7312523B388BE00D2146C /* BCSegmentedView.m in Sources */,
-				78AED0ED23C5FD8B00A24DDB /* CommonModel.m in Sources */,
+				78565C6423E1AF0900D2A8DE /* MessageModel.m in Sources */,
 				78D731BA23BB610400D2146C /* MinEducationManager.m in Sources */,
 				78D7314023B38B5700D2146C /* MainViewController.m in Sources */,
+				78565C7823E27E1E00D2A8DE /* BaseEducationManager+RTC.m in Sources */,
 				78D731AA23BB103B00D2146C /* BigEducationManager.m in Sources */,
 				78D730F023B3889D00D2146C /* EEPageControlView.m in Sources */,
 				78D7310F23B388B100D2146C /* MCStudentVideoCell.m in Sources */,
 				787E7A3923A9FE97005F8F0C /* ReplayControlView.m in Sources */,
 				78D731C223BCE4EA00D2146C /* BCViewController.m in Sources */,
-				78AED06723C5A65400A24DDB /* ConfigModel.m in Sources */,
 				78D7314123B38B5700D2146C /* MainNavigationController.m in Sources */,
 				78AED05E23C5A59C00A24DDB /* JsonParseUtil.m in Sources */,
 				78D7311523B388B100D2146C /* MCSegmentedView.m in Sources */,
 				7818739923D0427500905852 /* ReplayNavigationView.m in Sources */,
+				781873B223D6AC4900905852 /* BaseEducationManager.m in Sources */,
 				78D7314423B390DC00D2146C /* KeyCenter.m in Sources */,
 				78D730A723B3833500D2146C /* RolesInfoModel.m in Sources */,
+				781873CF23D6E5DA00905852 /* BaseEducationManager+GlobalStates.m in Sources */,
+				781873CC23D6D1A000905852 /* RoomAllModel.m in Sources */,
 				1AEDE5DD2338C0B40096ADEC /* EyeCareModeUtil.m in Sources */,
+				781873C623D6C5C900905852 /* EduConfigModel.m in Sources */,
 				78D7311023B388B100D2146C /* MCTeacherVideoView.m in Sources */,
 				78D7307223B3638B00D2146C /* SignalManager.m in Sources */,
 				78D7307423B3638B00D2146C /* RTCManager.m in Sources */,
 				78D7311123B388B100D2146C /* MCStudentListView.m in Sources */,
 				787E7A3A23A9FE97005F8F0C /* SliderView.m in Sources */,
-				78AED0EA23C5D01000A24DDB /* RoomAllModel.m in Sources */,
 				78D730EC23B3889D00D2146C /* EEColorViewCell.m in Sources */,
+				781873C223D6C59F00905852 /* EnterRoomAllModel.m in Sources */,
 				1A44BE7A22BF863000766274 /* main.m in Sources */,
 				78D730F423B3889D00D2146C /* EEChatTextFiled.m in Sources */,
+				781873C323D6C59F00905852 /* ConfigModel.m in Sources */,
 				78AED05C23C5A59C00A24DDB /* UIColor+Addition.m in Sources */,
 				78AED05D23C5A59C00A24DDB /* AlertViewUtil.m in Sources */,
 			);

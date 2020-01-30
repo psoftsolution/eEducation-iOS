@@ -12,8 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OneToOneReplayViewController : UIViewController
 
-@property (strong, nonatomic) NSString *whiteId;
-@property (strong, nonatomic) NSString *whiteToken;
+@property (strong, nonatomic) NSString *recordId;
+//@property (strong, nonatomic) NSString *whiteToken;
 //@property (strong, nonatomic) NSString *videoPath;
 
 @end

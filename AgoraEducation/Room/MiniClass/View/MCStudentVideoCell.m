@@ -24,11 +24,11 @@
     return self;
 }
 
-- (void)setUserModel:(StudentModel *)userModel {
+- (void)setUserModel:(UserModel *)userModel {
     _userModel = userModel;
-    self.nameLable.text = userModel.account;
-    self.backImageView.hidden = userModel.video ? YES : NO;
-    NSString *audioImageName = userModel.audio ? @"icon-speaker3-min" : @"icon-speaker-off-min";
+    self.nameLable.text = userModel.userName;
+    self.backImageView.hidden = userModel.enableVideo ? YES : NO;
+    NSString *audioImageName = userModel.enableAudio ? @"icon-speaker3-min" : @"icon-speaker-off-min";
     [self.volumeImageView setImage:[UIImage imageNamed:audioImageName]];
 }
 
@@ -42,7 +42,7 @@
     backImageView.frame = self.contentView.bounds;
     [self.contentView addSubview:backImageView];
     backImageView.image = [UIImage imageNamed:@"icon-student"];
-    backImageView.contentMode = UIViewContentModeScaleAspectFill;
+    backImageView.contentMode = UIViewContentModeScaleAspectFit;
     backImageView.backgroundColor = [UIColor colorWithHexString:@"DBE2E5"];
     self.backImageView = backImageView;
 

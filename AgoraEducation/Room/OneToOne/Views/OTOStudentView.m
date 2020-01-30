@@ -35,7 +35,7 @@
 
 - (IBAction)muteMic:(UIButton *)sender {
     sender.selected = !sender.selected;
-    [self updateMicImageWithLocalVideoMute:sender.selected];
+    [self updateAudioImageWithMuted:sender.selected];
     if (self.delegate && [self.delegate respondsToSelector:@selector(muteAudioStream:)]) {
         [self.delegate muteAudioStream:sender.selected];
     }
@@ -43,7 +43,7 @@
 
 - (IBAction)muteVideo:(UIButton *)sender {
     sender.selected = !sender.selected;
-    [self updateCameraImageWithLocalVideoMute:sender.selected];
+    [self updateVideoImageWithMuted:sender.selected];
     if (self.delegate && [self.delegate respondsToSelector:@selector(muteVideoStream:)]) {
          [self.delegate muteVideoStream:sender.selected];
      }
@@ -53,16 +53,15 @@
     [self.nameLabel setText:name];
 }
 
-- (void)updateCameraImageWithLocalVideoMute:(BOOL)mute {
+- (void)updateVideoImageWithMuted:(BOOL)mute {
+    self.defaultImageView.hidden = mute ? NO : YES;
+    
     self.cameraButton.selected = mute;
     NSString *imageName = mute ? @"icon-video-off-min" : @"icon-video-on-min";
     [self.cameraButton setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];
 }
 
-- (void)updateMicImageWithLocalVideoMute:(BOOL)mute {
-    
-    self.defaultImageView.hidden = mute ? NO : YES;
-    
+- (void)updateAudioImageWithMuted:(BOOL)mute {
     self.micButton.selected = mute;
     NSString *imageName = mute ? @"icon-speaker-off-min" : @"icon-speaker3-min";
     [self.micButton setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];

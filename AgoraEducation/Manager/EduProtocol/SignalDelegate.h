@@ -10,6 +10,10 @@
 #import "RolesInfoModel.h"
 #import "SignalRoomModel.h"
 
+#import "MessageModel.h"
+#import "SignalMessageModel.h"
+#import "SignalP2PModel.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol SignalDelegate <NSObject>
@@ -17,10 +21,13 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 - (void)signalDidUpdateMessage:(SignalRoomModel * _Nonnull)messageModel;
-
 - (void)signalDidUpdateGlobalStateWithSourceModel:(RolesInfoModel * _Nullable)sourceInfoModel currentModel:(RolesInfoModel * _Nullable)currentInfoModel;
-
 - (void)signalDidReceived:(SignalP2PModel * _Nonnull)signalModel;
+
+- (void)didReceivedMessage:(MessageInfoModel * _Nonnull)model;
+- (void)didReceivedReplaySignal:(MessageInfoModel * _Nonnull)model;
+- (void)didReceivedPeerSignal:(SignalP2PModel * _Nonnull)model;
+- (void)didReceivedSignal:(SignalMessageInfoModel * _Nonnull)model;
 
 @end
 

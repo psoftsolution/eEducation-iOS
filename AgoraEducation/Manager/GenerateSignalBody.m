@@ -37,12 +37,12 @@
     return message;
 }
 
-+ (NSString *)muteChatContent:(BOOL)isMute {
-    NSNumber *type = isMute ? @(SignalP2PTypeMuteChat): @(SignalP2PTypeUnMuteChat);
-    NSDictionary *dict = @{@"cmd":type,@"text":@""};
-    NSString *message = [JsonParseUtil dictionaryToJson:dict];
-    return message;
-}
+//+ (NSString *)muteChatContent:(BOOL)isMute {
+//    NSNumber *type = isMute ? @(SignalP2PTypeMuteChat): @(SignalP2PTypeUnMuteChat);
+//    NSDictionary *dict = @{@"cmd":type,@"text":@""};
+//    NSString *message = [JsonParseUtil dictionaryToJson:dict];
+//    return message;
+//}
 
 + (NSString *)messageWithName:(NSString *)name content:(NSString *)content {
     NSDictionary *dict = @{@"account":name,@"content":content,};
@@ -50,14 +50,14 @@
     return message;
 }
 
-+ (NSString *)channelAttrsWithValue:(StudentModel *)model {
-    NSDictionary *dict = @{@"uid": model.uid,
-                           @"account": model.account,
-                           @"video": @(model.video),
-                           @"audio": @(model.audio),
-                           @"chat": @(model.chat)};
-    NSString *attrString = [JsonParseUtil dictionaryToJson:dict];
-    return attrString;
-}
+//+ (NSString *)channelAttrsWithValue:(StudentModel *)model {
+//    NSDictionary *dict = @{@"uid": model.uid,
+//                           @"account": model.account,
+//                           @"video": @(model.video),
+//                           @"audio": @(model.audio),
+//                           @"chat": @(model.chat)};
+//    NSString *attrString = [JsonParseUtil dictionaryToJson:dict];
+//    return attrString;
+//}
 
 @end

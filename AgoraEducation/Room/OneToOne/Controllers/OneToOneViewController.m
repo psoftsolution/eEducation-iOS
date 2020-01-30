@@ -7,7 +7,6 @@
 //
 
 #import "OneToOneViewController.h"
-
 #import "EENavigationView.h"
 #import "EEWhiteboardTool.h"
 #import "EEPageControlView.h"
@@ -16,18 +15,7 @@
 #import "EEColorShowView.h"
 #import "OTOTeacherView.h"
 #import "OTOStudentView.h"
-
-#import "GenerateSignalBody.h"
-#import "TeacherModel.h"
-#import "StudentModel.h"
-#import "SignalRoomModel.h"
-#import "SignalP2PModel.h"
-
-#import "KeyCenter.h"
-
-#import "HttpManager.h"
 #import "UIView+Toast.h"
-#import "RoomAllModel.h"
 
 @interface OneToOneViewController ()<UITextFieldDelegate, RoomProtocol, SignalDelegate, RTCDelegate, EEPageControlDelegate, EEWhiteboardToolDelegate, WhitePlayDelegate>
 
@@ -75,15 +63,10 @@
     self.studentView.delegate = self;
     self.navigationView.delegate = self;
     self.chatTextFiled.contentTextFiled.delegate = self;
-    [self.navigationView updateClassName:self.paramsModel.className];
     
-    [self.educationManager initSessionModel];
-    [self.educationManager setSignalDelegate:self];
-#ifdef GLOBAL_STATE_API
-    self.educationManager.roomId = self.paramsModel.roomId;
-    self.educationManager.userToken = self.paramsModel.userToken;
-#endif
-    
+    NSString *className = self.educationManager.eduConfigModel.className;
+    [self.navigationView updateClassName:className];
+
     WEAK(self);
     [self.colorShowView setSelectColor:^(NSString * _Nullable colorString) {
         NSArray *colorArray = [UIColor convertColorToRGB:[UIColor colorWithHexString:colorString]];
@@ -91,23 +74,33 @@
     }];
 
     // api -> init rtm -> rtc & white
-    [self.educationManager queryGlobalStateWithChannelName:self.paramsModel.channelName completeBlock:^(RolesInfoModel *infoModel) {
-        
-        if(infoModel == nil) {
-            return;
-        }
-        
+    [self.educationManager getRoomInfoCompleteSuccessBlock:^(RoomInfoModel * _Nonnull roomInfoModel) {
+
         [weakself setupSignalWithSuccessBolck:^{
             [weakself setupRTC];
-            [weakself signalDidUpdateGlobalStateWithSourceModel:[RolesInfoModel new] currentModel:infoModel];
+            [weakself setupWhiteBoard];
+            
+             RoomModel *roomModel = roomInfoModel.room;
+            if(roomModel.courseState == ClassStateInClass) {
+                
+                NSDate *currentDate = [NSDate dateWithTimeIntervalSinceNow:0];
+                NSTimeInterval currenTimeInterval = [currentDate timeIntervalSince1970];
+                [weakself.navigationView initTimerCount:(NSInteger)currenTimeInterval - roomModel.startTime];
+                [weakself.navigationView startTimer];
+            } else {
+                [weakself.navigationView stopTimer];
+            }
+            
+            [weakself updateChatViews];
+            [weakself checkNeedRender];
         }];
+        
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
+        [weakself showToast:errMessage];
     }];
 }
 
-- (void)showHTTPToast:(NSString *)title {
-    if(title == nil || title.length == 0){
-        title = @"Network request failed";
-    }
+- (void)showToast:(NSString *)title {
     [self.view makeToast:title];
 }
 
@@ -152,17 +145,18 @@
     self.textFiledBottomCon.constant = 0;
 }
 
-- (void)joinWhiteBoardRoomWithUID:(NSString *)uuid disableDevice:(BOOL)disableDevice {
+- (void)setupWhiteBoard {
     
-    WEAK(self);
-    [self.educationManager releaseWhiteResources];
     [self.educationManager initWhiteSDK:self.boardView dataSourceDelegate:self];
-    [self.educationManager joinWhiteRoomWithUuid:uuid completeSuccessBlock:^(WhiteRoom * _Nullable room) {
+    
+    RoomModel *roomModel = self.educationManager.roomModel;
+    WEAK(self);
+    [self.educationManager joinWhiteRoomWithBoardId:roomModel.boardId boardToken:roomModel.boardToken completeSuccessBlock:^(WhiteRoom * _Nullable room) {
         
         CMTime cmTime = CMTimeMakeWithSeconds(0, 100);
         [weakself.educationManager seekWhiteToTime:cmTime completionHandler:^(BOOL finished) {
         }];
-        [weakself.educationManager disableWhiteDeviceInputs:disableDevice];
+        [weakself.educationManager disableWhiteDeviceInputs:NO];
         [weakself.educationManager currentWhiteScene:^(NSInteger sceneCount, NSInteger sceneIndex) {
             weakself.sceneCount = sceneCount;
             weakself.sceneIndex = sceneIndex;
@@ -171,63 +165,79 @@
         }];
         
     } completeFailBlock:^(NSError * _Nullable error) {
-        
+        [weakself showToast:@"white board join error"];
     }];
 }
 
-
-- (void)updateTeacherViews:(TeacherModel*)teacherModel {
+- (void)updateTeacherViews:(UserModel*)teacherModel {
     
     if(teacherModel == nil){
         return;
     }
     
     // update teacher views
-    self.teacherView.defaultImageView.hidden = teacherModel.video ? YES : NO;
-    [self.teacherView updateSpeakerEnabled:teacherModel.audio];
-    [self.teacherView updateUserName:teacherModel.account];
+    self.teacherView.defaultImageView.hidden = teacherModel.enableVideo ? YES : NO;
+    [self.teacherView updateSpeakerEnabled:teacherModel.enableAudio];
+    [self.teacherView updateUserName:teacherModel.userName];
 }
 
 - (void)updateChatViews {
-    TeacherModel *teacherModel = self.educationManager.teacherModel;
-    BOOL muteChat = teacherModel != nil ? teacherModel.mute_chat : NO;
+    RoomModel *roomModel = self.educationManager.roomModel;
+    BOOL muteChat = roomModel != nil ? roomModel.muteAllChat : NO;
     if(!muteChat) {
-        muteChat = self.educationManager.studentModel.chat == 0 ? YES : NO;
+        UserModel *studentModel = self.educationManager.studentModel;
+        muteChat = studentModel.enableChat == 0 ? YES : NO;
     }
     self.chatTextFiled.contentTextFiled.enabled = muteChat ? NO : YES;
     self.chatTextFiled.contentTextFiled.placeholder = muteChat ? @" Prohibited post" : @" Input message";
 }
 
-- (void)updateStudentViews:(StudentModel*)studentModel {
+- (void)updateStudentViews:(UserModel*)studentModel {
     
     if(studentModel == nil){
         return;
     }
     
-    [self.studentView updateCameraImageWithLocalVideoMute:studentModel.video == 0 ? YES : NO];
-    [self.studentView updateMicImageWithLocalVideoMute:studentModel.audio == 0 ? YES : NO];
-    [self.studentView updateUserName:studentModel.account];
+    [self.studentView updateVideoImageWithMuted:studentModel.enableVideo == 0 ? YES : NO];
+    [self.studentView updateAudioImageWithMuted:studentModel.enableAudio == 0 ? YES : NO];
+    [self.studentView updateUserName:studentModel.userName];
     
-    [self.educationManager enableRTCLocalVideo:studentModel.video == 0 ? NO : YES];
-    [self.educationManager enableRTCLocalAudio:studentModel.audio == 0 ? NO : YES];
+    [self.educationManager enableRTCLocalVideo:studentModel.enableVideo == 0 ? NO : YES];
+    [self.educationManager enableRTCLocalAudio:studentModel.enableAudio == 0 ? NO : YES];
 }
 
 - (void)setupSignalWithSuccessBolck:(void (^)(void))successBlock {
 
-    [self.educationManager joinSignalWithChannelName:self.paramsModel.channelName completeSuccessBlock:^{
-        if(successBlock != nil){
-            successBlock();
-        }
+    NSString *appid = self.educationManager.eduConfigModel.appId;
+    NSString *appToken = self.educationManager.eduConfigModel.rtmToken;
+    NSString *uid = @(self.educationManager.eduConfigModel.uid).stringValue;
+    
+    WEAK(self);
+    [self.educationManager initSignalWithAppid:appid appToken:appToken userId:uid dataSourceDelegate:self completeSuccessBlock:^{
         
-    } completeFailBlock:nil];
+        NSString *channelName = weakself.educationManager.eduConfigModel.channelName;
+        [weakself.educationManager joinSignalWithChannelName:channelName completeSuccessBlock:^{
+            if(successBlock != nil){
+                successBlock();
+            }
+            
+        } completeFailBlock:^{
+            
+        }];
+        
+    } completeFailBlock:^{
+        
+    }];
 }
 
 - (void)setupRTC {
     
-    [self.educationManager initRTCEngineKitWithAppid:[KeyCenter agoraAppid] clientRole:RTCClientRoleBroadcaster dataSourceDelegate:self];
+    EduConfigModel *configModel = self.educationManager.eduConfigModel;
+    
+    [self.educationManager initRTCEngineKitWithAppid:configModel.appId clientRole:RTCClientRoleBroadcaster dataSourceDelegate:self];
     
     WEAK(self);
-    [self.educationManager joinRTCChannelByToken:[KeyCenter agoraRTCToken] channelId:self.paramsModel.channelName info:nil uid:[self.paramsModel.userId integerValue] joinSuccess:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) {
+    [self.educationManager joinRTCChannelByToken:configModel.rtcToken channelId:configModel.channelName info:nil uid:configModel.uid joinSuccess:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) {
         
         NSString *uidStr = [NSString stringWithFormat:@"%lu", (unsigned long)uid];
         [weakself.educationManager.rtcUids addObject:uidStr];
@@ -247,26 +257,30 @@
 
 - (void)checkNeedRender {
     
-    NSString *teacherUid = self.educationManager.teacherModel.uid;
-    if([self.educationManager.rtcUids containsObject:teacherUid]){
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uid == %d", teacherUid.integerValue];
-        NSArray<RTCVideoSessionModel *> *filteredArray = [self.educationManager.rtcVideoSessionModels filteredArrayUsingPredicate:predicate];
-        if(filteredArray.count == 0){
-            [self renderTeacherCanvas:teacherUid.integerValue];
+    if(self.educationManager.teacherModel != nil) {
+        NSInteger teacherUid = self.educationManager.teacherModel.uid;
+        if([self.educationManager.rtcUids containsObject:@(teacherUid).stringValue]){
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uid == %d", teacherUid];
+            NSArray<RTCVideoSessionModel *> *filteredArray = [self.educationManager.rtcVideoSessionModels filteredArrayUsingPredicate:predicate];
+            if(filteredArray.count == 0){
+                [self renderTeacherCanvas:teacherUid];
+            }
+            [self updateTeacherViews:self.educationManager.teacherModel];
+        } else {
+            [self removeTeacherCanvas:teacherUid];
         }
-        [self updateTeacherViews:self.educationManager.teacherModel];
-    } else {
-        [self removeTeacherCanvas:teacherUid.integerValue];
     }
     
-    NSString *studentUid = self.educationManager.studentModel.uid;
-    if([self.educationManager.rtcUids containsObject:studentUid]){
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uid == %d", studentUid.integerValue];
-        NSArray<RTCVideoSessionModel *> *filteredArray = [self.educationManager.rtcVideoSessionModels filteredArrayUsingPredicate:predicate];
-        if(filteredArray.count == 0){
-            [self renderStudentCanvas:studentUid.integerValue];
+    if(self.educationManager.studentModel != nil) {
+        NSInteger studentUid = self.educationManager.studentModel.uid;
+        if([self.educationManager.rtcUids containsObject:@(studentUid).stringValue]){
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uid == %d", studentUid];
+            NSArray<RTCVideoSessionModel *> *filteredArray = [self.educationManager.rtcVideoSessionModels filteredArrayUsingPredicate:predicate];
+            if(filteredArray.count == 0){
+                [self renderStudentCanvas:studentUid];
+            }
+            [self updateStudentViews:self.educationManager.studentModel];
         }
-        [self updateStudentViews:self.educationManager.studentModel];
     }
 }
 
@@ -276,7 +290,7 @@
     model.videoView = self.teacherView.videoRenderView;
     model.renderMode = RTCVideoRenderModeHidden;
     model.canvasType = RTCVideoCanvasTypeRemote;
-    [self.educationManager setupRTCVideoCanvas:model];
+    [self.educationManager setupRTCVideoCanvas:model completeBlock:nil];
 }
 
 - (void)removeTeacherCanvas:(NSUInteger)uid {
@@ -292,7 +306,7 @@
     model.videoView = self.shareScreenView;
     model.renderMode = RTCVideoRenderModeFit;
     model.canvasType = RTCVideoCanvasTypeRemote;
-    [self.educationManager setupRTCVideoCanvas:model];
+    [self.educationManager setupRTCVideoCanvas:model completeBlock:nil];
     
     self.shareScreenView.hidden = NO;
 }
@@ -308,7 +322,7 @@
     model.videoView = self.studentView.videoRenderView;
     model.renderMode = RTCVideoRenderModeHidden;
     model.canvasType = RTCVideoCanvasTypeLocal;
-    [self.educationManager setupRTCVideoCanvas: model];
+    [self.educationManager setupRTCVideoCanvas:model completeBlock:nil];
 }
 
 - (void)closeRoom {
@@ -322,39 +336,42 @@
 }
 
 - (void)muteVideoStream:(BOOL)mute {
-    StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
-    currentStuModel.video = mute ? 0 : 1;
-    
-    // update mute states
     WEAK(self);
-    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:^{
+    [self.educationManager updateEnableVideoWithValue:!mute completeSuccessBlock:^{
         
-        weakself.educationManager.studentModel.video = currentStuModel.video;
         [weakself updateStudentViews:weakself.educationManager.studentModel];
+        [weakself sendSignalWithType:NSStringFromSignalValueType(SignalValueTypeVideo) value:mute];
         
-    } completeFailBlock:^{
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
         
+        [weakself showToast:errMessage];
         [weakself updateStudentViews:weakself.educationManager.studentModel];
     }];
+}
+
+- (void)sendSignalWithType:(NSString *)type value:(BOOL)mute {
+    SignalMessageInfoModel *model = [SignalMessageInfoModel new];
+    model.uid = self.educationManager.eduConfigModel.uid;
+    model.account = self.educationManager.eduConfigModel.userName;
+    model.resource = type;
+    model.value = mute ? 0 : 1;
+    [self.educationManager sendSignalWithModel:model completeSuccessBlock:nil completeFailBlock:nil];
 }
 
 - (void)muteAudioStream:(BOOL)mute {
-    StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
-    currentStuModel.audio = mute ? 0 : 1;
     
-    // update mute states
     WEAK(self);
-    [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:^{
+    [self.educationManager updateEnableAudioWithValue:!mute completeSuccessBlock:^{
         
-        weakself.educationManager.studentModel.audio = currentStuModel.audio;
         [weakself updateStudentViews:weakself.educationManager.studentModel];
+        [weakself sendSignalWithType:NSStringFromSignalValueType(SignalValueTypeAudio) value:mute];
         
-    } completeFailBlock:^{
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
         
+        [weakself showToast:errMessage];
         [weakself updateStudentViews:weakself.educationManager.studentModel];
     }];
 }
-
 
 - (BOOL)shouldAutorotate {
     return NO;
@@ -378,79 +395,31 @@
 }
 
 #pragma mark SignalDelegate
-- (void)signalDidReceived:(SignalP2PModel *)signalModel {
-    
-    StudentModel *currentStuModel = [self.educationManager.studentModel yy_modelCopy];
-    
-    switch (signalModel.cmd) {
-        case SignalP2PTypeMuteAudio:
-        {
-            currentStuModel.audio = 0;
-            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
-        }
-            break;
-        case SignalP2PTypeUnMuteAudio:
-        {
-            currentStuModel.audio = 1;
-            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
-        }
-            break;
-        case SignalP2PTypeMuteVideo:
-        {
-            currentStuModel.video = 0;
-            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
-        }
-            break;
-        case SignalP2PTypeUnMuteVideo:
-        {
-            currentStuModel.video = 1;
-            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
-        }
-            break;
-        case SignalP2PTypeApply:
-        case SignalP2PTypeReject:
-        case SignalP2PTypeAccept:
-        case SignalP2PTypeCancel:
-            break;
-        case SignalP2PTypeMuteChat:
-        {
-            currentStuModel.chat = 0;
-            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
-        }
-            break;
-        case SignalP2PTypeUnMuteChat:
-        {
-            currentStuModel.chat = 1;
-            [self.educationManager updateGlobalStateWithValue:currentStuModel completeSuccessBlock:nil completeFailBlock:nil];
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)signalDidUpdateMessage:(SignalRoomModel *_Nonnull)roomMessageModel {
-
-    [self.messageListView addMessageModel:roomMessageModel];
-}
-
--(void)signalDidUpdateGlobalStateWithSourceModel:(RolesInfoModel *)sourceInfoModel currentModel:(RolesInfoModel *)currentInfoModel {
-    
-    // teacher
-    if(currentInfoModel != nil && currentInfoModel.teacherModel != nil){
-        TeacherModel *sourceModel = sourceInfoModel.teacherModel;
-        TeacherModel *currentModel = currentInfoModel.teacherModel;
-        if(![sourceModel.whiteboard_uid isEqualToString:currentModel.whiteboard_uid]) {
-            [self joinWhiteBoardRoomWithUID:currentModel.whiteboard_uid disableDevice:NO];
+- (void)didReceivedSignal:(SignalMessageInfoModel *)model {
+    WEAK(self);
+    [self.educationManager getRoomInfoCompleteSuccessBlock:^(RoomInfoModel * _Nonnull roomInfoModel) {
+        
+        [weakself updateChatViews];
+        
+        if (model.uid == weakself.educationManager.teacherModel.uid) {
+            
+            [weakself updateTeacherViews:weakself.educationManager.teacherModel];
+            
+        } else if (model.uid == weakself.educationManager.studentModel.uid) {
+            [weakself updateStudentViews:weakself.educationManager.studentModel];
         }
         
-        if(sourceModel.class_state != currentModel.class_state) {
-            currentModel.class_state ? [self.navigationView startTimer] : [self.navigationView stopTimer];
-        }
-    }
-    
-    [self updateChatViews];
-    [self checkNeedRender];
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
+        
+        [weakself showToast:errMessage];
+        
+    }];
+}
+- (void)didReceivedMessage:(MessageInfoModel *)model {
+    [self.messageListView addMessageModel:model];
+}
+- (void)didReceivedReplaySignal:(MessageInfoModel *)model {
+    [self.messageListView addMessageModel:model];
 }
 
 #pragma mark RTCDelegate
@@ -469,7 +438,7 @@
     
     if (uid == kShareScreenUid) {
         [self removeShareCanvas: uid];
-    } else if (uid == [self.educationManager.teacherModel.uid integerValue]) {
+    } else if (uid == self.educationManager.teacherModel.uid) {
         
         NSString *uidStr = [NSString stringWithFormat:@"%lu", (unsigned long)uid];
         [self.educationManager.rtcUids removeObject:uidStr];
@@ -509,7 +478,15 @@
 
     NSString *content = textField.text;
     if (content.length > 0) {
-        [self.educationManager sendMessageWithContent:content userName:self.paramsModel.userName];
+        MessageInfoModel *model = [MessageInfoModel new];
+        model.account = self.educationManager.eduConfigModel.userName;
+        model.content = content;
+        WEAK(self);
+        [self.educationManager sendMessageWithModel:model completeSuccessBlock:^{
+            [weakself.messageListView addMessageModel:model];
+        } completeFailBlock:^{
+            
+        }];
     }
     textField.text = nil;
     [textField resignFirstResponder];

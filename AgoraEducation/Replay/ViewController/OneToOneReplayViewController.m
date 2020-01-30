@@ -41,8 +41,8 @@
 - (IBAction)onWhiteBoardClick:(id)sender {
     self.controlView.hidden = NO;
     
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControlView) object:nil];
-    [self performSelector:@selector(hideControlView) withObject:nil afterDelay:3];
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControlView) object:nil];
+//    [self performSelector:@selector(hideControlView) withObject:nil afterDelay:3];
 }
 
 - (IBAction)onPlayClick:(id)sender {

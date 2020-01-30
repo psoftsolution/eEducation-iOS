@@ -19,12 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGFloat cellHeight;
 
-//  for replay recording
-@property (copy, nonatomic) NSString *roomid;
-@property (copy, nonatomic) NSString *startTime;
-@property (copy, nonatomic) NSString *endTime;
-@property (nonatomic, copy) NSString *url;
-
 @end
+
+  
+
+//@property (nonatomic, assign) NSInteger uid;
+//@property (nonatomic, strong) NSString *resource;
+//@property (nonatomic, assign) NSInteger value;
 
 NS_ASSUME_NONNULL_END

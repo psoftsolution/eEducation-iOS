@@ -49,34 +49,9 @@
     [self.messageTableView reloadData];
 }
 
-- (void)checkMessageDataLink {
-    
-    for (SignalRoomModel *messageModel in self.messageArray) {
-        
-        if(messageModel.link == nil){
-            continue;
-        }
-        
-        NSString *regex = @"^/replay/*/*/*/*";
-        NSError *error;
-        NSRegularExpression *regular = [NSRegularExpression regularExpressionWithPattern:regex options:NSRegularExpressionCaseInsensitive error:&error];
-        NSArray *matches = [regular matchesInString:messageModel.link options:0 range:NSMakeRange(0, messageModel.link.length)];
-        if(matches != nil && matches.count == 1) {
-            NSArray *componentsArray = [messageModel.link componentsSeparatedByString:@"/"];
-            if(componentsArray != nil && componentsArray.count == 6) {
-                messageModel.roomid = componentsArray[2];
-                messageModel.startTime = componentsArray[3];
-                messageModel.endTime = componentsArray[4];
-                messageModel.content = @"replay recording";
-            }
-        }
-    }
-}
-
-- (void)addMessageModel:(SignalRoomModel *)model {
+- (void)addMessageModel:(MessageInfoModel *)model {
     [self.messageArray addObject:model];
-    [self checkMessageDataLink];
-    
+
     [self.messageTableView reloadData];
     if (self.messageArray.count > 0) {
          [self.messageTableView scrollToRowAtIndexPath:
@@ -99,7 +74,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SignalRoomModel *messageModel = self.messageArray[indexPath.row];
+    MessageInfoModel *messageModel = self.messageArray[indexPath.row];
     if(messageModel.cellHeight > 0){
         return messageModel.cellHeight;
     }
@@ -115,13 +90,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-//    SignalRoomModel *messageModel = self.messageArray[indexPath.row];
-//    if(messageModel.roomid == nil){
-//        return;
-//    }
+    MessageInfoModel *messageModel = self.messageArray[indexPath.row];
+    if(messageModel.recordId == nil || messageModel.recordId.length == 0){
+        return;
+    }
     
     OneToOneReplayViewController *vc = [[OneToOneReplayViewController alloc] initWithNibName:@"OneToOneReplayViewController" bundle:nil];
-//    vc.roomId = 22570882304049152;
+    vc.recordId = messageModel.recordId;
     vc.modalPresentationStyle = UIModalPresentationFullScreen;
     UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
     UINavigationController *nvc = (UINavigationController*)window.rootViewController;

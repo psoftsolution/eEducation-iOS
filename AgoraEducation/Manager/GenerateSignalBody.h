@@ -17,11 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)studentCancelLink;
 + (NSString *)muteVideoStream:(BOOL)stream;
 + (NSString *)muteAudioStream:(BOOL)stream;
-+ (NSString *)muteChatContent:(BOOL)isMute;
+//+ (NSString *)muteChatContent:(BOOL)isMute;
 
 + (NSString *)messageWithName:(NSString *)name content:(NSString *)content;
 
-+ (NSString *)channelAttrsWithValue:(StudentModel *)model;
+//+ (NSString *)channelAttrsWithValue:(StudentModel *)model;
 
 @end
 

@@ -45,18 +45,26 @@ static HttpManager *manager = nil;
         }
     }
     
+    NSLog(@"============>Get HTTP Start<============");
+    NSLog(@"url==>%@", url);
+    NSLog(@"headers==>%@", headers);
+    NSLog(@"params==>%@", params);
+    
     [HttpManager.shareManager.sessionManager GET:url parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             success(responseObject);
         }
+        NSLog(@"Result==>%@", responseObject);
+        NSLog(@"============>Get HTTP Success<============");
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (failure) {
             failure(error);
         }
+        NSLog(@"Error==>%@", error.description);
+        NSLog(@"============>Get HTTP Error<============");
     }];
-
 }
 
 + (void)post:(NSString *)url params:(NSDictionary *)params headers:(NSDictionary<NSString*, NSString*> *)headers success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
@@ -67,15 +75,23 @@ static HttpManager *manager = nil;
             [HttpManager.shareManager.sessionManager.requestSerializer setValue:headers[key] forHTTPHeaderField:key];
         }
     }
+    NSLog(@"============>Post HTTP Start<============");
+    NSLog(@"url==>%@", url);
+    NSLog(@"headers==>%@", headers);
+    NSLog(@"params==>%@", params);
     
     [HttpManager.shareManager.sessionManager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
-                   success(responseObject);
-               }
+            success(responseObject);
+        }
+        NSLog(@"Result==>%@", responseObject);
+        NSLog(@"============>Post HTTP Success<============");
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (failure) {
           failure(error);
         }
+        NSLog(@"Error==>%@", error.description);
+        NSLog(@"============>Post HTTP Error<============");
     }];
 }
 

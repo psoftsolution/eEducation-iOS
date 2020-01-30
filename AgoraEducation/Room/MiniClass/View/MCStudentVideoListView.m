@@ -12,7 +12,7 @@
 @interface MCStudentVideoListView ()<UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic, strong) UICollectionView *videoListView;
 @property (nonatomic, strong) NSLayoutConstraint *collectionViewLeftCon;
-@property (nonatomic, strong) NSArray<RolesStudentInfoModel*> *studentArray;
+@property (nonatomic, strong) NSArray<UserModel*> *studentArray;
 @end
 
 @implementation MCStudentVideoListView
@@ -59,10 +59,10 @@
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     MCStudentVideoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VideoCell" forIndexPath:indexPath];
     
-    StudentModel *currentModel = self.studentArray[indexPath.row].studentModel;
+    UserModel *currentModel = self.studentArray[indexPath.row];
     cell.userModel = currentModel;
     if (self.studentVideoList) {
-        self.studentVideoList(cell, [currentModel uid]);
+        self.studentVideoList(cell, currentModel.uid);
     }
 
     return cell;
@@ -77,7 +77,7 @@
     return CGSizeMake(95, 70);
 }
 
-- (void)updateStudentArray:(NSArray<RolesStudentInfoModel*> *)studentArray {
+- (void)updateStudentArray:(NSArray<UserModel*> *)studentArray {
     
     if(studentArray.count == 0 || self.studentArray.count != studentArray.count) {
         self.studentArray = [NSArray arrayWithArray:studentArray];
@@ -89,9 +89,9 @@
 
         NSInteger count = studentArray.count;
         for(NSInteger i = 0; i < count; i++) {
-            RolesStudentInfoModel *sourceModel = [self.studentArray objectAtIndex:i];
-            RolesStudentInfoModel *currentModel = [studentArray objectAtIndex:i];
-            if(![sourceModel.attrKey isEqualToString:currentModel.attrKey] || ![sourceModel.studentModel isEqual:currentModel.studentModel]) {
+            UserModel *sourceModel = [self.studentArray objectAtIndex:i];
+            UserModel *currentModel = [studentArray objectAtIndex:i];
+            if(sourceModel.uid != currentModel.uid || ![sourceModel yy_modelIsEqual:currentModel]) {
 
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
                 [indexPaths addObject:indexPath];
@@ -118,5 +118,9 @@
         [_videoListView registerClass:[MCStudentVideoCell class] forCellWithReuseIdentifier:@"VideoCell"];
     }
     return _videoListView;
+}
+
+- (void)dealloc {
+    
 }
 @end
