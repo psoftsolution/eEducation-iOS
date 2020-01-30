@@ -7,11 +7,6 @@
 //
 
 #import "SignalManager.h"
-#import "SignalP2PModel.h"
-#import "GenerateSignalBody.h"
-#import "SignalRoomModel.h"
-
-NSString * const RoleTypeTeacther = @"teacher";
 
 @interface SignalManager()<AgoraRtmDelegate, AgoraRtmChannelDelegate>
 

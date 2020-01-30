@@ -3,7 +3,7 @@
 //  AgoraEducation
 //
 //  Created by SRS on 2020/1/8.
-//  Copyright © 2020 yangmoumou. All rights reserved.
+//  Copyright © 2019 Agora. All rights reserved.
 //
 
 #import "CommonModel.h"

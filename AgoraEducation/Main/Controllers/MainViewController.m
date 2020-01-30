@@ -9,19 +9,13 @@
 #import "MainViewController.h"
 #import "EEClassRoomTypeView.h"
 #import "SettingViewController.h"
-#import "GenerateSignalBody.h"
 #import "EyeCareModeUtil.h"
-
-#import "MinEducationManager.h"
-#import "BigEducationManager.h"
+#import "NSString+MD5.h"
+#import "UIView+Toast.h"
 
 #import "OneToOneViewController.h"
 #import "MCViewController.h"
 #import "BCViewController.h"
-
-#import "NSString+MD5.h"
-
-#import "UIView+Toast.h"
 
 @interface MainViewController ()<EEClassRoomTypeDelegate, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *baseView;
@@ -80,7 +74,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    //    [self.educationManager releaseResources];
 }
 
 #pragma mark Private Function
@@ -140,10 +133,6 @@
 }
 
 - (IBAction)joinRoom:(UIButton *)sender {
-    
-    self.classNameTextFiled.text = @"test1";
-    self.userNameTextFiled.text = @"Jerry";
-    
     NSString *userName = self.userNameTextFiled.text;
     NSString *className = self.classNameTextFiled.text;
     
@@ -222,9 +211,7 @@
     [self.navigationController pushViewController:settingVC animated:YES];
 }
 
-
 - (void)join1V1RoomWithIdentifier:(NSString*)identifier {
-    
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"Room" bundle:[NSBundle mainBundle]];
     OneToOneViewController *vc = [story instantiateViewControllerWithIdentifier:identifier];
     vc.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -233,7 +220,6 @@
 }
 
 - (void)joinMinRoomWithIdentifier:(NSString*)identifier {
-    
     UIStoryboard *story = [UIStoryboard storyboardWithName:@"Room" bundle:[NSBundle mainBundle]];
     MCViewController *vc = [story instantiateViewControllerWithIdentifier:identifier];
     vc.modalPresentationStyle = UIModalPresentationFullScreen;

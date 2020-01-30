@@ -38,7 +38,7 @@
             if(userModel.role == UserRoleTypeTeacher) {
                 weakself.teacherModel = userModel;
             } else if(userModel.role == UserRoleTypeStudent) {
-                userModel.coVideo = 1;
+
                 if(userModel.coVideo == 1) {
                     [weakself.renderStudentModels addObject:[userModel yy_modelCopy]];
                 }
