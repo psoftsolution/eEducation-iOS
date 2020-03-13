@@ -17,7 +17,12 @@
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define WEAK(object) __weak typeof(object) weak##object = object
 
-#define kShareScreenUid 7
+#ifdef DEBUG
+#define AgoraLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#define AgoraLog(...)
+#endif
+
 
 #endif /* AgoraSmallClass_pch */
 

@@ -50,12 +50,17 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void)setMessageModel:(SignalRoomModel *)messageModel {
+- (void)setMessageModel:(MessageInfoModel *)messageModel {
     _messageModel = messageModel;
 
     NSMutableAttributedString *contentString;
-    if(messageModel.roomid != nil){
-        contentString = [[NSMutableAttributedString alloc] initWithString:NSLocalizedString(@"ReplayRecordingText", nil) attributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)}];
+
+    if(messageModel.recordId != nil && messageModel.recordId.length > 0) {
+        
+        messageModel.content = NSLocalizedString(@"ReplayRecordingText", nil);
+        
+        contentString = [[NSMutableAttributedString alloc] initWithString:messageModel.content attributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)}];
+       
     } else {
         contentString = [[NSMutableAttributedString alloc] initWithString:messageModel.content];
     }
@@ -69,8 +74,8 @@
         self.leftView.hidden = YES;
         self.leftContentLabel.hidden = YES;
         self.nameLabel.textAlignment = NSTextAlignmentRight;
-    }else {
-        CGSize size =  [self sizeWithContent:messageModel.content];
+    } else {
+        CGSize size =  [self sizeWithContent: messageModel.content];
         self.leftViewWidthCon.constant = size.width + 25 > self.cellWidth ? self.cellWidth : size.width +25;
         [self.leftContentLabel setAttributedText:contentString];
         self.rightView.hidden = YES;

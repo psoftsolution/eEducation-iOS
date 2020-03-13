@@ -38,9 +38,9 @@ static AppUpdateManager *manager = nil;
 - (void)checkAppUpdateWithModel:(ConfigModel *)model {
     if(model.code == 0 && model.data != nil) {
         
-        if(model.data.forcedUpgrade == 1) {
+        if(model.data.forcedUpgrade == 2) {
             [AppUpdateManager.shareManager showAppUpdateAlertView:NO];
-        } else if(model.data.forcedUpgrade == 2) {
+        } else if(model.data.forcedUpgrade == 3) {
             [AppUpdateManager.shareManager showAppUpdateAlertView:YES];
         }
     }
@@ -53,9 +53,9 @@ static AppUpdateManager *manager = nil;
         ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
         if(model.code == 0 && model.data != nil) {
             
-            if(model.data.forcedUpgrade == 1) {
+            if(model.data.forcedUpgrade == 2) {
                 [AppUpdateManager.shareManager showAppUpdateAlertView:NO];
-            } else if(model.data.forcedUpgrade == 2) {
+            } else if(model.data.forcedUpgrade == 3) {
                 [AppUpdateManager.shareManager showAppUpdateAlertView:YES];
             }
         }

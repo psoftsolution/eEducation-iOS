@@ -7,11 +7,6 @@
 //
 
 #import "SignalManager.h"
-#import "SignalP2PModel.h"
-#import "GenerateSignalBody.h"
-#import "SignalRoomModel.h"
-
-NSString * const RoleTypeTeacther = @"teacher";
 
 @interface SignalManager()<AgoraRtmDelegate, AgoraRtmChannelDelegate>
 
@@ -22,7 +17,7 @@ NSString * const RoleTypeTeacther = @"teacher";
 
 @implementation SignalManager
 
-- (void)initWithMessageModel:(SignalModel*)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock {
+- (void)initWithMessageModel:(SignalModel*)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock {
 
     self.agoraRtmKit = [[AgoraRtmKit alloc] initWithAppId:model.appId delegate:self];
     [self.agoraRtmKit loginByToken:model.token user:model.uid completion:^(AgoraRtmLoginErrorCode errorCode) {
@@ -33,14 +28,16 @@ NSString * const RoleTypeTeacther = @"teacher";
             }
         } else {
             if(failBlock != nil){
-                failBlock();
+                failBlock(errorCode);
             }
         }
     }];
 }
 
-- (void)joinChannelWithName:(NSString *)channelName completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock {
-
+- (void)joinChannelWithName:(NSString *)channelName completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock {
+    
+    self.channelName = channelName;
+    
     self.agoraRtmChannel = [self.agoraRtmKit createChannelWithId:channelName delegate:self];
     [self.agoraRtmChannel joinWithCompletion:^(AgoraRtmJoinChannelErrorCode errorCode) {
         
@@ -50,7 +47,7 @@ NSString * const RoleTypeTeacther = @"teacher";
             }
         } else {
             if(failBlock != nil){
-                failBlock();
+                failBlock(errorCode);
             }
         }
     }];
@@ -103,7 +100,7 @@ NSString * const RoleTypeTeacther = @"teacher";
     [self.agoraRtmKit queryPeersOnlineStatus:peerIds completion:completionBlock];
 }
 
-- (void)sendMessage:(NSString *)value completeSuccessBlock:(void (^) (void))successBlock completeFailBlock:(void (^) (void))failBlock {
+- (void)sendMessage:(NSString *)value completeSuccessBlock:(void (^) (void))successBlock completeFailBlock:(void (^) (NSInteger errorCode))failBlock {
 
     AgoraRtmMessage *rtmMessage = [[AgoraRtmMessage alloc] initWithText:value];
     [self.agoraRtmChannel sendMessage:rtmMessage completion:^(AgoraRtmSendChannelMessageErrorCode errorCode) {
@@ -116,13 +113,13 @@ NSString * const RoleTypeTeacther = @"teacher";
             
         } else {
             if(failBlock != nil){
-                failBlock();
+                failBlock(errorCode);
             }
         }
     }];
 }
 
-- (void)sendMessage:(NSString *)value toPeer:(NSString *)peerId completeSuccessBlock:(void (^) (void))successBlock completeFailBlock:(void (^) (void))failBlock {
+- (void)sendMessage:(NSString *)value toPeer:(NSString *)peerId completeSuccessBlock:(void (^) (void))successBlock completeFailBlock:(void (^) (NSInteger errorCode))failBlock {
     
     AgoraRtmMessage *rtmMessage = [[AgoraRtmMessage alloc] initWithText:value];
     [self.agoraRtmKit sendMessage:rtmMessage toPeer:peerId completion:^(AgoraRtmSendPeerMessageErrorCode errorCode) {
@@ -132,7 +129,7 @@ NSString * const RoleTypeTeacther = @"teacher";
             }
         } else {
             if(failBlock != nil){
-                failBlock();
+                failBlock(errorCode);
             }
         }
     }];
@@ -149,6 +146,8 @@ NSString * const RoleTypeTeacther = @"teacher";
         [self.agoraRtmChannel leaveWithCompletion:nil];
         self.channelName = nil;
     }
+    
+    [self.agoraRtmKit logoutWithCompletion:nil];
 }
 
 - (void)dealloc {
