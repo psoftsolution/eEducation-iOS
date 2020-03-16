@@ -24,6 +24,8 @@
     self.muteVideoButton.selected = YES;
     self.muteAudioButton.selected = YES;
     self.muteWhiteButton.selected = YES;
+    
+//    self.muteWhiteButton.enabled = NO;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -34,23 +36,23 @@
     
 }
 
-- (void)setStudentModel:(UserModel *)studentModel {
+- (void)setStudentModel:(StudentModel *)studentModel {
     _studentModel = studentModel;
-    [self.nameLabel setText:studentModel.userName];
-    NSString *audioImageName = studentModel.enableAudio ? @"icon-speaker3-max" : @"icon-speakeroff-dark";
+    [self.nameLabel setText:studentModel.account];
+    NSString *audioImageName = studentModel.audio ? @"icon-speaker3-max" : @"icon-speakeroff-dark";
     [self.muteAudioButton setImage:[UIImage imageNamed:audioImageName] forState:(UIControlStateNormal)];
-    self.muteAudioButton.selected = studentModel.enableAudio ? YES : NO;
+    self.muteAudioButton.selected = studentModel.audio ? YES : NO;
 
-    NSString *videoImageName = studentModel.enableVideo ? @"roomCameraOn" : @"roomCameraOff";
+    NSString *videoImageName = studentModel.video ? @"roomCameraOn" : @"roomCameraOff";
     [self.muteVideoButton setImage:[UIImage imageNamed:videoImageName] forState:(UIControlStateNormal)];
-
-    self.muteVideoButton.selected = studentModel.enableVideo ? YES : NO;
+    self.muteVideoButton.selected = studentModel.video ? YES : NO;
     
-    self.muteVideoButton.hidden = studentModel.uid != self.uid ? YES : NO;
-    self.muteAudioButton.hidden = studentModel.uid != self.uid ? YES : NO;
+    self.muteVideoButton.hidden = studentModel.uid.integerValue != self.userId.integerValue ? YES : NO;
+    self.muteAudioButton.hidden = studentModel.uid.integerValue != self.userId.integerValue ? YES : NO;
     
-    self.muteWhiteButton.selected = studentModel.grantBoard ? YES : NO;
-    self.muteWhiteButton.hidden = studentModel.uid != self.uid ? YES : NO;
+    self.muteWhiteButton.selected = studentModel.grant_board ? YES : NO;
+    self.muteWhiteButton.hidden = studentModel.uid.integerValue != self.userId.integerValue ? YES : NO;
 }
+
 
 @end

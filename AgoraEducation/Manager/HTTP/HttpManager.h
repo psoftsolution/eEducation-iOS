@@ -21,25 +21,17 @@
 // http: get app config
 #define HTTP_GET_CONFIG @""HTTP_BASE_URL"/edu/v1/app/version"
 
-// http: get global state when enter room
-#define HTTP_ENTER_ROOM @"%@/edu/v2/apps/%@/room/entry"
-
-// http: get or update global state
-#define HTTP_ROOM_INFO @"%@/edu/v1/apps/%@/room/%@"
-
-// http: update user info
-#define HTTP_UPDATE_USER_INFO @"%@/edu/v1/apps/%@/room/%@/user/%@"
-
-// http: get replay info
-#define HTTP_GET_REPLAY_INFO @"%@/edu/v1/apps/%@/room/%@/record/%@"
-
 @interface HttpManager : NSObject
-// common
+
++ (void)setHttpBaseUrl:(NSString *)url;
++ (NSString *)getHttpBaseUrl;
+
 + (void)get:(NSString *)url params:(NSDictionary *)params headers:(NSDictionary<NSString*, NSString*> *)headers success:(void (^)(id))success failure:(void (^)(NSError *))failure;
+
 + (void)post:(NSString *)url params:(NSDictionary *)params headers:(NSDictionary<NSString*, NSString*> *)headers success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure;
 
-// service
++ (void)POSTWhiteBoardRoomWithUuid:(NSString *)uuid token:(void (^)(NSString *token))token failure:(void (^)(NSString *msg))failure;
+
 + (void)getAppConfigWithSuccess:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure;
-+ (void)getReplayInfoWithBaseURL:(NSString *)baseURL userToken:(NSString *)userToken appId:(NSString *)appId roomId:(NSString *)roomId recordId:(NSString *)recordId success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure;
 
 @end

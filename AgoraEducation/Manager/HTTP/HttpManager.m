@@ -8,9 +8,11 @@
 
 #import "HttpManager.h"
 #import <AFNetworking/AFNetworking.h>
+#import "KeyCenter.h"
 
 @interface HttpManager ()
 
+@property (nonatomic, copy) NSString *baseURL;
 @property (nonatomic,strong) AFHTTPSessionManager *sessionManager;
 
 @end
@@ -26,6 +28,22 @@ static HttpManager *manager = nil;
         }
         return manager;
     }
+}
+
++ (void)setHttpBaseUrl:(NSString *)url {
+    if(url != nil && url.length > 0) {
+        
+        HttpManager.shareManager.baseURL = url;
+        NSString *lastString = [url substringFromIndex:url.length-1];
+        if([lastString isEqualToString:@"/"]) {
+            HttpManager.shareManager.baseURL = [url substringWithRange:NSMakeRange(0, [url length] - 1)];
+        }
+    }
+}
+
+
++ (NSString *)getHttpBaseUrl {
+    return HttpManager.shareManager.baseURL;
 }
 
 - (void)initSessionManager {
@@ -53,20 +71,20 @@ static HttpManager *manager = nil;
     [HttpManager.shareManager.sessionManager GET:url parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            success(responseObject);
+        }
         
         NSLog(@"\n============>Get HTTP Success<============\n\
               \nResult==>\n%@\n\
               ", responseObject);
-        if (success) {
-            success(responseObject);
-        }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"\n============>Get HTTP Error<============\n\
-              \nError==>\n%@\n\
-              ", error.description);
         if (failure) {
             failure(error);
         }
+        NSLog(@"\n============>Get HTTP Error<============\n\
+              \nError==>\n%@\n\
+              ", error.description);
     }];
 }
 
@@ -78,7 +96,6 @@ static HttpManager *manager = nil;
             [HttpManager.shareManager.sessionManager.requestSerializer setValue:headers[key] forHTTPHeaderField:key];
         }
     }
-
     NSLog(@"\n============>Post HTTP Start<============\n\
           \nurl==>\n%@\n\
           \nheaders==>\n%@\n\
@@ -86,21 +103,41 @@ static HttpManager *manager = nil;
           ", url, headers, params);
     
     [HttpManager.shareManager.sessionManager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSLog(@"\n============>Post HTTP Success<============\n\
-              \nResult==>\n%@\n\
-              ", responseObject);
         if (success) {
             success(responseObject);
         }
         
+        NSLog(@"\n============>Post HTTP Success<============\n\
+              \nResult==>\n%@\n\
+              ", responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-
+        if (failure) {
+          failure(error);
+        }
+        
         NSLog(@"\n============>Post HTTP Error<============\n\
               \nError==>\n%@\n\
               ", error.description);
+    }];
+}
+
++ (void)POSTWhiteBoardRoomWithUuid:(NSString *)uuid token:(void (^)(NSString *token))token failure:(void (^)(NSString *msg))failure {
+    
+    NSString *urlString = @"https://cloudcapiv4.herewhite.com/room/join";
+    NSString *url = [NSString stringWithFormat:@"%@?uuid=%@&token=%@", urlString, uuid, [KeyCenter whiteBoardToken]];
+    [HttpManager post:url params:nil headers:nil success:^(id responseObj) {
+        if ([responseObj[@"code"] integerValue] == 200) {
+            if (token) {
+                token(responseObj[@"msg"][@"roomToken"]);
+            }
+        }else {
+            if (failure) {
+                failure(@"Get roomToken error");
+            }
+        }
+    } failure:^(NSError *error) {
         if (failure) {
-          failure(error);
+            failure(@"Get roomToken error");
         }
     }];
 }
@@ -125,25 +162,6 @@ static HttpManager *manager = nil;
     };
     
     [HttpManager get:HTTP_GET_CONFIG params:params headers:nil success:^(id responseObj) {
-        
-        if(success != nil){
-            success(responseObj);
-        }
-    } failure:^(NSError *error) {
-        
-        if(failure != nil) {
-            failure(error);
-        }
-    }];
-}
-
-+ (void)getReplayInfoWithBaseURL:(NSString *)baseURL userToken:(NSString *)userToken appId:(NSString *)appId roomId:(NSString *)roomId recordId:(NSString *)recordId success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
-    
-    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
-    headers[@"token"] = userToken;
-
-    NSString *url = [NSString stringWithFormat:HTTP_GET_REPLAY_INFO, baseURL, appId, roomId, recordId];
-    [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
         if(success != nil){
             success(responseObj);

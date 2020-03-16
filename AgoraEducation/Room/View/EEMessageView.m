@@ -47,10 +47,34 @@
     [self.messageTableView reloadData];
 }
 
-- (void)addMessageModel:(MessageInfoModel *)model {
+- (void)checkMessageDataLink {
+    
+    for (SignalRoomModel *messageModel in self.messageArray) {
+        
+        if(messageModel.link == nil){
+            continue;
+        }
+        
+        NSString *regex = @"^/replay/*/*/*/*";
+        NSError *error;
+        NSRegularExpression *regular = [NSRegularExpression regularExpressionWithPattern:regex options:NSRegularExpressionCaseInsensitive error:&error];
+        NSArray *matches = [regular matchesInString:messageModel.link options:0 range:NSMakeRange(0, messageModel.link.length)];
+        if(matches != nil && matches.count == 1) {
+            NSArray *componentsArray = [messageModel.link componentsSeparatedByString:@"/"];
+            if(componentsArray != nil && componentsArray.count == 6) {
+                messageModel.roomid = componentsArray[2];
+                messageModel.startTime = componentsArray[3];
+                messageModel.endTime = componentsArray[4];
+                messageModel.content = NSLocalizedString(@"ReplayRecordingText", nil);
+            }
+        }
+    }
+}
 
+- (void)addMessageModel:(SignalRoomModel *)model {
     [self.messageArray addObject:model];
-
+    [self checkMessageDataLink];
+    
     [self.messageTableView reloadData];
     if (self.messageArray.count > 0) {
          [self.messageTableView scrollToRowAtIndexPath:
@@ -73,7 +97,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MessageInfoModel *messageModel = self.messageArray[indexPath.row];
+    SignalRoomModel *messageModel = self.messageArray[indexPath.row];
     if(messageModel.cellHeight > 0){
         return messageModel.cellHeight;
     }
@@ -89,11 +113,22 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    MessageInfoModel *messageModel = self.messageArray[indexPath.row];
-    if(messageModel.recordId == nil || messageModel.recordId.length == 0){
+    SignalRoomModel *messageModel = self.messageArray[indexPath.row];
+    if(messageModel.roomid == nil){
         return;
     }
     
-    [ReplayViewController enterReplayViewController:messageModel.recordId];
+    ReplayViewController *vc = [[ReplayViewController alloc] initWithNibName:@"ReplayViewController" bundle:nil];
+    vc.roomid = messageModel.roomid;
+    vc.startTime = messageModel.startTime;
+    vc.endTime = messageModel.endTime;
+    vc.videoPath = messageModel.url;
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+    UINavigationController *nvc = (UINavigationController*)window.rootViewController;
+    if(nvc != nil){
+        [nvc.visibleViewController presentViewController:vc animated:YES completion:nil];
+    }
+    return;
 }
 @end

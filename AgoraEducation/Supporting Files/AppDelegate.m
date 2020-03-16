@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "AppUpdateManager.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +17,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+
+    [AppUpdateManager.shareManager checkAppUpdate];
     return YES;
 }
 
@@ -47,7 +49,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTICE_KEY_ON_WILL_TERMINATE object:nil];
 }
 @end

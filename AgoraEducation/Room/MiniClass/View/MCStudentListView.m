@@ -11,7 +11,7 @@
 
 @interface MCStudentListView ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) UITableView *studentTableView;
-@property (nonatomic, strong) NSArray<UserModel*> *studentArray;
+@property (nonatomic, strong) NSArray<RolesStudentInfoModel*> *studentArray;
 
 @end
 
@@ -41,11 +41,12 @@
     self.studentTableView.frame = self.bounds;
 }
 
-- (void)updateStudentArray:(NSArray<UserModel*> *)array {
+- (void)updateStudentArray:(NSArray<RolesStudentInfoModel*> *)array {
     
     self.studentArray = [NSArray arrayWithArray:array];
     [self.studentTableView reloadData];
 }
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.studentArray.count;
@@ -60,9 +61,11 @@
         [cell.muteVideoButton addTarget:self action:@selector(muteVideo:) forControlEvents:(UIControlEventTouchUpInside)];
     }
 
-    UserModel *infoModel = self.studentArray[indexPath.row];
-    cell.uid = self.uid;
-    cell.studentModel = infoModel;
+    RolesStudentInfoModel *infoModel = self.studentArray[indexPath.row];
+    StudentModel *stuModel = infoModel.studentModel;
+    stuModel.uid = infoModel.attrKey;
+    cell.userId = self.userId;
+    cell.studentModel = stuModel;
     return cell;
 }
 
@@ -81,16 +84,15 @@
 
 - (void)muteVideo:(UIButton *)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(muteVideoStream:)]) {
-        [self.delegate muteVideoStream:sender.selected];
-    }
+           [self.delegate muteVideoStream:sender.selected];
+       }
     sender.selected = !sender.selected;
     NSString *imageName = sender.selected ? @"roomCameraOn":@"roomCameraOff";
     [sender setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];
 }
 
-
-- (void)setUid:(NSInteger)uid {
-    _uid = uid;
+- (void)setUserId:(NSString *)userId {
+    _userId = userId;
     [self.studentTableView reloadData];
 }
 @end

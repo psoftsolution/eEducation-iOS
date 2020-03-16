@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "RoomProtocol.h"
-#import "RoomAllModel.h"
+#import "RolesInfoModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MCStudentListView : UIView
-@property (nonatomic, assign) NSInteger uid;
+@property (nonatomic, copy) NSString *userId;
 @property (nonatomic, weak)id<RoomProtocol> delegate;
-- (void)updateStudentArray:(NSArray<UserModel*> *)array;
+- (void)updateStudentArray:(NSArray<RolesStudentInfoModel*> *)array;
 @end
 
 NS_ASSUME_NONNULL_END

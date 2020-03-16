@@ -28,7 +28,6 @@
 
 - (void)setClientRole:(AgoraClientRole)clientRole {
     [self.rtcEngineKit setClientRole: clientRole];
-    
 }
 
 - (void)enableVideo {

@@ -7,9 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MessageModel.h"
-#import "SignalMessageModel.h"
-#import "SignalP2PModel.h"
+#import "RolesInfoModel.h"
+#import "SignalRoomModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,11 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
-- (void)didReceivedMessage:(MessageInfoModel * _Nonnull)model;
-- (void)didReceivedReplaySignal:(MessageInfoModel * _Nonnull)model;
-- (void)didReceivedPeerSignal:(SignalP2PModel * _Nonnull)model;
-- (void)didReceivedSignal:(SignalMessageInfoModel * _Nonnull)model;
-- (void)didReceivedConnectionStateChanged:(AgoraRtmConnectionState)state;
+- (void)signalDidUpdateMessage:(SignalRoomModel * _Nonnull)messageModel;
+
+- (void)signalDidUpdateGlobalStateWithSourceModel:(RolesInfoModel * _Nullable)sourceInfoModel currentModel:(RolesInfoModel * _Nullable)currentInfoModel;
+
+- (void)signalDidReceived:(SignalP2PModel * _Nonnull)signalModel;
 
 @end
 

@@ -33,22 +33,19 @@
 }
 
 - (IBAction)muteAudio:(UIButton *)sender {
-    
     sender.selected = !sender.selected;
-    
-    [self updateAudioImageWithMuted:sender.selected];
-
+    NSString *imageName = sender.selected ? @"icon-speakeroff-dark" : @"icon-speaker3";
+    [self.audioMuteButton setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];
     if (self.delegate && [self.delegate respondsToSelector:@selector(muteAudioStream:)]) {
         [self.delegate muteAudioStream:sender.selected];
     }
+
 }
 
 - (IBAction)muteVideo:(UIButton *)sender {
-    
     sender.selected = !sender.selected;
-    
-    [self updateVideoImageWithMuted:sender.selected];
-
+    NSString *imageName = sender.selected ? @"icon-video-off-min" : @"icon-video-on-min";
+    [self.videoMuteButton setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];
     if (self.delegate && [self.delegate respondsToSelector:@selector(muteVideoStream:)]) {
         [self.delegate muteVideoStream:sender.selected];
     }
