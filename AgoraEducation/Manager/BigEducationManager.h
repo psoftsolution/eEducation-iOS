@@ -42,8 +42,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setSignalDelegate:(id<SignalDelegate>)delegate;
 - (void)joinSignalWithChannelName:(NSString *)channelName completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
 
-- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nonnull)block;
+- (void)queryGlobalStateWithChannelName:(NSString *)channelName completeBlock:(QueryRolesInfoBlock _Nullable)block;
 - (void)updateGlobalStateWithValue:(NSString *)value completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (void))failBlock;
+
+- (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount excludeUids:(NSArray<NSString *> *) excludeUids completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock;
 
 - (void)sendMessageWithContent:(NSString *)text userName:(NSString *)name;
 - (void)setSignalWithType:(SignalP2PType)type completeSuccessBlock:(void (^ _Nullable) (void))successBlock;
@@ -65,11 +67,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /* ==================================>WhiteManager<================================ */
 - (void)initWhiteSDK:(WhiteBoardView *)boardView dataSourceDelegate:(id<WhitePlayDelegate> _Nullable)whitePlayerDelegate;
-- (void)joinWhiteRoomWithUuid:(NSString*)uuid completeSuccessBlock:(void (^) (WhiteRoom * _Nullable room))successBlock completeFailBlock:(void (^) (NSError * _Nullable error))failBlock;
+- (void)joinWhiteRoomWithBoardId:(NSString*)boardId boardToken:(NSString*)boardToken  completeSuccessBlock:(void (^) (WhiteRoom * _Nullable room))successBlock completeFailBlock:(void (^) (NSError * _Nullable error))failBlock;
 - (void)createWhiteReplayerWithModel:(ReplayerModel *)model completeSuccessBlock:(void (^) (WhitePlayer * _Nullable whitePlayer, AVPlayer * _Nullable avPlayer))successBlock completeFailBlock:(void (^) (NSError * _Nullable error))failBlock;
 - (void)disableWhiteDeviceInputs:(BOOL)disable;
+- (void)setWhiteStrokeColor:(NSArray<NSNumber *>*)strokeColor;
+- (void)setWhiteApplianceName:(NSString *)applianceName;
 - (void)refreshWhiteViewSize;
 - (void)moveWhiteToContainer:(NSInteger)sceneIndex;
+- (void)setWhiteSceneIndex:(NSUInteger)index completionHandler:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completionHandler;
 - (void)seekWhiteToTime:(CMTime)time completionHandler:(void (^ _Nonnull)(BOOL finished))completionHandler;
 - (void)playWhite;
 - (void)pauseWhite;

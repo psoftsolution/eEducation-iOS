@@ -10,8 +10,8 @@
 	<true/>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>io.agora.AgoraEducationDis</key>
-		<string>AgoraEducationAppRelease</string>
+		<key>io.agora.AgoraEducationDisGY</key>
+		<string>AgoraEducationGongYiAppStoreRelease</string>
 	</dict>
 </dict>
 </plist>

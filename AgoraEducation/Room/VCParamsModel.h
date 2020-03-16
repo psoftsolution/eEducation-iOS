@@ -14,10 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *className;
 @property (nonatomic, copy) NSString *userName;
-@property (nonatomic, copy) NSString *userId;
+@property (nonatomic, copy) NSString *uid;
 @property (nonatomic, copy) NSString *channelName;
 
-
+@property (nonatomic, copy) NSString *userToken;
+@property (nonatomic, copy) NSString *roomId;
 
 @end
 

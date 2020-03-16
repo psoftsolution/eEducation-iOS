@@ -21,6 +21,9 @@
 // http: get app config
 #define HTTP_GET_CONFIG @""HTTP_BASE_URL"/edu/v1/app/version"
 
+// http: get global state when enter room
+#define HTTP_POST_ENTER_ROOM @"%@/edu/v2/apps/%@/room/entry"
+
 @interface HttpManager : NSObject
 
 + (void)setHttpBaseUrl:(NSString *)url;
@@ -35,3 +38,4 @@
 + (void)getAppConfigWithSuccess:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure;
 
 @end
+

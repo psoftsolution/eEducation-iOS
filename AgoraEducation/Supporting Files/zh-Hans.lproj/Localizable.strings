@@ -2,7 +2,7 @@
   Localizable.strings
   AgoraEducation
 
-  Created by SRS on 2020/2/17.
+  Created by SRS on 2020/2/19.
   Copyright © 2020 yangmoumou. All rights reserved.
 */
 
@@ -25,14 +25,18 @@ MaterialsAreaText = "教材区";
 ChatroomText = "聊天室";
 StudentText = "学生";
 
-OneToOneText = "一对一";
+OneToOneText = "1V1";
 SmallClassText = "小班课";
 LargeClassText = "大班课";
 
 UserNameVerifyText = "用户名为11位及以内的数字或者英文字符";
-RoomTypeVerifyText = "请选择房间类型";
+RoomTypeVerifyText = "找不到房间类型";
 RoomCountVerifyText = "人数已满,请换个房间";
 RequestFailedText = "请求失败";
+
+QueryOnlineErrorText = "获取线上用户数量失败";
+InitSignalErrorText = "初始化信令失败";
+JoinWhiteErrorText = "加入白板失败";
 
 MuteBoardText = "老师已回收了你的白板权限";
 UnMuteBoardText = "老师已授权了你的白板权限";

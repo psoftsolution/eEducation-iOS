@@ -34,7 +34,7 @@
 
 - (void)setUpView {
     UIView *videoCanvasView = [[UIView alloc] init];
-    videoCanvasView.frame = self.contentView.bounds;
+    videoCanvasView.frame = CGRectMake(0, 0, 95, 70);
     [self.contentView addSubview:videoCanvasView];
     self.videoCanvasView = videoCanvasView;
 
@@ -45,7 +45,7 @@
     backImageView.contentMode = UIViewContentModeScaleAspectFit;
     backImageView.backgroundColor = [UIColor colorWithHexString:@"DBE2E5"];
     self.backImageView = backImageView;
-
+    
     UIView *labelView = [[UIView alloc] initWithFrame:CGRectMake(0, 50, 95, 20)];
     labelView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
     [self.contentView addSubview:labelView];
@@ -56,7 +56,7 @@
     self.nameLable = nameLable;
 
     UIImageView *volumeImageView = [[UIImageView alloc] init];
-    volumeImageView.frame = CGRectMake(75, 50, 20, 20);
+    volumeImageView.frame = CGRectMake(75,50, 20, 20);
     [self.contentView addSubview:volumeImageView];
     [volumeImageView setImage:[UIImage imageNamed:@"icon-speaker3-min"]];
     self.volumeImageView = volumeImageView;

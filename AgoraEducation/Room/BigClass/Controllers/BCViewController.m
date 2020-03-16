@@ -23,7 +23,7 @@
 #import "SignalP2PModel.h"
 
 #import "SignalManager.h"
-
+#import "UIView+Toast.h"
 #import "KeyCenter.h"
 
 #define kLandscapeViewWidth    223
@@ -45,6 +45,7 @@
 // white
 @property (weak, nonatomic) IBOutlet UIView *whiteboardView;
 @property (nonatomic, weak) WhiteBoardView *boardView;
+
 @property (nonatomic, assign) NSInteger segmentedIndex;
 @property (nonatomic, assign) NSInteger unreadMessageCount;
 @property (nonatomic, assign) StudentLinkState linkState;
@@ -63,7 +64,7 @@
 }
 
 -(void)initData {
-    
+
     self.segmentedView.delegate = self;
     self.studentVideoView.delegate = self;
     self.navigationView.delegate = self;
@@ -74,23 +75,25 @@
     [self.educationManager initSessionModel];
     [self.educationManager setSignalDelegate:self];
     
-    [self setupRTC];
-    [self setupSignal];
+    WEAK(self);
+    [self setupSignalWithSuccessBolck:^{
+        [weakself setupRTC];
+        [weakself setupWhiteBoard];
+    }];
 }
 
 - (void)setupRTC {
     
     [self.educationManager initRTCEngineKitWithAppid:[KeyCenter agoraAppid] clientRole:RTCClientRoleAudience dataSourceDelegate:self];
-    [self.educationManager joinRTCChannelByToken:[KeyCenter agoraRTCToken] channelId:self.paramsModel.channelName info:nil uid:[self.paramsModel.userId integerValue] joinSuccess:nil];
+    [self.educationManager joinRTCChannelByToken:[KeyCenter agoraRTCToken] channelId:self.paramsModel.channelName info:nil uid:[self.paramsModel.uid integerValue] joinSuccess:nil];
 }
 
-- (void)setupSignal {
-    
+- (void)setupSignalWithSuccessBolck:(void (^)(void))successBlock {
     WEAK(self);
     [self.educationManager joinSignalWithChannelName:self.paramsModel.channelName completeSuccessBlock:^{
         
         StudentModel *model = [StudentModel new];
-        model.uid = weakself.paramsModel.userId;
+        model.uid = weakself.paramsModel.uid;
         model.account = weakself.paramsModel.userName;
         model.video = 1;
         model.audio = 1;
@@ -99,6 +102,10 @@
         [weakself.educationManager updateGlobalStateWithValue:value completeSuccessBlock:^{
             
         } completeFailBlock:nil];
+        
+        if(successBlock != nil){
+            successBlock();
+        }
         
     } completeFailBlock:nil];
 }
@@ -138,7 +145,7 @@
         
         BOOL remote = NO;
         if(filteredArray.count == 0){
-            if (studentUid.integerValue == self.paramsModel.userId.integerValue) {
+            if (studentUid.integerValue == self.paramsModel.uid.integerValue) {
                 [self renderStudentCanvas:studentUid.integerValue remoteVideo:remote];
             } else {
                 remote = YES;
@@ -248,6 +255,10 @@
     self.studentVideoView.hidden = NO;
     
     [self.studentVideoView setButtonEnabled:!remote];
+    
+    if(!remote){
+        self.linkState = StudentLinkStateAccept;
+    }
     [self.handUpButton setBackgroundImage:[UIImage imageNamed:@"icon-handup-x"] forState:(UIControlStateNormal)];
 
     [self.studentVideoView updateVideoImageWithMuted:studentModel.video == 0 ? YES : NO];
@@ -318,7 +329,7 @@
 - (IBAction)handUpEvent:(UIButton *)sender {
     
     NSInteger link_uid = self.educationManager.teacherModel.link_uid.integerValue;
-    if(link_uid > 0 && link_uid != self.paramsModel.userId.integerValue) {
+    if(link_uid > 0 && link_uid != self.paramsModel.uid.integerValue) {
         return;
     }
     
@@ -366,7 +377,6 @@
         weakself.linkState = StudentLinkStateAccept;
         
         weakself.tipLabel.hidden = NO;
-        
         [weakself.tipLabel setText: NSLocalizedString(@"AcceptRequestText", nil)];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             weakself.tipLabel.hidden = YES;
@@ -411,25 +421,32 @@
     self.textFiledBottomConstraint.constant = 0;
 }
 
-- (void)joinWhiteBoardRoomWithUID:(NSString *)uuid disableDevice:(BOOL)disableDevice {
-    
+- (void)setupWhiteBoard {
+
     WEAK(self);
     [self.educationManager releaseWhiteResources];
     [self.educationManager initWhiteSDK:self.boardView dataSourceDelegate:self];
-    [self.educationManager joinWhiteRoomWithUuid:uuid completeSuccessBlock:^(WhiteRoom * _Nullable room) {
+    
+    NSString *whiteId = [KeyCenter whiteBoardId];
+    NSString *whiteToken = [KeyCenter whiteBoardToken];
+    [self.educationManager joinWhiteRoomWithBoardId:whiteId boardToken:whiteToken completeSuccessBlock:^(WhiteRoom * _Nullable room) {
         
         CMTime cmTime = CMTimeMakeWithSeconds(0, 100);
         [weakself.educationManager seekWhiteToTime:cmTime completionHandler:^(BOOL finished) {
         }];
-        [weakself.educationManager disableWhiteDeviceInputs:disableDevice];
+        [weakself.educationManager disableWhiteDeviceInputs:YES];
         [weakself.educationManager disableCameraTransform:weakself.educationManager.teacherModel.lock_board];
         [weakself.educationManager currentWhiteScene:^(NSInteger sceneCount, NSInteger sceneIndex) {
             [weakself.educationManager moveWhiteToContainer:sceneIndex];
         }];
         
     } completeFailBlock:^(NSError * _Nullable error) {
-        
+        [weakself showToast:NSLocalizedString(@"JoinWhiteErrorText", nil)];
     }];
+}
+
+- (void)showToast:(NSString *)title {
+    [self.view makeToast:title];
 }
 
 #pragma mark BCSegmentedDelegate
@@ -524,7 +541,7 @@
             [self.handUpButton setBackgroundImage:[UIImage imageNamed:@"icon-handup"] forState:(UIControlStateNormal)];
             
             self.tipLabel.hidden = NO;
-            [self.tipLabel setText: NSLocalizedString(@"AcceptRequestText", nil)];
+            [self.tipLabel setText: NSLocalizedString(@"CancelRequestText", nil)];
             WEAK(self);
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 weakself.tipLabel.hidden = YES;
@@ -563,16 +580,8 @@
     
     // teacher
     {
-        TeacherModel *sourceModel = sourceInfoModel.teacherModel;
         TeacherModel *currentModel = currentInfoModel.teacherModel;
-        if(![sourceModel.whiteboard_uid isEqualToString:currentModel.whiteboard_uid]) {
-            
-            [self joinWhiteBoardRoomWithUID:currentModel.whiteboard_uid disableDevice:YES];
-            
-        } else if(currentModel.whiteboard_uid.length > 0){
-                   
-            [self.educationManager disableCameraTransform:currentModel.lock_board];
-        }
+        [self.educationManager disableCameraTransform:currentModel.lock_board];
     }
     
     // student

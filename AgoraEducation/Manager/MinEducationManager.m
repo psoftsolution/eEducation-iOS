@@ -39,6 +39,7 @@
     }
     return self;
 }
+
 - (void)onWillTerminate {
     [self releaseResources];
 }
@@ -96,10 +97,12 @@
     }];
 }
 
-- (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock {
+- (void)queryOnlineStudentCountWithChannelName:(NSString *)channelName maxCount:(NSInteger)maxCount excludeUids:(NSArray<NSString *> *) excludeUids completeSuccessBlock:(void (^) (NSInteger count))successBlock completeFailBlock:(void (^) (void))failBlock {
     
-    [self queryGlobalStateWithChannelName:channelName completeBlock:^(RolesInfoModel * _Nullable rolesInfoModel) {
+    WEAK(self);
+    [self.signalManager getChannelAllAttributes:channelName completeBlock:^(NSArray<AgoraRtmChannelAttribute *> * _Nullable attributes) {
         
+        RolesInfoModel *rolesInfoModel = [weakself filterRolesInfoModelWithAttributes:attributes];
         if(rolesInfoModel == nil || rolesInfoModel.studentModels == nil) {
             if(failBlock != nil){
                 failBlock();
@@ -111,9 +114,18 @@
             
             NSMutableArray<NSString *> *uIds = [NSMutableArray array];
             for(RolesStudentInfoModel *model in rolesInfoModel.studentModels){
-                [uIds addObject:model.attrKey];
+                if(excludeUids == nil || ![excludeUids containsObject:model.attrKey]){
+                    [uIds addObject:model.attrKey];
+                }
             }
-            [self.signalManager queryPeersOnlineStatus:uIds completion:^(NSArray<AgoraRtmPeerOnlineStatus *> *peerOnlineStatus, AgoraRtmQueryPeersOnlineErrorCode errorCode) {
+            if([uIds count] == 0){
+                if(successBlock != nil){
+                    successBlock(0);
+                }
+                return;
+            }
+            
+            [weakself.signalManager queryPeersOnlineStatus:uIds completion:^(NSArray<AgoraRtmPeerOnlineStatus *> *peerOnlineStatus, AgoraRtmQueryPeersOnlineErrorCode errorCode) {
                 
                 if(errorCode == AgoraRtmQueryPeersOnlineErrorOk) {
                     
@@ -280,7 +292,7 @@
 }
 
 - (void)setupRTCVideoCanvas:(RTCVideoCanvasModel *) model {
-    
+
     RTCVideoSessionModel *currentSessionModel;
     RTCVideoSessionModel *removeSessionModel;
     for (RTCVideoSessionModel *videoSessionModel in self.rtcVideoSessionModels) {
@@ -416,8 +428,6 @@
 }
 
 
-
-
 #pragma mark WhiteManager
 - (void)initWhiteSDK:(WhiteBoardView *)boardView dataSourceDelegate:(id<WhitePlayDelegate> _Nullable)whitePlayerDelegate {
     
@@ -428,30 +438,20 @@
     [self.whiteManager initWhiteSDKWithBoardView:boardView config:[WhiteSdkConfiguration defaultConfig]];
 }
 
-- (void)joinWhiteRoomWithUuid:(NSString*)uuid completeSuccessBlock:(void (^) (WhiteRoom * _Nullable room))successBlock completeFailBlock:(void (^) (NSError * _Nullable error))failBlock {
+- (void)joinWhiteRoomWithBoardId:(NSString*)boardId boardToken:(NSString*)boardToken  completeSuccessBlock:(void (^) (WhiteRoom * _Nullable room))successBlock completeFailBlock:(void (^) (NSError * _Nullable error))failBlock {
     
-    WEAK(self);
-    [HttpManager POSTWhiteBoardRoomWithUuid:uuid token:^(NSString * _Nonnull token) {
-
-        WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:uuid roomToken:token];
-        [weakself.whiteManager joinWhiteRoomWithWhiteRoomConfig:roomConfig completeSuccessBlock:^(WhiteRoom * _Nullable room) {
-            
-            if(successBlock != nil){
-                successBlock(room);
-            }
-            
-        } completeFailBlock:^(NSError * _Nullable error) {
-            
-            if(failBlock != nil){
-                failBlock(error);
-            }
-        }];
+    WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:boardId roomToken:boardToken];
+    [self.whiteManager joinWhiteRoomWithWhiteRoomConfig:roomConfig completeSuccessBlock:^(WhiteRoom * _Nullable room) {
         
-    } failure:^(NSString * _Nonnull msg) {
-        if(failBlock != nil){
-            failBlock(nil);
+        if(successBlock != nil){
+            successBlock(room);
         }
-        NSLog(@"EducationManager Get Room Token Err:%@", msg);
+        
+    } completeFailBlock:^(NSError * _Nullable error) {
+        
+        if(failBlock != nil){
+            failBlock(error);
+        }
     }];
 }
 
@@ -659,7 +659,7 @@ The RoomState property in the room will trigger this callback when it changes.
 }
 
 - (void)releaseResources {
-
+    
     for (RTCVideoSessionModel *model in self.rtcVideoSessionModels){
         model.videoCanvas.view = nil;
         
