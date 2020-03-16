@@ -159,7 +159,6 @@
     }
     
     SceneType sceneType;
-    NSString *vcIdentifier;
     if ([self.roomType.titleLabel.text isEqualToString:NSLocalizedString(@"OneToOneText", nil)]) {
         self.educationManager = [OneToOneEducationManager new];
         sceneType = SceneType1V1;
