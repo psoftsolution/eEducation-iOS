@@ -35,7 +35,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [weakself generateHttpErrorMessageWithDescribe:NSLocalizedString(@"RequestFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"RequestFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -134,7 +134,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [weakself generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetRoomInfoFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetRoomInfoFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -163,7 +163,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [weakself generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateRoomInfoFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateRoomInfoFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -176,7 +176,7 @@
 }
 
 #pragma mark Private
-- (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode {
++ (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSArray<NSString*> *allLanguages = [defaults objectForKey:@"AppleLanguages"];
