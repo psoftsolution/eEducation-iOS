@@ -252,7 +252,7 @@
     
     WEAK(self);
     [self setLoadingVisible:YES];
-    [self.educationManager getConfigWithSuccessBolck:^{
+    [BaseEducationManager getConfigWithSuccessBolck:^{
         [weakself setLoadingVisible:NO];
         if(successBlock != nil){
             successBlock();
@@ -271,7 +271,7 @@
     NSString *className = EduConfigModel.shareInstance.className;
     SceneType sceneType = EduConfigModel.shareInstance.sceneType;
     
-    [self.educationManager enterRoomWithUserName:userName roomName:className sceneType:sceneType successBolck:^{
+    [BaseEducationManager enterRoomWithUserName:userName roomName:className sceneType:sceneType successBolck:^{
         
         [weakself setLoadingVisible:NO];
         if(successBlock != nil){

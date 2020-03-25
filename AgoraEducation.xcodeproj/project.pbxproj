@@ -19,6 +19,7 @@
 		1AEDE5E32338CBBF0096ADEC /* SkinCoverWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDE5E22338CBBF0096ADEC /* SkinCoverWindow.m */; };
 		7813B70223FA5A0300265830 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7813B6F623FA5A0300265830 /* LaunchScreen.storyboard */; };
 		7813B70523FA5A0300265830 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7813B6FD23FA5A0300265830 /* Main.storyboard */; };
+		781685B7242A00EB007FD559 /* LogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 781685B6242A00EB007FD559 /* LogManager.m */; };
 		783FB6C4240D0739007298C1 /* BaseEducationManager+RTC.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB6BB240D0739007298C1 /* BaseEducationManager+RTC.m */; };
 		783FB6C5240D0739007298C1 /* BaseEducationManager+GlobalStates.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB6BC240D0739007298C1 /* BaseEducationManager+GlobalStates.m */; };
 		783FB6C6240D0739007298C1 /* BaseEducationManager+WhiteBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB6BD240D0739007298C1 /* BaseEducationManager+WhiteBoard.m */; };
@@ -40,7 +41,6 @@
 		783FB703240D12BA007298C1 /* CommonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB6FB240D12BA007298C1 /* CommonModel.m */; };
 		783FB704240D12BA007298C1 /* ConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB6FF240D12BA007298C1 /* ConfigModel.m */; };
 		783FB705240D12BA007298C1 /* RoomAllModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB700240D12BA007298C1 /* RoomAllModel.m */; };
-		78515D3923FCD4F20015B5EC /* AppUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78515D3723FCD4F20015B5EC /* AppUpdateManager.m */; };
 		7878B4AF23FA655300AF1B4F /* Room.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7878B4AC23FA655300AF1B4F /* Room.storyboard */; };
 		7878B4C523FA72EE00AF1B4F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7878B4C723FA72EE00AF1B4F /* Localizable.strings */; };
 		7878B4CB23FA735700AF1B4F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7878B4CD23FA735700AF1B4F /* InfoPlist.strings */; };
@@ -165,6 +165,8 @@
 		7813B72823FA5BDA00265830 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		7813B72E23FA5C1200265830 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		7813B73023FA5C1600265830 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		781685B5242A00EB007FD559 /* LogManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogManager.h; sourceTree = "<group>"; };
+		781685B6242A00EB007FD559 /* LogManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogManager.m; sourceTree = "<group>"; };
 		783FB6BA240D0739007298C1 /* BaseEducationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseEducationManager.h; sourceTree = "<group>"; };
 		783FB6BB240D0739007298C1 /* BaseEducationManager+RTC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BaseEducationManager+RTC.m"; sourceTree = "<group>"; };
 		783FB6BC240D0739007298C1 /* BaseEducationManager+GlobalStates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BaseEducationManager+GlobalStates.m"; sourceTree = "<group>"; };
@@ -209,8 +211,6 @@
 		783FB6FF240D12BA007298C1 /* ConfigModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigModel.m; sourceTree = "<group>"; };
 		783FB700240D12BA007298C1 /* RoomAllModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomAllModel.m; sourceTree = "<group>"; };
 		783FB701240D12BA007298C1 /* CommonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonModel.h; sourceTree = "<group>"; };
-		78515D3723FCD4F20015B5EC /* AppUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppUpdateManager.m; sourceTree = "<group>"; };
-		78515D3823FCD4F20015B5EC /* AppUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppUpdateManager.h; sourceTree = "<group>"; };
 		7878B4AD23FA655300AF1B4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Room.storyboard; sourceTree = "<group>"; };
 		7878B4B023FA656000AF1B4F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Room.strings; sourceTree = "<group>"; };
 		7878B4B123FA656300AF1B4F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Room.strings"; sourceTree = "<group>"; };
@@ -595,6 +595,15 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		781685B32429FE54007FD559 /* LogManager */ = {
+			isa = PBXGroup;
+			children = (
+				781685B5242A00EB007FD559 /* LogManager.h */,
+				781685B6242A00EB007FD559 /* LogManager.m */,
+			);
+			path = LogManager;
+			sourceTree = "<group>";
+		};
 		783FB6B9240D0739007298C1 /* BaseManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -711,15 +720,6 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		78515D3623FCD4F20015B5EC /* AppUpdateManager */ = {
-			isa = PBXGroup;
-			children = (
-				78515D3823FCD4F20015B5EC /* AppUpdateManager.h */,
-				78515D3723FCD4F20015B5EC /* AppUpdateManager.m */,
-			);
-			path = AppUpdateManager;
-			sourceTree = "<group>";
-		};
 		7878B4A823FA655300AF1B4F /* Room */ = {
 			isa = PBXGroup;
 			children = (
@@ -767,9 +767,9 @@
 		787E7A4223A9FEFF005F8F0C /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				781685B32429FE54007FD559 /* LogManager */,
 				783FB6B9240D0739007298C1 /* BaseManager */,
 				78C127A024037DE300420E72 /* CombineReplayManager */,
-				78515D3623FCD4F20015B5EC /* AppUpdateManager */,
 				78D731A823BB103B00D2146C /* BigEducationManager.h */,
 				78D731A923BB103B00D2146C /* BigEducationManager.m */,
 				78D731B823BB610400D2146C /* MinEducationManager.h */,
@@ -1161,6 +1161,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				781685B7242A00EB007FD559 /* LogManager.m in Sources */,
 				78D7311323B388B100D2146C /* MCStudentViewCell.m in Sources */,
 				78D7313E23B38B5700D2146C /* EEClassRoomTypeView.m in Sources */,
 				783FB704240D12BA007298C1 /* ConfigModel.m in Sources */,
@@ -1169,7 +1170,6 @@
 				78D730FE23B388A400D2146C /* OTOTeacherView.m in Sources */,
 				78D730E923B3889D00D2146C /* EEWhiteboardTool.m in Sources */,
 				783FB6F2240D07B3007298C1 /* RTCVideoCanvasModel.m in Sources */,
-				78515D3923FCD4F20015B5EC /* AppUpdateManager.m in Sources */,
 				783FB6DE240D0746007298C1 /* UIView+EEBadge.m in Sources */,
 				783FB702240D12BA007298C1 /* EnterRoomAllModel.m in Sources */,
 				783FB6C5240D0739007298C1 /* BaseEducationManager+GlobalStates.m in Sources */,

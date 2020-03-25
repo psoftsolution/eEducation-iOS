@@ -14,9 +14,8 @@
 
 @implementation BaseEducationManager (GlobalStates)
 
-- (void)getConfigWithSuccessBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
-    
-    WEAK(self);
++ (void)getConfigWithSuccessBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
+
     [HttpManager getAppConfigWithSuccess:^(id responseObj) {
         
         ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
@@ -35,7 +34,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [weakself generateHttpErrorMessageWithDescribe:NSLocalizedString(@"RequestFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"RequestFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -46,7 +45,7 @@
     }];
 }
 
-- (void)enterRoomWithUserName:(NSString *)userName roomName:(NSString *)roomName sceneType:(SceneType)sceneType successBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
++ (void)enterRoomWithUserName:(NSString *)userName roomName:(NSString *)roomName sceneType:(SceneType)sceneType successBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
     NSString *url = [NSString stringWithFormat:HTTP_ENTER_ROOM, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId];
     
@@ -57,8 +56,7 @@
     // student
     params[@"role"] = @(2);
     params[@"uuid"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
-    
-    WEAK(self);
+
     [HttpManager post:url params:params headers:nil success:^(id responseObj) {
         
         EnterRoomAllModel *model = [EnterRoomAllModel yy_modelWithDictionary:responseObj];
@@ -72,7 +70,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [weakself generateHttpErrorMessageWithDescribe:NSLocalizedString(@"EnterRoomFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"EnterRoomFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -113,7 +111,7 @@
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
-    WEAK(self);
+
     [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
         RoomAllModel *model = [RoomAllModel yy_modelWithDictionary:responseObj];
@@ -133,7 +131,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [weakself generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetRoomInfoFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetRoomInfoFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -152,7 +150,6 @@
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
     
-    WEAK(self);
     [HttpManager post:url params:params headers:headers success:^(id responseObj) {
         
         CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];
@@ -162,7 +159,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [weakself generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateRoomInfoFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateRoomInfoFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -175,7 +172,7 @@
 }
 
 #pragma mark Private
-- (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode {
++ (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSArray<NSString*> *allLanguages = [defaults objectForKey:@"AppleLanguages"];

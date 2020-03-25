@@ -44,7 +44,7 @@ static HttpManager *manager = nil;
         }
     }
     
-    NSLog(@"\n============>Get HTTP Start<============\n\
+    AgoraLog(@"\n============>Get HTTP Start<============\n\
           \nurl==>\n%@\n\
           \nheaders==>\n%@\n\
           \nparams==>\n%@\n\
@@ -54,14 +54,14 @@ static HttpManager *manager = nil;
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSLog(@"\n============>Get HTTP Success<============\n\
+        AgoraLog(@"\n============>Get HTTP Success<============\n\
               \nResult==>\n%@\n\
               ", responseObject);
         if (success) {
             success(responseObject);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"\n============>Get HTTP Error<============\n\
+        AgoraLog(@"\n============>Get HTTP Error<============\n\
               \nError==>\n%@\n\
               ", error.description);
         if (failure) {
@@ -79,7 +79,7 @@ static HttpManager *manager = nil;
         }
     }
 
-    NSLog(@"\n============>Post HTTP Start<============\n\
+    AgoraLog(@"\n============>Post HTTP Start<============\n\
           \nurl==>\n%@\n\
           \nheaders==>\n%@\n\
           \nparams==>\n%@\n\
@@ -87,7 +87,7 @@ static HttpManager *manager = nil;
     
     [HttpManager.shareManager.sessionManager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSLog(@"\n============>Post HTTP Success<============\n\
+        AgoraLog(@"\n============>Post HTTP Success<============\n\
               \nResult==>\n%@\n\
               ", responseObject);
         if (success) {
@@ -96,7 +96,7 @@ static HttpManager *manager = nil;
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 
-        NSLog(@"\n============>Post HTTP Error<============\n\
+        AgoraLog(@"\n============>Post HTTP Error<============\n\
               \nError==>\n%@\n\
               ", error.description);
         if (failure) {

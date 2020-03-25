@@ -18,6 +18,14 @@
     self.rtcManager.rtcManagerDelegate = self;
     [self.rtcManager initEngineKit:appid];
     [self.rtcManager setChannelProfile:(AgoraChannelProfileLiveBroadcasting)];
+    
+    AgoraVideoEncoderConfiguration *configuration = [AgoraVideoEncoderConfiguration new];
+    configuration.dimensions = AgoraVideoDimension360x360;
+    configuration.frameRate = 15;
+    configuration.bitrate = AgoraVideoBitrateStandard;
+    configuration.orientationMode = AgoraVideoOutputOrientationModeFixedLandscape;
+    [self.rtcManager setVideoEncoderConfiguration:configuration];
+
     [self.rtcManager enableVideo];
     [self.rtcManager enableWebSdkInteroperability:YES];
     [self.rtcManager enableDualStreamMode:YES];

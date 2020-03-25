@@ -674,7 +674,7 @@
                 successBlock();
             }
         } else {
-            NSLog(@"Set scene index err：%@", error);
+            AgoraLog(@"Set scene index err：%@", error);
         }
     }];
 }
