@@ -1,8 +1,8 @@
 //
-//  LogManager.h
+//  KeyCenter.h
 //  AgoraEducation
 //
-//  Created by SRS on 2020/3/24.
+//  Created by SRS on 2020/3/26.
 //  Copyright © 2020 yangmoumou. All rights reserved.
 //
 
@@ -10,11 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LogManager : NSObject
+@interface KeyCenter : NSObject
 
-
-+ (void)setupRTCLog;
-
++ (NSString *)agoraAppid;
 
 @end
 

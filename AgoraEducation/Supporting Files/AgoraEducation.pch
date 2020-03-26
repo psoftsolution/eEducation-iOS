@@ -9,6 +9,8 @@
 #ifndef AgoraSmallClass_pch
 #define AgoraSmallClass_pch
 
+#ifdef __OBJC__
+
 #import <YYModel.h>
 #import "UIColor+Addition.h"
 #import "AlertViewUtil.h"
@@ -21,6 +23,8 @@
 #define AgoraLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 #else
 #define AgoraLog(...)
+#endif
+
 #endif
 
 

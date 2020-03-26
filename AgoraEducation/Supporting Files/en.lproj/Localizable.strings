@@ -36,6 +36,7 @@ RoomCountVerifyText = "Room is full, please change another room";
 RequestFailedText = "request failed";
 RequestConfigFailedText = "request config failed";
 EnterRoomFailedText = "enter room failed";
+LeftRoomFailedText = "left room failed";
 GetRoomInfoFailedText = "get room info failed";
 UpdateRoomInfoFailedText = "update room info failed";
 RequestReplayFailedText = "request replay info failed";
@@ -56,3 +57,7 @@ UpdateText = "version has been updated. Please download the new version";
 JoinWhiteErrorText = "white board join error";
 JoinWhiteErrorText = "white board join error";
 LoginOnAnotherDeviceText = "account signed in on another device";
+
+LogNotFoundText = "no log files found";
+LogClearErrorText = "failed to clear log files";
+LogZipErrorText = "log file compression failed";

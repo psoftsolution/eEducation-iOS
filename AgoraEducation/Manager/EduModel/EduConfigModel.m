@@ -8,6 +8,7 @@
 
 #import "EduConfigModel.h"
 #import "HttpManager.h"
+#import "KeyCenter.h"
 
 static EduConfigModel *manager = nil;
 
@@ -38,6 +39,7 @@ static EduConfigModel *manager = nil;
     @synchronized(self) {
         if(self = [super init]) {
             self.httpBaseURL = HTTP_BASE_URL;
+            self.appId = [KeyCenter agoraAppid];
         }
     }
     return self;

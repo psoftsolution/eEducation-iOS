@@ -206,6 +206,8 @@
     
     // release signal
     [self releaseSignalResources];
+    
+    [BaseEducationManager leftRoomWithSuccessBolck:nil completeFailBlock:nil];
 }
 
 @end
