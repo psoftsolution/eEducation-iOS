@@ -83,6 +83,10 @@
 
 + (void)leftRoomWithSuccessBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
+    if(EduConfigModel.shareInstance.appId == nil || EduConfigModel.shareInstance.roomId == nil) {
+        return;
+    }
+    
     NSString *url = [NSString stringWithFormat:HTTP_LEFT_ROOM, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];

@@ -8,18 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
-#ifdef DEBUG
+typedef NS_ENUM(NSInteger, EnvType) {
+    EnvTypeTest = 1,
+    EnvTypePre = 2,
+    EnvTypeFormal = 3,
+};
 
-#define HTTP_BASE_URL @"http://115.231.168.26:8080"
+extern EnvType env;
 
-#else
-//#define HTTP_BASE_URL @"https://solutions-api-pre.sh.agoralab.co"
-#define HTTP_BASE_URL @"https://solutions-api.sh.agoralab.co"
-
-#endif
+#define HTTP_BASE_URL (env == EnvTypeTest ? \
+                            @"http://115.231.168.26:8080" : \
+                            (env == EnvTypePre ? \
+                                @"https://solutions-api-pre.sh.agoralab.co" : \
+                                @"https://solutions-api.sh.agoralab.co") \
+                       )
 
 // http: get app config
-#define HTTP_GET_CONFIG @""HTTP_BASE_URL"/edu/v1/app/version"
+#define HTTP_GET_CONFIG @"%@/edu/v1/app/version"
 
 #define HTTP_ENTER_ROOM @"%@/edu/v1/apps/%@/room/entry"
 

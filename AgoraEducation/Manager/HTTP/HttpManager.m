@@ -9,6 +9,8 @@
 #import "HttpManager.h"
 #import <AFNetworking/AFNetworking.h>
 
+EnvType env = EnvTypeFormal;
+
 @interface HttpManager ()
 
 @property (nonatomic,strong) AFHTTPSessionManager *sessionManager;
@@ -124,7 +126,8 @@ static HttpManager *manager = nil;
         @"appVersion" : app_Version
     };
     
-    [HttpManager get:HTTP_GET_CONFIG params:params headers:nil success:^(id responseObj) {
+    NSString *url = [NSString stringWithFormat:HTTP_GET_CONFIG, HTTP_BASE_URL];
+    [HttpManager get:url params:params headers:nil success:^(id responseObj) {
         
         if(success != nil){
             success(responseObj);
