@@ -108,26 +108,9 @@ static HttpManager *manager = nil;
 }
 
 + (void)getAppConfigWithSuccess:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
-    
-    NSInteger deviceType = 0;
-    if (UIUserInterfaceIdiomPhone == [UIDevice currentDevice].userInterfaceIdiom) {
-        deviceType = 1;
-    } else if(UIUserInterfaceIdiomPad == [UIDevice currentDevice].userInterfaceIdiom) {
-        deviceType = 2;
-    }
-    
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-    
-    NSDictionary *params = @{
-        @"appCode" : @"edu-demo",//
-        @"osType" : @(1),// 1.ios 2.android
-        @"terminalType" : @(deviceType),//1.phone 2.pad
-        @"appVersion" : app_Version
-    };
-    
-    NSString *url = [NSString stringWithFormat:HTTP_GET_CONFIG, HTTP_BASE_URL];
-    [HttpManager get:url params:params headers:nil success:^(id responseObj) {
+        
+    NSString *url = [NSString stringWithFormat:HTTP_GET_LANGUAGE, HTTP_BASE_URL];
+    [HttpManager get:url params:nil headers:nil success:^(id responseObj) {
         
         if(success != nil){
             success(responseObj);

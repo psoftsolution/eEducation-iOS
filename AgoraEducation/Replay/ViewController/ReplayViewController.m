@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, RecordState) {
 
 + (void)enterReplayViewController:(NSString *)recordId {
     
-      [HttpManager getReplayInfoWithBaseURL:EduConfigModel.shareInstance.httpBaseURL userToken:EduConfigModel.shareInstance.userToken appId:EduConfigModel.shareInstance.appId roomId:EduConfigModel.shareInstance.roomId recordId:recordId success:^(id responseObj) {
+      [HttpManager getReplayInfoWithBaseURL:HTTP_BASE_URL userToken:EduConfigModel.shareInstance.userToken appId:EduConfigModel.shareInstance.appId roomId:EduConfigModel.shareInstance.roomId recordId:recordId success:^(id responseObj) {
 
           ReplayModel *model = [ReplayModel yy_modelWithDictionary:responseObj];
           if(model.code == 0) {
@@ -154,7 +154,7 @@ typedef NS_ENUM(NSInteger, RecordState) {
 - (void)getReplayInfoWithBaseURL {
     
     WEAK(self);
-      [HttpManager getReplayInfoWithBaseURL:EduConfigModel.shareInstance.httpBaseURL userToken:EduConfigModel.shareInstance.userToken appId:EduConfigModel.shareInstance.appId roomId:EduConfigModel.shareInstance.roomId recordId:self.recordId success:^(id responseObj) {
+      [HttpManager getReplayInfoWithBaseURL:HTTP_BASE_URL userToken:EduConfigModel.shareInstance.userToken appId:EduConfigModel.shareInstance.appId roomId:EduConfigModel.shareInstance.roomId recordId:self.recordId success:^(id responseObj) {
 
           ReplayModel *model = [ReplayModel yy_modelWithDictionary:responseObj];
           if(model.code == 0) {

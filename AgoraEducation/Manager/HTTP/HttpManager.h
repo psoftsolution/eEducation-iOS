@@ -23,8 +23,7 @@ extern EnvType env;
                                 @"https://solutions-api.sh.agoralab.co") \
                        )
 
-// http: get app config
-#define HTTP_GET_CONFIG @"%@/edu/v1/app/version"
+#define HTTP_GET_LANGUAGE @"%@/edu/v1/multi/language"
 
 #define HTTP_ENTER_ROOM @"%@/edu/v1/apps/%@/room/entry"
 

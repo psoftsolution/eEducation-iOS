@@ -21,12 +21,7 @@
         ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
         if(model.code == 0) {
             
-            EduConfigModel.shareInstance.oneToOneStudentLimit = model.data.configInfoModel.oneToOneStudentLimit.integerValue;
-            EduConfigModel.shareInstance.smallClassStudentLimit = model.data.configInfoModel.smallClassStudentLimit.integerValue;
-            EduConfigModel.shareInstance.largeClassStudentLimit = model.data.configInfoModel.largeClassStudentLimit.integerValue;
-            
-            EduConfigModel.shareInstance.httpBaseURL = model.data.apiHost;
-            EduConfigModel.shareInstance.multiLanguage = model.data.configInfoModel.multiLanguage;
+            EduConfigModel.shareInstance.multiLanguage = model.multiLanguage;
             
             if(successBlock != nil){
                 successBlock();
@@ -46,7 +41,7 @@
 
 + (void)enterRoomWithUserName:(NSString *)userName roomName:(NSString *)roomName sceneType:(SceneType)sceneType successBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
-    NSString *url = [NSString stringWithFormat:HTTP_ENTER_ROOM, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId];
+    NSString *url = [NSString stringWithFormat:HTTP_ENTER_ROOM, HTTP_BASE_URL, EduConfigModel.shareInstance.appId];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"userName"] = userName;
@@ -87,7 +82,7 @@
         return;
     }
     
-    NSString *url = [NSString stringWithFormat:HTTP_LEFT_ROOM, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
+    NSString *url = [NSString stringWithFormat:HTTP_LEFT_ROOM, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
@@ -138,7 +133,7 @@
 
 - (void)getRoomInfoCompleteSuccessBlock:(void (^ _Nullable) (RoomInfoModel * roomInfoModel))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
  
-    NSString *url = [NSString stringWithFormat:HTTP_ROOM_INFO, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
+    NSString *url = [NSString stringWithFormat:HTTP_ROOM_INFO, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
@@ -176,7 +171,7 @@
 
 - (void)updateUserInfoWithParams:(NSDictionary*)params completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
-    NSString *url = [NSString stringWithFormat:HTTP_UPDATE_USER_INFO, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId, EduConfigModel.shareInstance.userId];
+    NSString *url = [NSString stringWithFormat:HTTP_UPDATE_USER_INFO, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId, EduConfigModel.shareInstance.userId];
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
