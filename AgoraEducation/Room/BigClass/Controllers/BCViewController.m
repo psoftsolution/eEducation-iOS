@@ -142,6 +142,8 @@
 
 - (void)muteVideoStream:(BOOL)mute {
     
+    AgoraLogInfo(@"large muteVideoStream:%d", mute);
+    
     if(self.educationManager.renderStudentModels.count == 0) {
         return;
     }
@@ -180,24 +182,26 @@
 
 - (void)muteAudioStream:(BOOL)mute {
 
-   if(self.educationManager.renderStudentModels.count == 0) {
+    AgoraLogInfo(@"large muteAudioStream:%d", mute);
+    
+    if(self.educationManager.renderStudentModels.count == 0) {
        return;
-   }
-   
-   WEAK(self);
-   [self.educationManager updateEnableAudioWithValue:!mute completeSuccessBlock:^{
+    }
+
+    WEAK(self);
+    [self.educationManager updateEnableAudioWithValue:!mute completeSuccessBlock:^{
        
        UserModel *renderModel = weakself.educationManager.renderStudentModels.firstObject;
        [weakself updateStudentViews:renderModel remoteVideo:NO];
       
        [weakself sendSignalWithType:SignalValueMuteAudio success: nil];
        
-   } completeFailBlock:^(NSString * _Nonnull errMessage) {
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
        
        [weakself showToast:errMessage];
        UserModel *renderModel = weakself.educationManager.renderStudentModels.firstObject;
        [weakself updateStudentViews:renderModel remoteVideo:NO];
-   }];
+    }];
 }
 
 - (void)checkNeedRenderWithRole:(UserRoleType)roleType {

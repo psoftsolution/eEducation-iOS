@@ -43,7 +43,7 @@
         } else {
             if(failBlock != nil){
                 failBlock(error);
-                AgoraLog(@"createReplayer Err:%@", error);
+                AgoraLogError(@"createReplayer Err:%@", error);
             }
         }
     }];

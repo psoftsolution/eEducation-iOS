@@ -16,7 +16,6 @@
 
 + (void)getConfigWithSuccessBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
-    WEAK(self);
     [HttpManager getAppConfigWithSuccess:^(id responseObj) {
         
         ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
@@ -35,7 +34,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"RequestFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"RequestFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -57,7 +56,6 @@
     params[@"role"] = @(2);
     params[@"uuid"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
     
-    WEAK(self);
     [HttpManager post:url params:params headers:nil success:^(id responseObj) {
         
         EnterRoomAllModel *model = [EnterRoomAllModel yy_modelWithDictionary:responseObj];
@@ -73,7 +71,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [weakself generateHttpErrorMessageWithDescribe:NSLocalizedString(@"EnterRoomFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"EnterRoomFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -84,6 +82,39 @@
         }
     }];
 }
+
++ (void)leftRoomWithSuccessBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
+    
+    if(EduConfigModel.shareInstance.appId == nil || EduConfigModel.shareInstance.roomId == nil) {
+        return;
+    }
+
+    NSString *url = [NSString stringWithFormat:HTTP_LEFT_ROOM, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
+    
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    headers[@"token"] = EduConfigModel.shareInstance.userToken;
+    
+    [HttpManager post:url params:nil headers:headers success:^(id responseObj) {
+        
+        CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0){
+            if(successBlock != nil){
+                successBlock();
+            }
+        } else {
+            if(failBlock != nil) {
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"LeftRoomFailedText", nil) errorCode:model.code];
+                failBlock(errMsg);
+            }
+        }
+        
+    } failure:^(NSError *error) {
+        if(failBlock != nil) {
+            failBlock(error.description);
+        }
+    }];
+}
+
 
 - (void)updateEnableChatWithValue:(BOOL)enableChat completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
@@ -114,7 +145,7 @@
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
-    WEAK(self);
+
     [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
         RoomAllModel *model = [RoomAllModel yy_modelWithDictionary:responseObj];
@@ -134,7 +165,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetRoomInfoFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetRoomInfoFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -152,8 +183,7 @@
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
-    
-    WEAK(self);
+
     [HttpManager post:url params:params headers:headers success:^(id responseObj) {
         
         CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];
@@ -163,7 +193,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateRoomInfoFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateRoomInfoFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -175,24 +205,7 @@
     }];
 }
 
-#pragma mark Private
-+ (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode {
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray<NSString*> *allLanguages = [defaults objectForKey:@"AppleLanguages"];
-    NSString *preferredLang = [allLanguages objectAtIndex:0];
-    NSString *msg = @"";
-    if([preferredLang containsString:@"zh-Hans"]) {
-        msg = [EduConfigModel.shareInstance.multiLanguage.cn valueForKey:@(errorCode).stringValue];
-    } else {
-        msg = [EduConfigModel.shareInstance.multiLanguage.en valueForKey:@(errorCode).stringValue];
-    }
-    
-    if(msg == nil || msg.length == 0) {
-        msg = [NSString stringWithFormat:@"%@：%ld", des, (long)errorCode];
-    }
-    return msg;
-}
+
 
 
 @end

@@ -362,6 +362,9 @@
 }
 
 - (void)muteVideoStream:(BOOL)mute {
+    
+    AgoraLogInfo(@"1v1 muteVideoStream:%d", mute);
+    
     WEAK(self);
     [self.educationManager updateEnableVideoWithValue:!mute completeSuccessBlock:^{
         
@@ -392,6 +395,8 @@
 }
 
 - (void)muteAudioStream:(BOOL)mute {
+    
+    AgoraLogInfo(@"1v1 muteAudioStream:%d", mute);
     
     WEAK(self);
     [self.educationManager updateEnableAudioWithValue:!mute completeSuccessBlock:^{
@@ -674,7 +679,7 @@
                 successBlock();
             }
         } else {
-            NSLog(@"Set scene index err：%@", error);
+            AgoraLogError(@"Set scene index err：%@", error);
         }
     }];
 }

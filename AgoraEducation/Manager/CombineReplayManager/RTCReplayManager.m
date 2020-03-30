@@ -205,17 +205,17 @@ static NSString * const kLoadedTimeRangesKey = @"loadedTimeRanges";
             }
         }
     } else if ([keyPath isEqualToString:kPlaybackLikelyToKeepUpKey]) {
-        AgoraLog(@"isPlaybackLikelyToKeepUp %d", self.nativePlayer.currentItem.isPlaybackLikelyToKeepUp);
+        AgoraLogInfo(@"isPlaybackLikelyToKeepUp %d", self.nativePlayer.currentItem.isPlaybackLikelyToKeepUp);
         if (self.nativePlayer.currentItem.isPlaybackLikelyToKeepUp) {
             [self nativeEndBuffering];
         }
     } else if ([keyPath isEqualToString:kPlaybackBufferFullKey]) {
-        AgoraLog(@"isPlaybackBufferFull %d", self.nativePlayer.currentItem.isPlaybackBufferFull);
+        AgoraLogInfo(@"isPlaybackBufferFull %d", self.nativePlayer.currentItem.isPlaybackBufferFull);
         if (self.nativePlayer.currentItem.isPlaybackBufferFull) {
             [self nativeEndBuffering];
         }
     } else if ([keyPath isEqualToString:kPlaybackBufferEmptyKey]) {
-        AgoraLog(@"isPlaybackBufferEmpty %d", self.nativePlayer.currentItem.isPlaybackBufferEmpty);
+        AgoraLogInfo(@"isPlaybackBufferEmpty %d", self.nativePlayer.currentItem.isPlaybackBufferEmpty);
         if (self.nativePlayer.currentItem.isPlaybackBufferEmpty) {
             [self nativeStartBuffering];
         }

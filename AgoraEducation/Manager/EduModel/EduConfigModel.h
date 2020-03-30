@@ -44,6 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString* password;
 @property (nonatomic, assign) NSInteger sceneType;
 
+
++ (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode;
+
 @end
 
 NS_ASSUME_NONNULL_END

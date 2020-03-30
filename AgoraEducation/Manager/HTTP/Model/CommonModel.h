@@ -11,9 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CommonModel : NSObject
-@property (nonatomic, copy)   NSString *msg;
+@property (nonatomic, strong) NSString *msg;
 @property (nonatomic, assign) NSInteger code;
-@property (nonatomic, assign) BOOL *data;
+@property (nonatomic, strong) NSString *data;
 @end
 
 NS_ASSUME_NONNULL_END

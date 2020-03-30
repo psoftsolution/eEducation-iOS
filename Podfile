@@ -10,6 +10,7 @@ target 'AgoraEducation' do
   pod 'Whiteboard', '2.6.4'
   pod 'AgoraRtcEngine_iOS', '2.9.0.102'
   pod 'AgoraRtm_iOS', '~> 1.2.2'
-  
+  pod 'CocoaLumberjack'
+  pod 'AliyunOSSiOS'
 end
 

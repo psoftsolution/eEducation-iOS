@@ -50,7 +50,28 @@ static EduConfigModel *manager = nil;
         if([lastString isEqualToString:@"/"]) {
             _httpBaseURL = [url substringWithRange:NSMakeRange(0, [url length] - 1)];
         }
+    } else {
+        self.httpBaseURL = HTTP_BASE_URL;
     }
+}
+
+#pragma mark Private
++ (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray<NSString*> *allLanguages = [defaults objectForKey:@"AppleLanguages"];
+    NSString *preferredLang = [allLanguages objectAtIndex:0];
+    NSString *msg = @"";
+    if([preferredLang containsString:@"zh-Hans"]) {
+        msg = [EduConfigModel.shareInstance.multiLanguage.cn valueForKey:@(errorCode).stringValue];
+    } else {
+        msg = [EduConfigModel.shareInstance.multiLanguage.en valueForKey:@(errorCode).stringValue];
+    }
+    
+    if(msg == nil || msg.length == 0) {
+        msg = [NSString stringWithFormat:@"%@：%ld", des, (long)errorCode];
+    }
+    return msg;
 }
 
 @end

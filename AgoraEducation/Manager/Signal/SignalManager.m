@@ -20,9 +20,14 @@
 - (void)initWithMessageModel:(SignalModel*)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock {
 
     self.agoraRtmKit = [[AgoraRtmKit alloc] initWithAppId:model.appId delegate:self];
+    NSString *logFilePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"/AgoraEducation/agoraRTM.log"];
+    [self.agoraRtmKit setLogFile:logFilePath];
+    [self.agoraRtmKit setLogFileSize:512];
+    [self.agoraRtmKit setLogFilters:AgoraRtmLogFilterInfo];
+
     [self.agoraRtmKit loginByToken:model.token user:model.uid completion:^(AgoraRtmLoginErrorCode errorCode) {
         if (errorCode == AgoraRtmLoginErrorOk) {
-            NSLog(@"rtm login success");
+            AgoraLogInfo(@"rtm login success");
             if(successBlock != nil){
                 successBlock();
             }
@@ -65,7 +70,7 @@
             }
             
         } else {
-            NSLog(@"SignalManager get channel attributes error");
+            AgoraLogError(@"SignalManager get channel attributes error");
         }
         
         if(block != nil){

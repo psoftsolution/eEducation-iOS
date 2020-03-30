@@ -28,7 +28,7 @@
     NSError *err;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
     if(err) {
-        NSLog(@"Json Parse Err：%@",err);
+        AgoraLogError(@"Json Parse Err：%@",err);
         return nil;
     }
     return dic;
