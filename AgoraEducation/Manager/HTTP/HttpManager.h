@@ -34,7 +34,7 @@ extern EnvType env;
 #define HTTP_OSS_STS_CALLBACK @"%@/edu/v1/log/sts/callback"
 
 // http: get global state when enter room
-#define HTTP_ENTER_ROOM @"%@/edu/v2/apps/%@/room/entry"
+#define HTTP_ENTER_ROOM @"%@/edu/v2/room/entry"
 
 #define HTTP_LEFT_ROOM @"%@/edu/v1/apps/%@/room/%@/exit"
 

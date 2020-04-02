@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ConfigInfoModel : NSObject
 
 @property (nonatomic, strong) NSString* version;
-@property (nonatomic, strong) NSString* appId;
 
 @property (nonatomic, strong) NSString* oneToOneTeacherLimit;
 @property (nonatomic, strong) NSString* smallClassTeacherLimit;

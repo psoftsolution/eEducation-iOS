@@ -21,7 +21,6 @@
         ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
         if(model.code == 0) {
             
-            EduConfigModel.shareInstance.appId = model.data.configInfoModel.appId;
             EduConfigModel.shareInstance.oneToOneStudentLimit = model.data.configInfoModel.oneToOneStudentLimit.integerValue;
             EduConfigModel.shareInstance.smallClassStudentLimit = model.data.configInfoModel.smallClassStudentLimit.integerValue;
             EduConfigModel.shareInstance.largeClassStudentLimit = model.data.configInfoModel.largeClassStudentLimit.integerValue;
@@ -47,7 +46,7 @@
 
 + (void)enterRoomWithUserName:(NSString *)userName password:(NSString *)password successBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
-    NSString *url = [NSString stringWithFormat:HTTP_ENTER_ROOM, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId];
+    NSString *url = [NSString stringWithFormat:HTTP_ENTER_ROOM, EduConfigModel.shareInstance.httpBaseURL];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"userName"] = userName;
@@ -60,7 +59,7 @@
         
         EnterRoomAllModel *model = [EnterRoomAllModel yy_modelWithDictionary:responseObj];
         if(model.code == 0){
-            
+            EduConfigModel.shareInstance.appId = model.data.room.appId;
             EduConfigModel.shareInstance.userToken = model.data.user.userToken;
             EduConfigModel.shareInstance.roomId = model.data.room.roomId;
             EduConfigModel.shareInstance.sceneType = model.data.room.type;
