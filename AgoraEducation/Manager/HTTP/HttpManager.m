@@ -9,7 +9,7 @@
 #import "HttpManager.h"
 #import <AFNetworking/AFNetworking.h>
 
-EnvType env = EnvTypeFormal;
+EnvType env = EnvTypeTest;
 
 @interface HttpManager ()
 
