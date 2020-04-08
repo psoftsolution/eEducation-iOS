@@ -43,8 +43,6 @@
     }
     
     UIAlertController *alertController = [[UIAlertController alloc] init];
-    UIAlertAction *cancle = [UIAlertAction actionWithTitle:currentEnv style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-    }];
     UIAlertAction *test = [UIAlertAction actionWithTitle:@"测试环境" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         env = EnvTypeTest;
     }];
@@ -55,8 +53,24 @@
         env = EnvTypeFormal;
     }];
     
-    
-    [alertController addAction:cancle];
+    UIPopoverPresentationController *popover = alertController.popoverPresentationController;
+    if (popover) {
+        popover.sourceView = self.view;
+        popover.sourceRect = CGRectMake(0, 0, 500, 500);
+        popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    }
+     
+    if(IsPad) {
+        UIAlertAction *current = [UIAlertAction actionWithTitle:currentEnv style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+
+        }];
+        [alertController addAction:current];
+    } else {
+        UIAlertAction *cancle = [UIAlertAction actionWithTitle:currentEnv style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        }];
+        [alertController addAction:cancle];
+    }
+
     [alertController addAction:test];
     [alertController addAction:pre];
     [alertController addAction:formal];
