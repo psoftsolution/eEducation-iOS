@@ -381,6 +381,13 @@
 
     self.tipLabel.layer.backgroundColor = [UIColor colorWithHexString:@"000000" alpha:0.7].CGColor;
     self.tipLabel.layer.cornerRadius = 6;
+    
+    if (IsPad) {
+        [self stateBarHidden:YES];
+        self.chatTextFiled.hidden = NO;
+        self.messageView.hidden = NO;
+        self.handUpButton.hidden = NO;
+    }
 }
 
 - (void)handleDeviceOrientationChange:(NSNotification *)notification{
@@ -468,21 +475,25 @@
 }
 
 - (void)landscapeScreenConstraints {
-    [self stateBarHidden:YES];
+    if (!IsPad) {
+        [self stateBarHidden:YES];
 
-    self.handUpButton.hidden = self.educationManager.teacherModel ? NO: YES;
-    self.chatTextFiled.hidden = NO;
-    self.messageView.hidden = NO;
+        self.handUpButton.hidden = self.educationManager.teacherModel ? NO: YES;
+        self.chatTextFiled.hidden = NO;
+        self.messageView.hidden = NO;
+    }
 }
 
 - (void)verticalScreenConstraints {
-    [self stateBarHidden:NO];
-    self.chatTextFiled.hidden = self.segmentedIndex == 0 ? YES : NO;
-    self.messageView.hidden = self.segmentedIndex == 0 ? YES : NO;
-    self.handUpButton.hidden = self.educationManager.teacherModel ? NO: YES;
-    
-    if(self.isRenderShare) {
-        self.shareScreenView.hidden = NO;
+    if (!IsPad) {
+        [self stateBarHidden:NO];
+        self.chatTextFiled.hidden = self.segmentedIndex == 0 ? YES : NO;
+        self.messageView.hidden = self.segmentedIndex == 0 ? YES : NO;
+        self.handUpButton.hidden = self.educationManager.teacherModel ? NO: YES;
+        
+        if(self.isRenderShare) {
+            self.shareScreenView.hidden = NO;
+        }
     }
 }
 
