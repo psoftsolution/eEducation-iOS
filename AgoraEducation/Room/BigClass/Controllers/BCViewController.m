@@ -286,7 +286,9 @@
     model.canvasType = remote ? RTCVideoCanvasTypeRemote : RTCVideoCanvasTypeLocal;
     [self.educationManager setupRTCVideoCanvas:model completeBlock:nil];
 
-    [self.educationManager setRTCClientRole:RTCClientRoleBroadcaster];
+    if(!remote){
+        [self.educationManager setRTCClientRole:RTCClientRoleBroadcaster];
+    }
 }
 
 - (void)removeStudentCanvas:(NSUInteger)uid {
@@ -294,7 +296,9 @@
     NSString *uidStr = [NSString stringWithFormat:@"%lu", (unsigned long)uid];
     [self.educationManager.rtcUids removeObject: uidStr];
     
-    [self.educationManager setRTCClientRole:RTCClientRoleAudience];
+    if(self.educationManager.studentModel.uid == uid){
+        [self.educationManager setRTCClientRole:RTCClientRoleAudience];
+    }
     [self.educationManager removeRTCVideoCanvas: uid];
     self.studentVideoView.defaultImageView.hidden = NO;
     self.studentVideoView.hidden = YES;
