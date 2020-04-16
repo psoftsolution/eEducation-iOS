@@ -12,7 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface KeyCenter : NSObject
 
+// For Agora SDK APP id，you can refer to [https://docs.agora.io/en/Agora%20Platform/terms?platform=All%20Platforms#a-nameappidaapp-id]
 + (NSString *)agoraAppid;
+
+// For Agora Edu Cloud service，you can refer to [https://docs.agora.io/en/faq/restful_authentication]
++ (NSString *)authorization;
+
+// For get white board info，you need to refer to HTTP_WHITE_ROOM_INFO to configure your own API
++ (NSString *)boardInfoApiURL;
 
 @end
 

@@ -180,15 +180,17 @@
     WEAK(self);
     [self getConfigWithSuccessBolck:^{
         [weakself getEntryInfoWithSuccessBolck:^{
-            [weakself getRoomInfoWithSuccessBlock:^{
-                [weakself setupSignalWithSuccessBolck:^{
-                    if(sceneType == SceneType1V1) {
-                        [weakself join1V1RoomWithIdentifier:@"oneToOneRoom"];
-                    } else if(sceneType == SceneTypeSmall){
-                        [weakself joinMinRoomWithIdentifier:@"mcRoom"];
-                    } else if(sceneType == SceneTypeBig){
-                        [weakself joinBigRoomWithIdentifier:@"bcroom"];
-                    }
+            [weakself getWhiteInfoWithSuccessBolck:^{
+                [weakself getRoomInfoWithSuccessBlock:^{
+                    [weakself setupSignalWithSuccessBolck:^{
+                        if(sceneType == SceneType1V1) {
+                            [weakself join1V1RoomWithIdentifier:@"oneToOneRoom"];
+                        } else if(sceneType == SceneTypeSmall){
+                            [weakself joinMinRoomWithIdentifier:@"mcRoom"];
+                        } else if(sceneType == SceneTypeBig){
+                            [weakself joinBigRoomWithIdentifier:@"bcroom"];
+                        }
+                    }];
                 }];
             }];
         }];
@@ -278,6 +280,20 @@
             successBlock();
         }
 
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
+        [weakself.view makeToast:errMessage];
+        [weakself setLoadingVisible:NO];
+    }];
+}
+
+- (void)getWhiteInfoWithSuccessBolck:(void (^)(void))successBlock {
+    WEAK(self);
+    [self setLoadingVisible:YES];
+    [self.educationManager getWhiteInfoCompleteSuccessBlock:^{
+        [weakself setLoadingVisible:NO];
+        if(successBlock != nil){
+            successBlock();
+        }
     } completeFailBlock:^(NSString * _Nonnull errMessage) {
         [weakself.view makeToast:errMessage];
         [weakself setLoadingVisible:NO];

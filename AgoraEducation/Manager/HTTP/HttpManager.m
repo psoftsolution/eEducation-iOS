@@ -8,8 +8,8 @@
 
 #import "HttpManager.h"
 #import <AFNetworking/AFNetworking.h>
-
-EnvType env = EnvTypeTest;
+#import "URL.h"
+#import "KeyCenter.h"
 
 @interface HttpManager ()
 
@@ -110,7 +110,11 @@ static HttpManager *manager = nil;
 + (void)getAppConfigWithSuccess:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
         
     NSString *url = [NSString stringWithFormat:HTTP_GET_LANGUAGE, HTTP_BASE_URL];
-    [HttpManager get:url params:nil headers:nil success:^(id responseObj) {
+    
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    headers[@"Authorization"] = [NSString stringWithFormat:@"Basic %@", [KeyCenter authorization]];
+    
+    [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
         if(success != nil){
             success(responseObj);
@@ -123,12 +127,13 @@ static HttpManager *manager = nil;
     }];
 }
 
-+ (void)getReplayInfoWithBaseURL:(NSString *)baseURL userToken:(NSString *)userToken appId:(NSString *)appId roomId:(NSString *)roomId recordId:(NSString *)recordId success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
++ (void)getReplayInfoWithUserToken:(NSString *)userToken appId:(NSString *)appId roomId:(NSString *)roomId recordId:(NSString *)recordId success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = userToken;
+    headers[@"Authorization"] = [NSString stringWithFormat:@"Basic %@", [KeyCenter authorization]];
 
-    NSString *url = [NSString stringWithFormat:HTTP_GET_REPLAY_INFO, baseURL, appId, roomId, recordId];
+    NSString *url = [NSString stringWithFormat:HTTP_GET_REPLAY_INFO, HTTP_BASE_URL, appId, roomId, recordId];
     [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
         if(success != nil){
@@ -138,6 +143,26 @@ static HttpManager *manager = nil;
         
         if(failure != nil) {
             failure(error);
+        }
+    }];
+}
+
++ (void)getWhiteInfoWithUserToken:(NSString *)userToken appid:(NSString *)appid roomId:(NSString *)roomId completeSuccessBlock:(void (^ _Nullable) (id responseObj))successBlock completeFailBlock:(void (^ _Nullable) (NSError *error))failBlock {
+    
+    NSString *url = [NSString stringWithFormat:[KeyCenter boardInfoApiURL], HTTP_BASE_URL, appid, roomId];
+    
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    headers[@"token"] = userToken;
+    headers[@"Authorization"] = [NSString stringWithFormat:@"Basic %@", [KeyCenter authorization]];
+
+    [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
+        
+        if(successBlock != nil) {
+            successBlock(responseObj);
+        }
+    } failure:^(NSError *error) {
+        if(failBlock != nil) {
+            failBlock(error);
         }
     }];
 }

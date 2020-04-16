@@ -7,11 +7,20 @@
 //
 
 #import "KeyCenter.h"
+#import "URL.h"
 
 @implementation KeyCenter
 
 + (NSString *)agoraAppid {
     return <#Your Agora App Id#>;
+}
+
++ (NSString *)authorization {
+     return <#Your Authorization#>;
+}
+
++ (NSString *)boardInfoApiURL {
+    return <#Your Board Info Api URL#>;
 }
 
 @end

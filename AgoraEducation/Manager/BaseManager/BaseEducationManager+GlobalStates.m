@@ -11,6 +11,8 @@
 #import "ConfigModel.h"
 #import "EnterRoomAllModel.h"
 #import "CommonModel.h"
+#import "URL.h"
+#import "KeyCenter.h"
 
 @implementation BaseEducationManager (GlobalStates)
 
@@ -40,7 +42,7 @@
 }
 
 + (void)enterRoomWithUserName:(NSString *)userName roomName:(NSString *)roomName sceneType:(SceneType)sceneType successBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
-    
+
     NSString *url = [NSString stringWithFormat:HTTP_ENTER_ROOM, HTTP_BASE_URL, EduConfigModel.shareInstance.appId];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -49,9 +51,16 @@
     params[@"type"] = @(sceneType);
     // student
     params[@"role"] = @(2);
-    params[@"uuid"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    
+#warning userUuid：If you have your own user system, you need to align with the user system of our back-end service. Here you need to use the unique user ID of your own user system, the same userUuid will be considered as the same user.
+    params[@"userUuid"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    
+#warning roomUuid:The unique classroom identifier of the customer scheduling system, users with the same roomUuid will be assigned to the same classroom. We do not have a schedule system, so this is set to empty.
+    params[@"roomUuid"] = @"";
 
-    [HttpManager post:url params:params headers:nil success:^(id responseObj) {
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    headers[@"Authorization"] = [NSString stringWithFormat:@"Basic %@", [KeyCenter authorization]];
+    [HttpManager post:url params:params headers:headers success:^(id responseObj) {
         
         EnterRoomAllModel *model = [EnterRoomAllModel yy_modelWithDictionary:responseObj];
         if(model.code == 0){
@@ -86,6 +95,7 @@
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
+    headers[@"Authorization"] = [KeyCenter authorization];
     
     [HttpManager post:url params:nil headers:headers success:^(id responseObj) {
         
@@ -137,7 +147,8 @@
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
-
+    headers[@"Authorization"] = [KeyCenter authorization];
+    
     [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
         RoomAllModel *model = [RoomAllModel yy_modelWithDictionary:responseObj];
@@ -149,8 +160,6 @@
             
             EduConfigModel.shareInstance.rtcToken = model.data.localUser.rtcToken;
             EduConfigModel.shareInstance.rtmToken = model.data.localUser.rtmToken;
-            EduConfigModel.shareInstance.boardId = model.data.room.boardId;
-            EduConfigModel.shareInstance.boardToken = model.data.room.boardToken;
             
             if(successBlock != nil) {
                 successBlock(model.data);
@@ -169,12 +178,40 @@
     }];
 }
 
+- (void)getWhiteInfoCompleteSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
+    
+    [HttpManager getWhiteInfoWithUserToken:EduConfigModel.shareInstance.userToken appid:EduConfigModel.shareInstance.appId roomId:EduConfigModel.shareInstance.roomId completeSuccessBlock:^(id responseObj) {
+        
+        WhiteModel *model = [WhiteModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0) {
+        
+            EduConfigModel.shareInstance.boardId = model.data.boardId;
+            EduConfigModel.shareInstance.boardToken = model.data.boardToken;
+            
+            if(successBlock != nil) {
+                successBlock();
+            }
+        } else {
+            if(failBlock != nil) {
+                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetWhiteInfoFailedText", nil) errorCode:model.code];
+                failBlock(errMsg);
+            }
+        }
+        
+    } completeFailBlock:^(NSError *error) {
+        if(failBlock != nil) {
+            failBlock(error.description);
+        }
+    }];
+}
+
 - (void)updateUserInfoWithParams:(NSDictionary*)params completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
     NSString *url = [NSString stringWithFormat:HTTP_UPDATE_USER_INFO, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId, EduConfigModel.shareInstance.userId];
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
+    headers[@"Authorization"] = [KeyCenter authorization];
     
     [HttpManager post:url params:params headers:headers success:^(id responseObj) {
         
