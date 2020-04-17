@@ -7,7 +7,7 @@
 //
 
 #import "EduConfigModel.h"
-#import "HttpManager.h"
+#import "URL.h"
 
 static EduConfigModel *manager = nil;
 
@@ -74,4 +74,12 @@ static EduConfigModel *manager = nil;
     return msg;
 }
 
++ (NSDictionary *)generateHttpAuthHeader {
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    if(EduConfigModel.shareInstance.rtmToken != nil && EduConfigModel.shareInstance.rtmToken.length > 0 && EduConfigModel.shareInstance.uid > 0) {
+        headers[@"x-agora-token"] = EduConfigModel.shareInstance.rtmToken;
+        headers[@"x-agora-uid"] = @(EduConfigModel.shareInstance.uid);
+    }
+    return headers;
+}
 @end

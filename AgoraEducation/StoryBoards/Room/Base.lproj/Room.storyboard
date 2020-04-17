@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_5" orientation="landscape" appearance="light"/>
+    <device id="retina6_1" orientation="landscape" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
@@ -409,6 +409,12 @@
                                         <exclude reference="JvZ-47-Ihk"/>
                                     </mask>
                                 </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="Edg-Cu-2iD"/>
+                                        <include reference="JvZ-47-Ihk"/>
+                                    </mask>
+                                </variation>
                                 <variation key="heightClass=compact-widthClass=regular">
                                     <mask key="constraints">
                                         <include reference="Edg-Cu-2iD"/>
@@ -432,6 +438,11 @@
                                     <mask key="constraints">
                                         <exclude reference="YRr-UI-aBE"/>
                                         <exclude reference="aKy-d5-QBu"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="YRr-UI-aBE"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=regular">
@@ -487,6 +498,11 @@
                                     <mask key="constraints">
                                         <exclude reference="4N7-0U-kod"/>
                                         <exclude reference="rHX-s3-qp4"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="4N7-0U-kod"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=compact-widthClass=regular" hidden="YES">
@@ -579,6 +595,13 @@
                                 <exclude reference="8ow-09-4qF"/>
                                 <exclude reference="azC-M6-XKY"/>
                                 <exclude reference="y7B-58-WSv"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="WAJ-dQ-QzN"/>
+                                <include reference="aoL-6p-g6X"/>
+                                <include reference="8ow-09-4qF"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=compact-widthClass=regular">

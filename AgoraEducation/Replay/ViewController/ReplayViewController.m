@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, RecordState) {
 
 + (void)enterReplayViewController:(NSString *)recordId {
     
-      [HttpManager getReplayInfoWithBaseURL:EduConfigModel.shareInstance.httpBaseURL userToken:EduConfigModel.shareInstance.userToken appId:EduConfigModel.shareInstance.appId roomId:EduConfigModel.shareInstance.roomId recordId:recordId success:^(id responseObj) {
+    [HttpManager getReplayInfoWithUserToken:EduConfigModel.shareInstance.userToken appId:EduConfigModel.shareInstance.appId roomId:EduConfigModel.shareInstance.roomId recordId:recordId success:^(id responseObj) {
 
           ReplayModel *model = [ReplayModel yy_modelWithDictionary:responseObj];
           if(model.code == 0) {
@@ -132,9 +132,8 @@ typedef NS_ENUM(NSInteger, RecordState) {
     self.combineReplayManager = [CombineReplayManager new];
     self.combineReplayManager.delegate = self;
     
-    
-    self.boardId = self.replayInfoModel.boardId;
-    self.boardToken = self.replayInfoModel.boardToken;
+    self.boardId = EduConfigModel.shareInstance.boardId;
+    self.boardToken = EduConfigModel.shareInstance.boardToken;
 
     self.startTime = self.replayInfoModel.startTime;
     self.endTime = self.replayInfoModel.endTime;
@@ -149,54 +148,6 @@ typedef NS_ENUM(NSInteger, RecordState) {
     NSAssert(self.videoPath != nil, @"can't find record video");
     [self setupRTCReplay];
     [self setupWhiteReplay];
-}
-
-- (void)getReplayInfoWithBaseURL {
-    
-    WEAK(self);
-      [HttpManager getReplayInfoWithBaseURL:EduConfigModel.shareInstance.httpBaseURL userToken:EduConfigModel.shareInstance.userToken appId:EduConfigModel.shareInstance.appId roomId:EduConfigModel.shareInstance.roomId recordId:self.recordId success:^(id responseObj) {
-
-          ReplayModel *model = [ReplayModel yy_modelWithDictionary:responseObj];
-          if(model.code == 0) {
-              
-              weakself.boardId = model.data.boardId;
-              weakself.boardToken = model.data.boardToken;
-              
-              weakself.startTime = model.data.startTime;
-              weakself.endTime = model.data.endTime;
-
-              for(RecordDetailsModel *detailModel in model.data.recordDetails) {
-                  // teacher
-                  if(detailModel.role == 1) {
-                      weakself.videoPath = detailModel.url;
-                      break;
-                  }
-              }
-              NSAssert(weakself.videoPath != nil, @"can't find record video");
-              [weakself setupRTCReplay];
-              [weakself setupWhiteReplay];
-              
-          } else {
-              
-              NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-              NSArray<NSString*> *allLanguages = [defaults objectForKey:@"AppleLanguages"];
-              NSString *preferredLang = [allLanguages objectAtIndex:0];
-              NSString *msg = @"";
-              if([preferredLang containsString:@"zh-Hans"]) {
-                  msg = [EduConfigModel.shareInstance.multiLanguage.cn valueForKey:@(model.code).stringValue];
-              } else {
-                  msg = [EduConfigModel.shareInstance.multiLanguage.en valueForKey:@(model.code).stringValue];
-              }
-              
-              if(msg == nil || msg.length == 0) {
-                  msg = [NSString stringWithFormat:@"%@：%ld", NSLocalizedString(@"RequestReplayFailedText", nil), (long)model.code];
-              }
-              [weakself.view makeToast:msg];
-    
-          }
-      } failure:^(NSError *error) {
-          [weakself.view makeToast:error.description];
-      }];
 }
 
 - (void)setupRTCReplay {

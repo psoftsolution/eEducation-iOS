@@ -39,8 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger isRecording;
 @property (nonatomic, strong) NSString *recordId;
 @property (nonatomic, assign) NSInteger recordingTime;
-@property (nonatomic, strong) NSString *boardId;
-@property (nonatomic, strong) NSString *boardToken;
 @property (nonatomic, assign) NSInteger lockBoard; //1=locked 0=no lock
 @property (nonatomic, strong) NSArray<UserModel*> *coVideoUsers;
 @end
