@@ -78,7 +78,7 @@ static EduConfigModel *manager = nil;
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     if(EduConfigModel.shareInstance.rtmToken != nil && EduConfigModel.shareInstance.rtmToken.length > 0 && EduConfigModel.shareInstance.uid > 0) {
         headers[@"x-agora-token"] = EduConfigModel.shareInstance.rtmToken;
-        headers[@"x-agora-uid"] = @(EduConfigModel.shareInstance.uid);
+        headers[@"x-agora-uid"] = @(EduConfigModel.shareInstance.uid).stringValue;
     }
     return headers;
 }

@@ -11,6 +11,8 @@
 #import "URL.h"
 #import "EduConfigModel.h"
 
+#define USER_TOKEN_EXPIRED_CODE 401
+
 @interface HttpManager ()
 
 @property (nonatomic,strong) AFHTTPSessionManager *sessionManager;
@@ -35,8 +37,6 @@ static HttpManager *manager = nil;
     self.sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     self.sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
     self.sessionManager.requestSerializer.timeoutInterval = 30;
-    
-//    self.sessionManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/xml", @"text/plain",@"text/plan", nil];
 }
 
 + (void)get:(NSString *)url params:(NSDictionary *)params headers:(NSDictionary<NSString*, NSString*> *)headers success:(void (^)(id))success failure:(void (^)(NSError *))failure {
@@ -166,7 +166,7 @@ static HttpManager *manager = nil;
 + (void)getWhiteInfoWithUserToken:(NSString *)userToken appid:(NSString *)appid roomId:(NSString *)roomId completeSuccessBlock:(void (^ _Nullable) (id responseObj))successBlock completeFailBlock:(void (^ _Nullable) (NSError *error))failBlock {
     
     NSString *url = [NSString stringWithFormat:HTTP_WHITE_ROOM_INFO, HTTP_BASE_URL, appid, roomId];
-    
+        
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = userToken;
     [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];

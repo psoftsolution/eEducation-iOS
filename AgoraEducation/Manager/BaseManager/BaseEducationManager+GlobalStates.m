@@ -68,6 +68,9 @@
             EduConfigModel.shareInstance.sceneType = model.data.room.type;
             EduConfigModel.shareInstance.className = model.data.room.roomName;
             
+            EduConfigModel.shareInstance.uid = model.data.user.uid;
+            EduConfigModel.shareInstance.rtmToken = model.data.user.rtmToken;
+            
             if(successBlock != nil){
                 successBlock();
             }
@@ -143,8 +146,6 @@
 
 - (void)getRoomInfoCompleteSuccessBlock:(void (^ _Nullable) (RoomInfoModel * roomInfoModel))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
  
-//    NSString *url1 = @"https://api.agora.io/dev/v2/project/%@/rtm/vendor/user_events";
-//    NSString *url = [NSString stringWithFormat:url1, EduConfigModel.shareInstance.appId];
     NSString *url = [NSString stringWithFormat:HTTP_ROOM_INFO, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
@@ -155,12 +156,10 @@
         RoomAllModel *model = [RoomAllModel yy_modelWithDictionary:responseObj];
         if(model.code == 0) {
             
-            EduConfigModel.shareInstance.uid = model.data.localUser.uid;
             EduConfigModel.shareInstance.userId = model.data.localUser.userId;
             EduConfigModel.shareInstance.channelName = model.data.room.channelName;
             
             EduConfigModel.shareInstance.rtcToken = model.data.localUser.rtcToken;
-            EduConfigModel.shareInstance.rtmToken = model.data.localUser.rtmToken;
 
             if(successBlock != nil) {
                 successBlock(model.data);

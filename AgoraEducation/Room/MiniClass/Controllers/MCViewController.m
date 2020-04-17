@@ -379,7 +379,7 @@
 
 - (void)closeRoom {
     WEAK(self);
-    [AlertViewUtil showAlertWithController:self title:NSLocalizedString(@"QuitClassroomText", nil) sureHandler:^(UIAlertAction * _Nullable action) {
+    [AlertViewUtil showAlertWithController:self title:NSLocalizedString(@"QuitClassroomText", nil) cancelHandler: nil sureHandler:^(UIAlertAction * _Nullable action) {
         
         [weakself.navigationView stopTimer];
         [weakself.educationManager releaseResources];
