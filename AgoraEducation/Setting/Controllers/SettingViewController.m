@@ -9,7 +9,7 @@
 #import "SettingViewController.h"
 #import "SettingViewCell.h"
 #import "EyeCareModeUtil.h"
-#import "HttpManager.h"
+#import "URL.h"
 
 @interface SettingViewController ()<UITableViewDelegate,UITableViewDataSource,SettingCellDelegate>
 @property (nonatomic, weak) UITableView *settingTableView;

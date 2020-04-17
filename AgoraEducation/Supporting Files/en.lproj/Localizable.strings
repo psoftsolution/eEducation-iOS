@@ -38,6 +38,7 @@ RequestConfigFailedText = "request config failed";
 EnterRoomFailedText = "enter room failed";
 LeftRoomFailedText = "left room failed";
 GetRoomInfoFailedText = "get room info failed";
+GetWhiteInfoFailedText = "get white info failed";
 UpdateRoomInfoFailedText = "update room info failed";
 RequestReplayFailedText = "request replay info failed";
 SendMessageFailedText = "send message failed";
