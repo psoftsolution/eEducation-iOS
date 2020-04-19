@@ -184,11 +184,25 @@
                 [weakself getRoomInfoWithSuccessBlock:^{
                     [weakself setupSignalWithSuccessBolck:^{
                         if(sceneType == SceneType1V1) {
-                            [weakself join1V1RoomWithIdentifier:@"oneToOneRoom"];
-                        } else if(sceneType == SceneTypeSmall){
-                            [weakself joinMinRoomWithIdentifier:@"mcRoom"];
-                        } else if(sceneType == SceneTypeBig){
-                            [weakself joinBigRoomWithIdentifier:@"bcroom"];
+                            if(IsPad){
+                                [weakself join1V1RoomWithIdentifier:@"oneToOneRoom-iPad"];
+                            } else {
+                                [weakself join1V1RoomWithIdentifier:@"oneToOneRoom"];
+                            }
+                        } else if(sceneType == SceneTypeSmall) {
+                            
+                            if(IsPad){
+                                [weakself join1V1RoomWithIdentifier:@"mcRoom-iPad"];
+                            } else {
+                                [weakself joinMinRoomWithIdentifier:@"mcRoom"];
+                            }
+                            
+                        } else if(sceneType == SceneTypeBig) {
+                            if(IsPad){
+                                [weakself join1V1RoomWithIdentifier:@"bcroom-iPad"];
+                            } else {
+                                [weakself joinMinRoomWithIdentifier:@"bcroom"];
+                            }
                         }
                     }];
                 }];
