@@ -16,9 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) KAlertHandler handler;
 
-+ (void)showAlertWithController:(UIViewController *)viewController title:(NSString *)title cancelHandler:(KAlertHandler)cancelHandler sureHandler:(KAlertHandler)sureHandler;
++ (void)showAlertWithController:(UIViewController *)viewController title:(NSString *)title cancelHandler:(KAlertHandler _Nullable)cancelHandler sureHandler:(KAlertHandler _Nullable)sureHandler;
 
 + (void)showAlertWithController:(UIViewController *)viewController title:(NSString *)title sureHandler:(KAlertHandler)sureHandler;
+
++ (void)showAlertWithController:(UIViewController *)viewController title:(NSString *)title cancelHandler:(KAlertHandler)cancelHandler;
 
 + (void)showAlertWithController:(UIViewController *)viewController title:(NSString *)title;
 

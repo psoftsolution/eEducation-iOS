@@ -9,6 +9,7 @@
 #import "LogManager.h"
 #import "SSZipArchive.h"
 #import "HttpManager.h"
+#import "URL.h"
 #import "OSSManager.h"
 #import "EduConfigModel.h"
 #import "LogParamsModel.h"

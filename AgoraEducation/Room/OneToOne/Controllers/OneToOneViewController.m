@@ -159,7 +159,7 @@
     
     RoomModel *roomModel = self.educationManager.roomModel;
     WEAK(self);
-    [self.educationManager joinWhiteRoomWithBoardId:roomModel.boardId boardToken:roomModel.boardToken whiteWriteModel:YES  completeSuccessBlock:^(WhiteRoom * _Nullable room) {
+    [self.educationManager joinWhiteRoomWithBoardId:EduConfigModel.shareInstance.boardId boardToken:EduConfigModel.shareInstance.boardToken whiteWriteModel:YES  completeSuccessBlock:^(WhiteRoom * _Nullable room) {
     
         [weakself.educationManager disableCameraTransform:roomModel.lockBoard];
         [weakself.educationManager disableWhiteDeviceInputs:NO];
@@ -353,7 +353,7 @@
 - (void)closeRoom {
     
     WEAK(self);
-    [AlertViewUtil showAlertWithController:self title:NSLocalizedString(@"QuitClassroomText", nil) sureHandler:^(UIAlertAction * _Nullable action) {
+    [AlertViewUtil showAlertWithController:self title:NSLocalizedString(@"QuitClassroomText", nil) cancelHandler: nil  sureHandler:^(UIAlertAction * _Nullable action) {
 
         [weakself.navigationView stopTimer];
         [weakself.educationManager releaseResources];

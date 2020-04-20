@@ -8,8 +8,10 @@
 
 #import "HttpManager.h"
 #import <AFNetworking/AFNetworking.h>
+#import "URL.h"
+#import "EduConfigModel.h"
 
-EnvType env = EnvTypeTest;
+#define USER_TOKEN_EXPIRED_CODE 401
 
 @interface HttpManager ()
 
@@ -108,7 +110,7 @@ static HttpManager *manager = nil;
 }
 
 + (void)getAppConfigWithSuccess:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
-    
+        
     NSInteger deviceType = 0;
     if (UIUserInterfaceIdiomPhone == [UIDevice currentDevice].userInterfaceIdiom) {
         deviceType = 1;
@@ -126,8 +128,11 @@ static HttpManager *manager = nil;
         @"appVersion" : app_Version
     };
     
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];
+    
     NSString *url = [NSString stringWithFormat:HTTP_GET_CONFIG, HTTP_BASE_URL];
-    [HttpManager get:url params:params headers:nil success:^(id responseObj) {
+    [HttpManager get:url params:params headers:headers success:^(id responseObj) {
         if(success != nil){
             success(responseObj);
         }
@@ -138,12 +143,13 @@ static HttpManager *manager = nil;
     }];
 }
 
-+ (void)getReplayInfoWithBaseURL:(NSString *)baseURL userToken:(NSString *)userToken appId:(NSString *)appId roomId:(NSString *)roomId recordId:(NSString *)recordId success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
++ (void)getReplayInfoWithUserToken:(NSString *)userToken appId:(NSString *)appId roomId:(NSString *)roomId recordId:(NSString *)recordId success:(void (^)(id responseObj))success failure:(void (^)(NSError *error))failure {
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = userToken;
-
-    NSString *url = [NSString stringWithFormat:HTTP_GET_REPLAY_INFO, baseURL, appId, roomId, recordId];
+    [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];
+    
+    NSString *url = [NSString stringWithFormat:HTTP_GET_REPLAY_INFO, HTTP_BASE_URL, appId, roomId, recordId];
     [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
         if(success != nil){
@@ -156,4 +162,25 @@ static HttpManager *manager = nil;
         }
     }];
 }
+
++ (void)getWhiteInfoWithUserToken:(NSString *)userToken appid:(NSString *)appid roomId:(NSString *)roomId completeSuccessBlock:(void (^ _Nullable) (id responseObj))successBlock completeFailBlock:(void (^ _Nullable) (NSError *error))failBlock {
+    
+    NSString *url = [NSString stringWithFormat:HTTP_WHITE_ROOM_INFO, HTTP_BASE_URL, appid, roomId];
+        
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    headers[@"token"] = userToken;
+    [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];
+
+    [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
+        
+        if(successBlock != nil) {
+            successBlock(responseObj);
+        }
+    } failure:^(NSError *error) {
+        if(failBlock != nil) {
+            failBlock(error);
+        }
+    }];
+}
+
 @end

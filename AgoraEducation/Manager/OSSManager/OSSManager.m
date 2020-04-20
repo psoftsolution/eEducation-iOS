@@ -9,6 +9,7 @@
 #import "OSSManager.h"
 #import <AliyunOSSiOS/AliyunOSSiOS.h>
 #import "HttpManager.h"
+#import "URL.h"
 #import "CommonModel.h"
 #import "EduConfigModel.h"
 

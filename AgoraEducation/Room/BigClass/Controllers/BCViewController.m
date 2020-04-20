@@ -420,8 +420,8 @@
 }
 
 - (void)stateBarHidden:(BOOL)hidden {
-    [self setNeedsStatusBarAppearanceUpdate];
     self.isLandscape = hidden;
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (IBAction)handUpEvent:(UIButton *)sender {
@@ -530,7 +530,7 @@
     
     RoomModel *roomModel = self.educationManager.roomModel;
     WEAK(self);
-    [self.educationManager joinWhiteRoomWithBoardId:roomModel.boardId boardToken:roomModel.boardToken whiteWriteModel:NO  completeSuccessBlock:^(WhiteRoom * _Nullable room) {
+    [self.educationManager joinWhiteRoomWithBoardId:EduConfigModel.shareInstance.boardId boardToken:EduConfigModel.shareInstance.boardToken whiteWriteModel:NO  completeSuccessBlock:^(WhiteRoom * _Nullable room) {
 
         [weakself.educationManager disableCameraTransform:roomModel.lockBoard];
         

@@ -47,6 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode;
 
++ (NSDictionary *)generateHttpAuthHeader;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -122,6 +122,8 @@
 		7868C000242DC7AD00644807 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 7868BFEB242DC7AD00644807 /* aestab.c */; };
 		7868C001242DC7AD00644807 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 7868BFF0242DC7AD00644807 /* SSZipArchive.m */; };
 		7868C005242DCFB500644807 /* LogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7868C003242DCFB500644807 /* LogManager.m */; };
+		78C0655824497FE000E4CF4A /* URL.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C0655724497FE000E4CF4A /* URL.m */; };
+		78C0655E24498BCF00E4CF4A /* WhiteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C0655D24498BCF00E4CF4A /* WhiteModel.m */; };
 		78D7313E23B38B5700D2146C /* EEClassRoomTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7313723B38B5700D2146C /* EEClassRoomTypeView.m */; };
 		78D7313F23B38B5700D2146C /* EEClassRoomTypeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D7313823B38B5700D2146C /* EEClassRoomTypeView.xib */; };
 		78D7314023B38B5700D2146C /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7313B23B38B5700D2146C /* MainViewController.m */; };
@@ -387,6 +389,10 @@
 		7868BFF0242DC7AD00644807 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
 		7868C003242DCFB500644807 /* LogManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogManager.m; sourceTree = "<group>"; };
 		7868C004242DCFB500644807 /* LogManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogManager.h; sourceTree = "<group>"; };
+		78C0655624497FE000E4CF4A /* URL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = URL.h; sourceTree = "<group>"; };
+		78C0655724497FE000E4CF4A /* URL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URL.m; sourceTree = "<group>"; };
+		78C0655C24498BCF00E4CF4A /* WhiteModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteModel.h; sourceTree = "<group>"; };
+		78C0655D24498BCF00E4CF4A /* WhiteModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteModel.m; sourceTree = "<group>"; };
 		78D7305B23B35ADB00D2146C /* AgoraEducation.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraEducation.pch; sourceTree = "<group>"; };
 		78D7313623B38B5700D2146C /* EEClassRoomTypeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEClassRoomTypeView.h; sourceTree = "<group>"; };
 		78D7313723B38B5700D2146C /* EEClassRoomTypeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EEClassRoomTypeView.m; sourceTree = "<group>"; };
@@ -613,6 +619,8 @@
 			children = (
 				78444009241AA2DE0060FB91 /* HttpManager.h */,
 				7844400A241AA2DE0060FB91 /* HttpManager.m */,
+				78C0655624497FE000E4CF4A /* URL.h */,
+				78C0655724497FE000E4CF4A /* URL.m */,
 				7844400B241AA2DE0060FB91 /* Model */,
 			);
 			path = HTTP;
@@ -635,6 +643,8 @@
 				7844400D241AA2DE0060FB91 /* EnterRoomAllModel.m */,
 				786752E62431ACE90070C916 /* LogParamsModel.h */,
 				786752E72431ACE90070C916 /* LogParamsModel.m */,
+				78C0655C24498BCF00E4CF4A /* WhiteModel.h */,
+				78C0655D24498BCF00E4CF4A /* WhiteModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1369,6 +1379,7 @@
 				1A44BE7B22BF863000766274 /* AppDelegate.m in Sources */,
 				784440AD241AA2DF0060FB91 /* WhiteReplayManager.m in Sources */,
 				784440B5241AA2DF0060FB91 /* ReplayModel.m in Sources */,
+				78C0655824497FE000E4CF4A /* URL.m in Sources */,
 				784440B0241AA2DF0060FB91 /* BigEducationManager.m in Sources */,
 				784440B8241AA2DF0060FB91 /* RoomAllModel.m in Sources */,
 				7868BFF6242DC7AD00644807 /* ioapi_mem.c in Sources */,
@@ -1390,6 +1401,7 @@
 				784440DD241AA2DF0060FB91 /* EEPageControlView.m in Sources */,
 				78D7314123B38B5700D2146C /* MainNavigationController.m in Sources */,
 				784440B9241AA2DF0060FB91 /* MinEducationManager.m in Sources */,
+				78C0655E24498BCF00E4CF4A /* WhiteModel.m in Sources */,
 				7868BFF7242DC7AD00644807 /* minishared.c in Sources */,
 				784440A8241AA2DF0060FB91 /* SignalP2PModel.m in Sources */,
 				784440C2241AA2DF0060FB91 /* SignalModel.m in Sources */,
@@ -1618,7 +1630,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 125;
+				CURRENT_PROJECT_VERSION = 130;
 				DEVELOPMENT_TEAM = SW3CA7M752;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1634,7 +1646,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.3.0;
+				MARKETING_VERSION = 5.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraEducation;
 				PRODUCT_NAME = "声网益课堂";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
@@ -1651,7 +1663,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 125;
+				CURRENT_PROJECT_VERSION = 130;
 				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1667,7 +1679,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.3.0;
+				MARKETING_VERSION = 5.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraEducationDisGY;
 				PRODUCT_NAME = "声网益课堂";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraEducationGongYiAppStoreRelease;
@@ -1808,7 +1820,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 125;
+				CURRENT_PROJECT_VERSION = 130;
 				DEVELOPMENT_TEAM = SW3CA7M752;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1824,7 +1836,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.3.0;
+				MARKETING_VERSION = 5.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraEducation;
 				PRODUCT_NAME = "声网益课堂";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraAppsDevProfile;
@@ -1930,7 +1942,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 125;
+				CURRENT_PROJECT_VERSION = 130;
 				DEVELOPMENT_TEAM = 7289G77ZF3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1946,7 +1958,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.3.0;
+				MARKETING_VERSION = 5.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraEducationQA;
 				PRODUCT_NAME = "声网益课堂";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraIOTest2019;
