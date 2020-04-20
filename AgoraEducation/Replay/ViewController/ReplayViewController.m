@@ -403,7 +403,7 @@ typedef NS_ENUM(NSInteger, RecordState) {
     [self setPlayViewsVisible:NO];
 }
 - (void)combinePlayError:(NSError * _Nullable)error {
-    AgoraLog(@"ReplayVideoViewController Stopped Err:%@", error);
+    AgoraLogError(@"ReplayVideoViewController Stopped Err:%@", error);
 }
 
 @end

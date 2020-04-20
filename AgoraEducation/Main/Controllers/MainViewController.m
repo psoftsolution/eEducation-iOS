@@ -147,7 +147,7 @@
 - (IBAction)joinRoom:(UIButton *)sender {
 
     self.userNameTextFiled.text = @"sdafasdf";
-    self.classNameTextFiled.text = @"adf";
+    self.classNameTextFiled.text = @"adfsafd";
     
     NSString *userName = self.userNameTextFiled.text;
     NSString *className = self.classNameTextFiled.text;

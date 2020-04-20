@@ -49,6 +49,6 @@
             [self.delegate lastPage];
         }
     }
-    AgoraLog(@"sender-------- %@",sender.restorationIdentifier);
+    AgoraLogInfo(@"sender-------- %@",sender.restorationIdentifier);
 }
 @end

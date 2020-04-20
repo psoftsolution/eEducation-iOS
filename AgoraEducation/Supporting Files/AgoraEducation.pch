@@ -21,14 +21,7 @@
 #define WEAK(object) __weak typeof(object) weak##object = object
 #define IsPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
-#ifdef DEBUG
-#define AgoraLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
-#else
-#define AgoraLog(...)
 #endif
-
-#endif
-
 
 #endif /* AgoraSmallClass_pch */
 

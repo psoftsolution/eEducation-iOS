@@ -26,7 +26,7 @@
     [self.agoraRtmKit setLogFilters:AgoraRtmLogFilterInfo];
     [self.agoraRtmKit loginByToken:model.token user:model.uid completion:^(AgoraRtmLoginErrorCode errorCode) {
         if (errorCode == AgoraRtmLoginErrorOk) {
-            AgoraLog(@"rtm login success");
+            AgoraLogInfo(@"rtm login success");
             if(successBlock != nil){
                 successBlock();
             }
@@ -69,7 +69,7 @@
             }
             
         } else {
-            AgoraLog(@"SignalManager get channel attributes error");
+            AgoraLogError(@"SignalManager get channel attributes error");
         }
         
         if(block != nil){

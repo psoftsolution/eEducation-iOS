@@ -14,6 +14,8 @@
 
 - (void)initSignalWithAppid:(NSString *)appid appToken:(NSString *)token userId:(NSString *)uid dataSourceDelegate:(id<SignalDelegate> _Nullable)signalDelegate completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock {
     
+    AgoraLogInfo(@"init signal appid:%@ token:%@ uid:%@", appid, token, uid);
+    
     self.signalDelegate = signalDelegate;
     
     SignalModel *model = [SignalModel new];
@@ -28,7 +30,7 @@
 }
 
 - (void)joinSignalWithChannelName:(NSString *)channelName completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock {
-    
+    AgoraLogInfo(@"join signal channelName:%@", channelName);
     [self.signalManager joinChannelWithName:channelName completeSuccessBlock:successBlock completeFailBlock:failBlock];
 }
 
@@ -43,14 +45,18 @@
     params[@"cmd"] = @(MessageCmdTypeUpdate);
     params[@"data"] = dataParams;
     
+    AgoraLogInfo(@"send signal params:%@", params);
+    
     NSString *messageBody = [JsonParseUtil dictionaryToJson:params];
     [self.signalManager sendMessage:messageBody completeSuccessBlock:^{
       
+        AgoraLogInfo(@"send signal success");
         if(successBlock != nil){
             successBlock();
         }
         
     } completeFailBlock:^(NSInteger errorCode) {
+        AgoraLogInfo(@"send signal fail errorCode:%ld", (long)errorCode);
         if(failBlock != nil){
             failBlock(errorCode);
         }
@@ -67,14 +73,18 @@
     params[@"cmd"] = @(MessageCmdTypeChat);
     params[@"data"] = dataParams;
     
+    AgoraLogInfo(@"send message params:%@", params);
+    
     NSString *messageBody = [JsonParseUtil dictionaryToJson:params];
     [self.signalManager sendMessage:messageBody completeSuccessBlock:^{
 
+        AgoraLogInfo(@"send message success");
         if(successBlock != nil){
             successBlock();
         }
 
     } completeFailBlock:^(NSInteger errorCode) {
+        AgoraLogInfo(@"send message fail errorCode:%ld", (long)errorCode);
         if(failBlock != nil){
             failBlock(errorCode);
         }
@@ -82,11 +92,14 @@
 }
 
 - (void)releaseSignalResources {
+    AgoraLogInfo(@"releaseSignalResources");
     [self.signalManager releaseResources];
 }
 
 #pragma mark SignalManagerDelegate
 - (void)rtmKit:(AgoraRtmKit * _Nonnull)kit connectionStateChanged:(AgoraRtmConnectionState)state reason:(AgoraRtmConnectionChangeReason)reason {
+    
+    AgoraLogInfo(@"connectionStateChanged state:%ld reason:%d", (long)state, reason);
     
     if([self.signalDelegate respondsToSelector:@selector(didReceivedConnectionStateChanged:)]) {
         [self.signalDelegate didReceivedConnectionStateChanged:state];
@@ -94,6 +107,8 @@
 }
 
 - (void)rtmKit:(AgoraRtmKit * _Nonnull)kit messageReceived:(AgoraRtmMessage * _Nonnull)message fromPeer:(NSString * _Nonnull)peerId {
+    
+    AgoraLogInfo(@"messageReceived:%@ fromPeer:%@", message.text, peerId);
     
     NSDictionary *dict = [JsonParseUtil dictionaryWithJsonString:message.text];
     SignalP2PModel *model = [SignalP2PModel yy_modelWithDictionary:dict];
@@ -105,6 +120,8 @@
 
 - (void)channel:(AgoraRtmChannel * _Nonnull)channel messageReceived:(AgoraRtmMessage * _Nonnull)message fromMember:(AgoraRtmMember * _Nonnull)member {
 
+    AgoraLogInfo(@"messageReceived:%@", message.text);
+    
     NSDictionary *dict = [JsonParseUtil dictionaryWithJsonString:message.text];
     
     if([dict[@"cmd"] integerValue] == MessageCmdTypeChat) {

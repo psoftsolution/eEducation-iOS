@@ -46,7 +46,7 @@ static HttpManager *manager = nil;
         }
     }
     
-    AgoraLog(@"\n============>Get HTTP Start<============\n\
+    AgoraLogInfo(@"\n============>Get HTTP Start<============\n\
           \nurl==>\n%@\n\
           \nheaders==>\n%@\n\
           \nparams==>\n%@\n\
@@ -56,14 +56,14 @@ static HttpManager *manager = nil;
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        AgoraLog(@"\n============>Get HTTP Success<============\n\
+        AgoraLogInfo(@"\n============>Get HTTP Success<============\n\
               \nResult==>\n%@\n\
               ", responseObject);
         if (success) {
             success(responseObject);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        AgoraLog(@"\n============>Get HTTP Error<============\n\
+        AgoraLogInfo(@"\n============>Get HTTP Error<============\n\
               \nError==>\n%@\n\
               ", error.description);
         if (failure) {
@@ -81,7 +81,7 @@ static HttpManager *manager = nil;
         }
     }
 
-    AgoraLog(@"\n============>Post HTTP Start<============\n\
+    AgoraLogInfo(@"\n============>Post HTTP Start<============\n\
           \nurl==>\n%@\n\
           \nheaders==>\n%@\n\
           \nparams==>\n%@\n\
@@ -89,7 +89,7 @@ static HttpManager *manager = nil;
     
     [HttpManager.shareManager.sessionManager POST:url parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        AgoraLog(@"\n============>Post HTTP Success<============\n\
+        AgoraLogInfo(@"\n============>Post HTTP Success<============\n\
               \nResult==>\n%@\n\
               ", responseObject);
         if (success) {
@@ -98,7 +98,7 @@ static HttpManager *manager = nil;
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 
-        AgoraLog(@"\n============>Post HTTP Error<============\n\
+        AgoraLogInfo(@"\n============>Post HTTP Error<============\n\
               \nError==>\n%@\n\
               ", error.description);
         if (failure) {

@@ -48,12 +48,15 @@
     UIAlertController *alertController = [[UIAlertController alloc] init];
     UIAlertAction *test = [UIAlertAction actionWithTitle:@"测试环境" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         env = EnvTypeTest;
+        AgoraLogInfo(@"切换 测试环境");
     }];
     UIAlertAction *pre = [UIAlertAction actionWithTitle:@"预发布环境" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         env = EnvTypePre;
+        AgoraLogInfo(@"切换 预发布环境");
     }];
     UIAlertAction *formal = [UIAlertAction actionWithTitle:@"正式环境" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         env = EnvTypeFormal;
+        AgoraLogInfo(@"切换 正式环境");
     }];
     
     UIPopoverPresentationController *popover = alertController.popoverPresentationController;

@@ -119,7 +119,7 @@
     
     // video 将直接播放，whitePlayer 也直接播放
     if ([self.rtcReplayManager hasEnoughBuffer]) {
-        AgoraLog(@"play directly");
+        AgoraLogInfo(@"play directly");
         [self.whiteReplayManager play];
         
         _displayLink.paused = NO;
@@ -146,7 +146,7 @@
     NSTimeInterval seekTime = CMTimeGetSeconds(time);
     [self.whiteReplayManager seekToScheduleTime:seekTime];
     [self setDisplayDurationTime:seekTime];
-    AgoraLog(@"seekTime: %f", seekTime);
+    AgoraLogInfo(@"seekTime: %f", seekTime);
 
     // 如果seek超出视频长度，finished为false，并且默认seek到最后一帧
     [self.rtcReplayManager seekToTime:time completionHandler:^(NSTimeInterval realTime, BOOL finished) {
@@ -164,7 +164,7 @@
         [self.delegate combinePlayStartBuffering];
     }
     
-    AgoraLog(@"startNativeBuffering");
+    AgoraLogInfo(@"startNativeBuffering");
     
     //加上 native 缓冲标识
     self.pauseReason = self.pauseReason | CombineSyncManagerPauseReasonWaitingRTCPlayerBuffering;
@@ -179,7 +179,7 @@
 
     self.pauseReason = self.pauseReason & ~CombineSyncManagerPauseReasonWaitingRTCPlayerBuffering;
     
-    AgoraLog(@"nativeEndBuffering %lu", (unsigned long)self.pauseReason);
+    AgoraLogInfo(@"nativeEndBuffering %lu", (unsigned long)self.pauseReason);
     
     /**
      1. WhitePlayer 还在缓冲(01)，暂停
@@ -246,7 +246,7 @@
     
     self.pauseReason = self.pauseReason & ~CombineSyncManagerPauseReasonWaitingWhitePlayerBuffering;
     
-    AgoraLog(@"playerEndBuffering %lu", (unsigned long)self.pauseReason);
+    AgoraLogInfo(@"playerEndBuffering %lu", (unsigned long)self.pauseReason);
     
     /**
      1. native 还在缓存(10)，主动暂停 whitePlayer

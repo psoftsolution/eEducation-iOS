@@ -144,6 +144,8 @@
 
 - (void)muteVideoStream:(BOOL)mute {
     
+    AgoraLogInfo(@"large muteVideoStream:%d", mute);
+    
     if(self.educationManager.renderStudentModels.count == 0) {
         return;
     }
@@ -182,6 +184,8 @@
 
 - (void)muteAudioStream:(BOOL)mute {
 
+    AgoraLogInfo(@"large muteAudioStream:%d", mute);
+    
    if(self.educationManager.renderStudentModels.count == 0) {
        return;
    }

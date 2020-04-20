@@ -106,11 +106,15 @@
     [super setupRTCVideoCanvas:model completeBlock:^(AgoraRtcVideoCanvas *videoCanvas) {
         
         if(removeSessionModel != nil){
+            AgoraLogInfo(@"VideoSessionModels remove repeat view uid:%lu", (unsigned long)removeSessionModel.uid);
             [weakself.rtcVideoSessionModels removeObject:removeSessionModel];
         }
         if(currentSessionModel != nil){
+            AgoraLogInfo(@"VideoSessionModels remove repeat uid:%lu", (unsigned long)currentSessionModel.uid);
             [weakself.rtcVideoSessionModels removeObject:currentSessionModel];
         }
+        
+        AgoraLogInfo(@"VideoSessionModels add:%lu", (unsigned long)model.uid);
         
         RTCVideoSessionModel *videoSessionModel = [RTCVideoSessionModel new];
         videoSessionModel.uid = model.uid;
@@ -135,6 +139,7 @@
             [self.rtcManager setupRemoteVideo:model.videoCanvas];
         }
         [self.rtcVideoSessionModels removeObject:model];
+        AgoraLogInfo(@"VideoSessionModels remove given uid:%lu", (unsigned long)model.uid);
     }
 }
 
