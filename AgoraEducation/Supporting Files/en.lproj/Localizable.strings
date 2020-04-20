@@ -60,6 +60,9 @@ JoinWhiteErrorText = "white board join error";
 JoinWhiteErrorText = "white board join error";
 LoginOnAnotherDeviceText = "account signed in on another device";
 
+GetLogParamsErrorText = "get log params failed";
 LogNotFoundText = "no log files found";
 LogClearErrorText = "failed to clear log files";
 LogZipErrorText = "log file compression failed";
+UploadOSSErrorText = "upload OSS failed";
+UploadLogSuccessText = "upload log successed";

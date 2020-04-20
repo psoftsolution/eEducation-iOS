@@ -30,7 +30,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"RequestFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"RequestFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -73,7 +73,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"EnterRoomFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"EnterRoomFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -106,7 +106,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"LeftRoomFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"LeftRoomFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -166,7 +166,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetRoomInfoFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetRoomInfoFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -193,7 +193,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetWhiteInfoFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"GetWhiteInfoFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -222,7 +222,7 @@
             }
         } else {
             if(failBlock != nil) {
-                NSString *errMsg = [BaseEducationManager generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateRoomInfoFailedText", nil) errorCode:model.code];
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateRoomInfoFailedText", nil) errorCode:model.code];
                 failBlock(errMsg);
             }
         }
@@ -233,25 +233,5 @@
         }
     }];
 }
-
-#pragma mark Private
-+ (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode {
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray<NSString*> *allLanguages = [defaults objectForKey:@"AppleLanguages"];
-    NSString *preferredLang = [allLanguages objectAtIndex:0];
-    NSString *msg = @"";
-    if([preferredLang containsString:@"zh-Hans"]) {
-        msg = [EduConfigModel.shareInstance.multiLanguage.cn valueForKey:@(errorCode).stringValue];
-    } else {
-        msg = [EduConfigModel.shareInstance.multiLanguage.en valueForKey:@(errorCode).stringValue];
-    }
-    
-    if(msg == nil || msg.length == 0) {
-        msg = [NSString stringWithFormat:@"%@：%ld", des, (long)errorCode];
-    }
-    return msg;
-}
-
 
 @end

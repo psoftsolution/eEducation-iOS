@@ -94,20 +94,7 @@ typedef NS_ENUM(NSInteger, RecordState) {
               }
 
           } else {
-              
-              NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-              NSArray<NSString*> *allLanguages = [defaults objectForKey:@"AppleLanguages"];
-              NSString *preferredLang = [allLanguages objectAtIndex:0];
-              NSString *msg = @"";
-              if([preferredLang containsString:@"zh-Hans"]) {
-                  msg = [EduConfigModel.shareInstance.multiLanguage.cn valueForKey:@(model.code).stringValue];
-              } else {
-                  msg = [EduConfigModel.shareInstance.multiLanguage.en valueForKey:@(model.code).stringValue];
-              }
-              
-              if(msg == nil || msg.length == 0) {
-                  msg = [NSString stringWithFormat:@"%@：%ld", NSLocalizedString(@"RequestReplayFailedText", nil), (long)model.code];
-              }
+              NSString *msg = [EduConfigModel generateHttpErrorMessageWithDescribe:@"RequestReplayFailedText" errorCode:model.code];
               [UIApplication.sharedApplication.keyWindow makeToast:msg];
     
           }
@@ -417,25 +404,6 @@ typedef NS_ENUM(NSInteger, RecordState) {
 }
 - (void)combinePlayError:(NSError * _Nullable)error {
     AgoraLog(@"ReplayVideoViewController Stopped Err:%@", error);
-}
-
-
-+ (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode {
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray<NSString*> *allLanguages = [defaults objectForKey:@"AppleLanguages"];
-    NSString *preferredLang = [allLanguages objectAtIndex:0];
-    NSString *msg = @"";
-    if([preferredLang containsString:@"zh-Hans"]) {
-        msg = [EduConfigModel.shareInstance.multiLanguage.cn valueForKey:@(errorCode).stringValue];
-    } else {
-        msg = [EduConfigModel.shareInstance.multiLanguage.en valueForKey:@(errorCode).stringValue];
-    }
-    
-    if(msg == nil || msg.length == 0) {
-        msg = [NSString stringWithFormat:@"%@：%ld", des, (long)errorCode];
-    }
-    return msg;
 }
 
 @end

@@ -25,6 +25,13 @@ extern EnvType env;
 
 #define HTTP_GET_LANGUAGE @"%@/edu/v1/multi/language"
 
+// http: get app config
+#define HTTP_LOG_PARAMS @"%@/edu/v1/apps/%@/log/params"
+// http: get app config
+#define HTTP_OSS_STS @"%@/edu/v1/log/sts"
+// http: get app config
+#define HTTP_OSS_STS_CALLBACK @"%@/edu/v1/log/sts/callback"
+
 #define HTTP_ENTER_ROOM @"%@/edu/v1/apps/%@/room/entry"
 
 #define HTTP_LEFT_ROOM @"%@/edu/v1/apps/%@/room/%@/exit"

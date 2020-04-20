@@ -10,9 +10,12 @@
 #import "SettingViewCell.h"
 #import "EyeCareModeUtil.h"
 #import "URL.h"
+#import "HttpManager.h"
+#import "SettingUploadViewCell.h"
 
 @interface SettingViewController ()<UITableViewDelegate,UITableViewDataSource,SettingCellDelegate>
 @property (nonatomic, weak) UITableView *settingTableView;
+@property (nonatomic, weak) SettingUploadViewCell *uploadViewCell;
 @end
 
 @implementation SettingViewController
@@ -112,21 +115,34 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    SettingViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SettingCell"];
-    if (!cell) {
-        cell = [[SettingViewCell alloc] initWithStyle:(UITableViewCellStyleDefault) reuseIdentifier:@"SettingCell"];
+    
+    if(indexPath.row == 0){
+        SettingViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SettingCell"];
+        if (!cell) {
+            cell = [[SettingViewCell alloc] initWithStyle:(UITableViewCellStyleDefault) reuseIdentifier:@"SettingCell"];
+        }
+        cell.delegate = self;
+        [cell switchOn:[[EyeCareModeUtil sharedUtil] queryEyeCareModeStatus]];
+        return cell;
+    } else {
+        SettingUploadViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SettingUploadCell"];
+        if (!cell) {
+            cell = [[SettingUploadViewCell alloc] initWithStyle:(UITableViewCellStyleDefault) reuseIdentifier:@"SettingUploadCell"];
+        }
+        self.uploadViewCell = cell;
+        return cell;
     }
-    cell.delegate = self;
-    [cell switchOn:[[EyeCareModeUtil sharedUtil] queryEyeCareModeStatus]];
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if(indexPath.row == 1){
+        [self.uploadViewCell uploadLog];
+    }
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return 2;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

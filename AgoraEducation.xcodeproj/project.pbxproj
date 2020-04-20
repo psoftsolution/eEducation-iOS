@@ -54,6 +54,27 @@
 		787E7A4023A9FE97005F8F0C /* ReplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 787E7A3523A9FE97005F8F0C /* ReplayViewController.m */; };
 		78A22C77240E0660003CEBBA /* ReplayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A22C76240E0660003CEBBA /* ReplayModel.m */; };
 		78BEDCCC244DA718008A2625 /* WhiteBoardTouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCCA244DA718008A2625 /* WhiteBoardTouchView.m */; };
+		78BEDCD0244DA803008A2625 /* LogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCCE244DA803008A2625 /* LogManager.m */; };
+		78BEDCFA244DA82A008A2625 /* crypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCD4244DA82A008A2625 /* crypt.c */; };
+		78BEDCFB244DA82A008A2625 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCD5244DA82A008A2625 /* unzip.c */; };
+		78BEDCFC244DA82A008A2625 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCD6244DA82A008A2625 /* zip.c */; };
+		78BEDCFD244DA82A008A2625 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCD8244DA82A008A2625 /* ioapi.c */; };
+		78BEDCFE244DA82A008A2625 /* ioapi_buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCDA244DA82A008A2625 /* ioapi_buf.c */; };
+		78BEDCFF244DA82A008A2625 /* ioapi_mem.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCDE244DA82A008A2625 /* ioapi_mem.c */; };
+		78BEDD00244DA82A008A2625 /* minishared.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCDF244DA82A008A2625 /* minishared.c */; };
+		78BEDD01244DA82A008A2625 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCE5244DA82A008A2625 /* aeskey.c */; };
+		78BEDD02244DA82A008A2625 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCE6244DA82A008A2625 /* hmac.c */; };
+		78BEDD03244DA82A008A2625 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCE9244DA82A008A2625 /* aescrypt.c */; };
+		78BEDD04244DA82A008A2625 /* fileenc.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCEA244DA82A008A2625 /* fileenc.c */; };
+		78BEDD05244DA82A008A2625 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCEC244DA82A008A2625 /* sha1.c */; };
+		78BEDD06244DA82A008A2625 /* aes_ni.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCEF244DA82A008A2625 /* aes_ni.c */; };
+		78BEDD07244DA82A008A2625 /* prng.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCF1244DA82A008A2625 /* prng.c */; };
+		78BEDD08244DA82A008A2625 /* pwd2key.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCF3244DA82A008A2625 /* pwd2key.c */; };
+		78BEDD09244DA82A008A2625 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCF4244DA82A008A2625 /* aestab.c */; };
+		78BEDD0A244DA82A008A2625 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDCF9244DA82A008A2625 /* SSZipArchive.m */; };
+		78BEDD0E244DA843008A2625 /* OSSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDD0C244DA843008A2625 /* OSSManager.m */; };
+		78BEDD11244DA863008A2625 /* LogParamsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDD10244DA863008A2625 /* LogParamsModel.m */; };
+		78BEDD14244DAA85008A2625 /* SettingUploadViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BEDD13244DAA85008A2625 /* SettingUploadViewCell.m */; };
 		78C127A324037E2100420E72 /* CombineReplayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C127A224037E2100420E72 /* CombineReplayManager.m */; };
 		78C127A624037EB300420E72 /* RTCReplayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C127A524037EB300420E72 /* RTCReplayManager.m */; };
 		78C127A924037ECD00420E72 /* WhiteReplayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C127A824037ECD00420E72 /* WhiteReplayManager.m */; };
@@ -242,6 +263,52 @@
 		78A22C78240E0FCC003CEBBA /* WhitePlayDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhitePlayDelegate.h; sourceTree = "<group>"; };
 		78BEDCCA244DA718008A2625 /* WhiteBoardTouchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteBoardTouchView.m; sourceTree = "<group>"; };
 		78BEDCCB244DA718008A2625 /* WhiteBoardTouchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteBoardTouchView.h; sourceTree = "<group>"; };
+		78BEDCCE244DA803008A2625 /* LogManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogManager.m; sourceTree = "<group>"; };
+		78BEDCCF244DA803008A2625 /* LogManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogManager.h; sourceTree = "<group>"; };
+		78BEDCD2244DA82A008A2625 /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
+		78BEDCD4244DA82A008A2625 /* crypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crypt.c; sourceTree = "<group>"; };
+		78BEDCD5244DA82A008A2625 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		78BEDCD6244DA82A008A2625 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		78BEDCD7244DA82A008A2625 /* minishared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minishared.h; sourceTree = "<group>"; };
+		78BEDCD8244DA82A008A2625 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		78BEDCD9244DA82A008A2625 /* ioapi_mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi_mem.h; sourceTree = "<group>"; };
+		78BEDCDA244DA82A008A2625 /* ioapi_buf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi_buf.c; sourceTree = "<group>"; };
+		78BEDCDB244DA82A008A2625 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		78BEDCDC244DA82A008A2625 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		78BEDCDD244DA82A008A2625 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		78BEDCDE244DA82A008A2625 /* ioapi_mem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi_mem.c; sourceTree = "<group>"; };
+		78BEDCDF244DA82A008A2625 /* minishared.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minishared.c; sourceTree = "<group>"; };
+		78BEDCE0244DA82A008A2625 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		78BEDCE1244DA82A008A2625 /* ioapi_buf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi_buf.h; sourceTree = "<group>"; };
+		78BEDCE3244DA82A008A2625 /* prng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prng.h; sourceTree = "<group>"; };
+		78BEDCE4244DA82A008A2625 /* aes_ni.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes_ni.h; sourceTree = "<group>"; };
+		78BEDCE5244DA82A008A2625 /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aeskey.c; sourceTree = "<group>"; };
+		78BEDCE6244DA82A008A2625 /* hmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hmac.c; sourceTree = "<group>"; };
+		78BEDCE7244DA82A008A2625 /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aestab.h; sourceTree = "<group>"; };
+		78BEDCE8244DA82A008A2625 /* pwd2key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pwd2key.h; sourceTree = "<group>"; };
+		78BEDCE9244DA82A008A2625 /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aescrypt.c; sourceTree = "<group>"; };
+		78BEDCEA244DA82A008A2625 /* fileenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fileenc.c; sourceTree = "<group>"; };
+		78BEDCEB244DA82A008A2625 /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aesopt.h; sourceTree = "<group>"; };
+		78BEDCEC244DA82A008A2625 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha1.c; sourceTree = "<group>"; };
+		78BEDCED244DA82A008A2625 /* brg_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_types.h; sourceTree = "<group>"; };
+		78BEDCEE244DA82A008A2625 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
+		78BEDCEF244DA82A008A2625 /* aes_ni.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes_ni.c; sourceTree = "<group>"; };
+		78BEDCF0244DA82A008A2625 /* brg_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_endian.h; sourceTree = "<group>"; };
+		78BEDCF1244DA82A008A2625 /* prng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = prng.c; sourceTree = "<group>"; };
+		78BEDCF2244DA82A008A2625 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		78BEDCF3244DA82A008A2625 /* pwd2key.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pwd2key.c; sourceTree = "<group>"; };
+		78BEDCF4244DA82A008A2625 /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aestab.c; sourceTree = "<group>"; };
+		78BEDCF5244DA82A008A2625 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
+		78BEDCF6244DA82A008A2625 /* fileenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileenc.h; sourceTree = "<group>"; };
+		78BEDCF7244DA82A008A2625 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
+		78BEDCF8244DA82A008A2625 /* SSZipCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipCommon.h; sourceTree = "<group>"; };
+		78BEDCF9244DA82A008A2625 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
+		78BEDD0C244DA843008A2625 /* OSSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OSSManager.m; sourceTree = "<group>"; };
+		78BEDD0D244DA843008A2625 /* OSSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSSManager.h; sourceTree = "<group>"; };
+		78BEDD0F244DA863008A2625 /* LogParamsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogParamsModel.h; sourceTree = "<group>"; };
+		78BEDD10244DA863008A2625 /* LogParamsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogParamsModel.m; sourceTree = "<group>"; };
+		78BEDD12244DAA85008A2625 /* SettingUploadViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingUploadViewCell.h; sourceTree = "<group>"; };
+		78BEDD13244DAA85008A2625 /* SettingUploadViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingUploadViewCell.m; sourceTree = "<group>"; };
 		78C127A124037E2100420E72 /* CombineReplayManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CombineReplayManager.h; sourceTree = "<group>"; };
 		78C127A224037E2100420E72 /* CombineReplayManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CombineReplayManager.m; sourceTree = "<group>"; };
 		78C127A424037EB200420E72 /* RTCReplayManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCReplayManager.h; sourceTree = "<group>"; };
@@ -489,6 +556,8 @@
 			children = (
 				1A70AFB02359F17500942742 /* SettingViewCell.h */,
 				1A70AFB12359F17500942742 /* SettingViewCell.m */,
+				78BEDD12244DAA85008A2625 /* SettingUploadViewCell.h */,
+				78BEDD13244DAA85008A2625 /* SettingUploadViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -709,6 +778,8 @@
 		783FB6F9240D12BA007298C1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				78BEDD0F244DA863008A2625 /* LogParamsModel.h */,
+				78BEDD10244DA863008A2625 /* LogParamsModel.m */,
 				783FB6FE240D12BA007298C1 /* EnterRoomAllModel.h */,
 				783FB6FA240D12BA007298C1 /* EnterRoomAllModel.m */,
 				783FB701240D12BA007298C1 /* CommonModel.h */,
@@ -774,6 +845,8 @@
 		787E7A4223A9FEFF005F8F0C /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				78BEDD0B244DA843008A2625 /* OSSManager */,
+				78BEDCCD244DA803008A2625 /* LogManager */,
 				783FB6B9240D0739007298C1 /* BaseManager */,
 				78C127A024037DE300420E72 /* CombineReplayManager */,
 				78D731A823BB103B00D2146C /* BigEducationManager.h */,
@@ -790,6 +863,85 @@
 				78D7306B23B3638B00D2146C /* White */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		78BEDCCD244DA803008A2625 /* LogManager */ = {
+			isa = PBXGroup;
+			children = (
+				78BEDCCE244DA803008A2625 /* LogManager.m */,
+				78BEDCCF244DA803008A2625 /* LogManager.h */,
+			);
+			path = LogManager;
+			sourceTree = "<group>";
+		};
+		78BEDCD1244DA82A008A2625 /* SSZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				78BEDCD2244DA82A008A2625 /* ZipArchive.h */,
+				78BEDCD3244DA82A008A2625 /* minizip */,
+				78BEDCF7244DA82A008A2625 /* SSZipArchive.h */,
+				78BEDCF8244DA82A008A2625 /* SSZipCommon.h */,
+				78BEDCF9244DA82A008A2625 /* SSZipArchive.m */,
+			);
+			path = SSZipArchive;
+			sourceTree = "<group>";
+		};
+		78BEDCD3244DA82A008A2625 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				78BEDCD4244DA82A008A2625 /* crypt.c */,
+				78BEDCD5244DA82A008A2625 /* unzip.c */,
+				78BEDCD6244DA82A008A2625 /* zip.c */,
+				78BEDCD7244DA82A008A2625 /* minishared.h */,
+				78BEDCD8244DA82A008A2625 /* ioapi.c */,
+				78BEDCD9244DA82A008A2625 /* ioapi_mem.h */,
+				78BEDCDA244DA82A008A2625 /* ioapi_buf.c */,
+				78BEDCDB244DA82A008A2625 /* crypt.h */,
+				78BEDCDC244DA82A008A2625 /* zip.h */,
+				78BEDCDD244DA82A008A2625 /* unzip.h */,
+				78BEDCDE244DA82A008A2625 /* ioapi_mem.c */,
+				78BEDCDF244DA82A008A2625 /* minishared.c */,
+				78BEDCE0244DA82A008A2625 /* ioapi.h */,
+				78BEDCE1244DA82A008A2625 /* ioapi_buf.h */,
+				78BEDCE2244DA82A008A2625 /* aes */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
+		78BEDCE2244DA82A008A2625 /* aes */ = {
+			isa = PBXGroup;
+			children = (
+				78BEDCE3244DA82A008A2625 /* prng.h */,
+				78BEDCE4244DA82A008A2625 /* aes_ni.h */,
+				78BEDCE5244DA82A008A2625 /* aeskey.c */,
+				78BEDCE6244DA82A008A2625 /* hmac.c */,
+				78BEDCE7244DA82A008A2625 /* aestab.h */,
+				78BEDCE8244DA82A008A2625 /* pwd2key.h */,
+				78BEDCE9244DA82A008A2625 /* aescrypt.c */,
+				78BEDCEA244DA82A008A2625 /* fileenc.c */,
+				78BEDCEB244DA82A008A2625 /* aesopt.h */,
+				78BEDCEC244DA82A008A2625 /* sha1.c */,
+				78BEDCED244DA82A008A2625 /* brg_types.h */,
+				78BEDCEE244DA82A008A2625 /* hmac.h */,
+				78BEDCEF244DA82A008A2625 /* aes_ni.c */,
+				78BEDCF0244DA82A008A2625 /* brg_endian.h */,
+				78BEDCF1244DA82A008A2625 /* prng.c */,
+				78BEDCF2244DA82A008A2625 /* aes.h */,
+				78BEDCF3244DA82A008A2625 /* pwd2key.c */,
+				78BEDCF4244DA82A008A2625 /* aestab.c */,
+				78BEDCF5244DA82A008A2625 /* sha1.h */,
+				78BEDCF6244DA82A008A2625 /* fileenc.h */,
+			);
+			path = aes;
+			sourceTree = "<group>";
+		};
+		78BEDD0B244DA843008A2625 /* OSSManager */ = {
+			isa = PBXGroup;
+			children = (
+				78BEDD0C244DA843008A2625 /* OSSManager.m */,
+				78BEDD0D244DA843008A2625 /* OSSManager.h */,
+			);
+			path = OSSManager;
 			sourceTree = "<group>";
 		};
 		78C127A024037DE300420E72 /* CombineReplayManager */ = {
@@ -875,6 +1027,7 @@
 		78D730C423B3853200D2146C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				78BEDCD1244DA82A008A2625 /* SSZipArchive */,
 				783FB6CC240D0746007298C1 /* AlertView */,
 				783FB6D2240D0746007298C1 /* Badge */,
 				783FB6C9240D0746007298C1 /* Color */,
@@ -1181,6 +1334,7 @@
 				783FB6C8240D0739007298C1 /* BaseEducationManager+Signal.m in Sources */,
 				787E7A3823A9FE97005F8F0C /* LoadingView.m in Sources */,
 				78D730FE23B388A400D2146C /* OTOTeacherView.m in Sources */,
+				78BEDD06244DA82A008A2625 /* aes_ni.c in Sources */,
 				78D730E923B3889D00D2146C /* EEWhiteboardTool.m in Sources */,
 				783FB6F2240D07B3007298C1 /* RTCVideoCanvasModel.m in Sources */,
 				783FB6DE240D0746007298C1 /* UIView+EEBadge.m in Sources */,
@@ -1196,49 +1350,69 @@
 				787E7A3D23A9FE97005F8F0C /* EduButton.m in Sources */,
 				78D730C323B384D400D2146C /* HttpManager.m in Sources */,
 				1A87571223571CFE009C55A8 /* SettingViewController.m in Sources */,
+				78BEDD0E244DA843008A2625 /* OSSManager.m in Sources */,
+				78BEDD14244DAA85008A2625 /* SettingUploadViewCell.m in Sources */,
 				1A399E5423697E9000F5A40F /* OneToOneViewController.m in Sources */,
 				78D730F523B3889D00D2146C /* EEColorShowView.m in Sources */,
+				78BEDCFF244DA82A008A2625 /* ioapi_mem.c in Sources */,
 				783FB6DD240D0746007298C1 /* JsonParseUtil.m in Sources */,
 				78FC86EA241793700083E364 /* MultiLanguageModel.m in Sources */,
 				78D730F223B3889D00D2146C /* EENavigationView.m in Sources */,
+				78BEDCFE244DA82A008A2625 /* ioapi_buf.c in Sources */,
 				78D731C023BB614D00D2146C /* OneToOneEducationManager.m in Sources */,
+				78BEDD05244DA82A008A2625 /* sha1.c in Sources */,
 				78D730B223B383E600D2146C /* SignalModel.m in Sources */,
 				787E7A4023A9FE97005F8F0C /* ReplayViewController.m in Sources */,
 				78D730FC23B388A400D2146C /* OTOStudentView.m in Sources */,
 				1A70AFB22359F17500942742 /* SettingViewCell.m in Sources */,
 				783FB6DC240D0746007298C1 /* AlertViewUtil.m in Sources */,
+				78BEDD08244DA82A008A2625 /* pwd2key.c in Sources */,
 				78D730A923B3833500D2146C /* ReplayManagerModel.m in Sources */,
+				78BEDD02244DA82A008A2625 /* hmac.c in Sources */,
 				78D7312223B388BE00D2146C /* BCStudentVideoView.m in Sources */,
 				78D7307523B3638B00D2146C /* WhiteManager.m in Sources */,
+				78BEDCD0244DA803008A2625 /* LogManager.m in Sources */,
+				78BEDCFA244DA82A008A2625 /* crypt.c in Sources */,
 				783FB6C4240D0739007298C1 /* BaseEducationManager+RTC.m in Sources */,
 				78D730E823B3889D00D2146C /* EEMessageViewCell.m in Sources */,
 				783FB703240D12BA007298C1 /* CommonModel.m in Sources */,
 				783FB705240D12BA007298C1 /* RoomAllModel.m in Sources */,
 				1A05ADA3237E4B3B0041F27B /* MCViewController.m in Sources */,
+				78BEDD04244DA82A008A2625 /* fileenc.c in Sources */,
 				78C1E85C24480D6B00F611F9 /* WhiteModel.m in Sources */,
 				1AEDE5E32338CBBF0096ADEC /* SkinCoverWindow.m in Sources */,
 				78C127A924037ECD00420E72 /* WhiteReplayManager.m in Sources */,
+				78BEDCFB244DA82A008A2625 /* unzip.c in Sources */,
+				78BEDD01244DA82A008A2625 /* aeskey.c in Sources */,
 				78D7312123B388BE00D2146C /* BCNavigationView.m in Sources */,
 				1AEDE5E02338CB9E0096ADEC /* SkinCoverLayer.m in Sources */,
 				78BEDCCC244DA718008A2625 /* WhiteBoardTouchView.m in Sources */,
 				78D7312523B388BE00D2146C /* BCSegmentedView.m in Sources */,
 				78D731BA23BB610400D2146C /* MinEducationManager.m in Sources */,
 				783FB6C6240D0739007298C1 /* BaseEducationManager+WhiteBoard.m in Sources */,
+				78BEDD0A244DA82A008A2625 /* SSZipArchive.m in Sources */,
 				78D7314023B38B5700D2146C /* MainViewController.m in Sources */,
 				78D731AA23BB103B00D2146C /* BigEducationManager.m in Sources */,
 				783FB6F6240D07B3007298C1 /* MessageModel.m in Sources */,
 				78D730F023B3889D00D2146C /* EEPageControlView.m in Sources */,
+				78BEDD00244DA82A008A2625 /* minishared.c in Sources */,
 				78D7310F23B388B100D2146C /* MCStudentVideoCell.m in Sources */,
+				78BEDD07244DA82A008A2625 /* prng.c in Sources */,
 				787E7A3923A9FE97005F8F0C /* ReplayControlView.m in Sources */,
 				783FB6F3240D07B3007298C1 /* RTCVideoSessionModel.m in Sources */,
 				78D731C223BCE4EA00D2146C /* BCViewController.m in Sources */,
 				78D7314123B38B5700D2146C /* MainNavigationController.m in Sources */,
+				78BEDCFD244DA82A008A2625 /* ioapi.c in Sources */,
 				78D7311523B388B100D2146C /* MCSegmentedView.m in Sources */,
 				783FB6C7240D0739007298C1 /* BaseEducationManager.m in Sources */,
+				78BEDD03244DA82A008A2625 /* aescrypt.c in Sources */,
 				1AEDE5DD2338C0B40096ADEC /* EyeCareModeUtil.m in Sources */,
 				78D7311023B388B100D2146C /* MCTeacherVideoView.m in Sources */,
+				78BEDCFC244DA82A008A2625 /* zip.c in Sources */,
+				78BEDD11244DA863008A2625 /* LogParamsModel.m in Sources */,
 				78D7307223B3638B00D2146C /* SignalManager.m in Sources */,
 				78D7307423B3638B00D2146C /* RTCManager.m in Sources */,
+				78BEDD09244DA82A008A2625 /* aestab.c in Sources */,
 				78A22C77240E0660003CEBBA /* ReplayModel.m in Sources */,
 				78D7311123B388B100D2146C /* MCStudentListView.m in Sources */,
 				787E7A3A23A9FE97005F8F0C /* SliderView.m in Sources */,
