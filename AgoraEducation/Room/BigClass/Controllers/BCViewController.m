@@ -415,8 +415,8 @@
 }
 
 - (void)stateBarHidden:(BOOL)hidden {
-    [self setNeedsStatusBarAppearanceUpdate];
     self.isLandscape = hidden;
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (IBAction)handUpEvent:(UIButton *)sender {
