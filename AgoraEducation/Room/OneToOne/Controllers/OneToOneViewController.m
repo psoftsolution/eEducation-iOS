@@ -154,14 +154,22 @@
     if (self.isChatTextFieldKeyboard) {
         CGRect frame = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
         float bottom = frame.size.height;
-        BOOL isIphoneX = (MAX(kScreenHeight, kScreenWidth) / MIN(kScreenHeight, kScreenWidth) > 1.78) ? YES : NO;
-        self.textFiledWidthCon.constant = isIphoneX ? kScreenWidth - 44 : kScreenWidth;
+        if(IsPad){
+            self.textFiledWidthCon.constant = kScreenWidth;
+        } else {
+            BOOL isIphoneX = (MAX(kScreenHeight, kScreenWidth) / MIN(kScreenHeight, kScreenWidth) > 1.78) ? YES : NO;
+            self.textFiledWidthCon.constant = isIphoneX ? kScreenWidth - 44 : kScreenWidth;
+        }
         self.textFiledBottomCon.constant = bottom;
     }
 }
 
 - (void)keyboardWillHidden:(NSNotification *)notification {
-    self.textFiledWidthCon.constant = 222;
+    if(IsPad){
+        self.textFiledWidthCon.constant = 292;
+    } else {
+        self.textFiledWidthCon.constant = 222;
+    }
     self.textFiledBottomCon.constant = 0;
 }
 

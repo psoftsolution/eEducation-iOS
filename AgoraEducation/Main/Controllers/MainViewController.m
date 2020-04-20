@@ -195,16 +195,16 @@
                         } else if(sceneType == SceneTypeSmall) {
                             
                             if(IsPad){
-                                [weakself join1V1RoomWithIdentifier:@"mcRoom-iPad"];
+                                [weakself joinMinRoomWithIdentifier:@"mcRoom-iPad"];
                             } else {
                                 [weakself joinMinRoomWithIdentifier:@"mcRoom"];
                             }
                             
                         } else if(sceneType == SceneTypeBig) {
                             if(IsPad){
-                                [weakself join1V1RoomWithIdentifier:@"bcroom-iPad"];
+                                [weakself joinBigRoomWithIdentifier:@"bcroom-iPad"];
                             } else {
-                                [weakself joinMinRoomWithIdentifier:@"bcroom"];
+                                [weakself joinBigRoomWithIdentifier:@"bcroom"];
                             }
                         }
                     }];
