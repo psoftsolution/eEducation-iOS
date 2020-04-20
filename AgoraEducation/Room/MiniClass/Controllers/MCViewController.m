@@ -20,6 +20,7 @@
 #import <Whiteboard/Whiteboard.h>
 #import "MCStudentVideoCell.h"
 #import "UIView+Toast.h"
+#import "WhiteBoardTouchView.h"
 
 #define kLandscapeViewWidth    222
 @interface MCViewController ()<UITextFieldDelegate,RoomProtocol, SignalDelegate, RTCDelegate, EEPageControlDelegate, EEWhiteboardToolDelegate, WhitePlayDelegate>
@@ -51,6 +52,8 @@
 
 @property (nonatomic, assign) BOOL isChatTextFieldKeyboard;
 @property (nonatomic, assign) BOOL hasSignalReconnect;
+
+@property (nonatomic, weak) WhiteBoardTouchView *whiteBoardTouchView;
 @end
 
 @implementation MCViewController
@@ -252,6 +255,15 @@
     
     self.tipLabel.layer.backgroundColor = [UIColor colorWithHexString:@"000000" alpha:0.7].CGColor;
     self.tipLabel.layer.cornerRadius = 6;
+    
+    WEAK(self);
+    WhiteBoardTouchView *whiteBoardTouchView = [WhiteBoardTouchView new];
+    [whiteBoardTouchView setupInView:self.boardView onTouchBlock:^{
+        NSString *toastMessage = NSLocalizedString(@"LockBoardTouchText", nil);
+        [weakself showTipWithMessage:toastMessage];
+    }];
+    self.whiteBoardTouchView = whiteBoardTouchView;
+    self.whiteBoardTouchView.hidden = YES;
 }
 
 - (void)initStudentRenderBlock {
@@ -523,8 +535,10 @@
                 NSString *toastMessage;
                 if(roomInfoModel.room.lockBoard) {
                     toastMessage = NSLocalizedString(@"LockBoardText", nil);
+                    self.whiteBoardTouchView.hidden = NO;
                 } else {
                     toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
+                    self.whiteBoardTouchView.hidden = YES;
                 }
                 [weakself showTipWithMessage:toastMessage];
                 

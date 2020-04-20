@@ -51,6 +51,7 @@ UnMuteBoardText = "老师已授权了你的白板权限";
 
 LockBoardText = "老师设置了白板跟随";
 UnlockBoardText = "老师解除了白板跟随";
+LockBoardTouchText = "老师正在控制白板，请勿书写";
 
 UpdateText = "版本已经更新了，请下载最新版本";
 

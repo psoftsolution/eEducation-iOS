@@ -15,8 +15,7 @@
 #import "BCNavigationView.h"
 #import "EEMessageView.h"
 #import "UIView+Toast.h"
-
-#define kLandscapeViewWidth    223
+#import "WhiteBoardTouchView.h"
 
 @interface BCViewController ()<BCSegmentedDelegate, UITextFieldDelegate, RoomProtocol, SignalDelegate, RTCDelegate, WhitePlayDelegate>
 
@@ -44,6 +43,9 @@
 @property (nonatomic, assign) BOOL isRenderShare;
 
 @property (nonatomic, assign) BOOL hasSignalReconnect;
+
+@property (nonatomic, weak) WhiteBoardTouchView *whiteBoardTouchView;
+
 @end
 
 @implementation BCViewController
@@ -388,6 +390,15 @@
         self.messageView.hidden = NO;
         self.handUpButton.hidden = NO;
     }
+    
+    WEAK(self);
+    WhiteBoardTouchView *whiteBoardTouchView = [WhiteBoardTouchView new];
+    [whiteBoardTouchView setupInView:self.boardView onTouchBlock:^{
+        NSString *toastMessage = NSLocalizedString(@"LockBoardTouchText", nil);
+        [weakself showTipWithMessage:toastMessage];
+    }];
+    self.whiteBoardTouchView = whiteBoardTouchView;
+    self.whiteBoardTouchView.hidden = YES;
 }
 
 - (void)handleDeviceOrientationChange:(NSNotification *)notification{
@@ -671,8 +682,10 @@
                 NSString *toastMessage;
                 if(roomInfoModel.room.lockBoard) {
                     toastMessage = NSLocalizedString(@"LockBoardText", nil);
+                    self.whiteBoardTouchView.hidden = NO;
                 } else {
                     toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
+                    self.whiteBoardTouchView.hidden = YES;
                 }
                 [weakself showTipWithMessage:toastMessage];
                 

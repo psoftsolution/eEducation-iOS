@@ -52,6 +52,7 @@ UnMuteBoardText = "teacher has authorized your whiteboard permissions";
 
 LockBoardText = "teacher sets whiteboard to follow";
 UnlockBoardText = "teacher lifted the whiteboard to follow";
+LockBoardTouchText = "the teacher is moving the whiteboard. Please do not draw on it";
 
 UpdateText = "version has been updated. Please download the new version";
 
