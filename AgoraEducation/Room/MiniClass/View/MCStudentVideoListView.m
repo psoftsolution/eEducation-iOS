@@ -74,6 +74,9 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if(IsPad){
+       return CGSizeMake(146, 108);
+    }
     return CGSizeMake(95, 70);
 }
 

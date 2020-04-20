@@ -142,14 +142,22 @@
     if (self.isChatTextFieldKeyboard) {
         CGRect frame = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
         float bottom = frame.size.height;
-        BOOL isIphoneX = (MAX(kScreenHeight, kScreenWidth) / MIN(kScreenHeight, kScreenWidth) > 1.78) ? YES : NO;
-        self.textFiledWidthCon.constant = isIphoneX ? kScreenWidth - 44 : kScreenWidth;
+        if(IsPad){
+            self.textFiledWidthCon.constant = kScreenWidth;
+        } else {
+            BOOL isIphoneX = (MAX(kScreenHeight, kScreenWidth) / MIN(kScreenHeight, kScreenWidth) > 1.78) ? YES : NO;
+            self.textFiledWidthCon.constant = isIphoneX ? kScreenWidth - 44 : kScreenWidth;
+        }
         self.textFiledBottomCon.constant = bottom;
     }
 }
 
 - (void)keyboardWillHidden:(NSNotification *)notification {
-    self.textFiledWidthCon.constant = 222;
+    if(IsPad){
+        self.textFiledWidthCon.constant = 292;
+    } else {
+        self.textFiledWidthCon.constant = 222;
+    }
     self.textFiledBottomCon.constant = 0;
 }
 
@@ -267,13 +275,15 @@
 }
 
 - (IBAction)chatRoomViewShowAndHide:(UIButton *)sender {
-    self.chatRoomViewRightCon.constant = sender.isSelected ? 0.f : 222.f;
-    self.textFiledRightCon.constant = sender.isSelected ? 0.f : 222.f;
-    self.chatRoomView.hidden = sender.isSelected ? NO : YES;
-    self.chatTextFiled.hidden = sender.isSelected ? NO : YES;
-    NSString *imageName = sender.isSelected ? @"view-close" : @"view-open";
-    [sender setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];
-    sender.selected = !sender.selected;
+    if(!IsPad) {
+        self.chatRoomViewRightCon.constant = sender.isSelected ? 0.f : 222.f;
+        self.textFiledRightCon.constant = sender.isSelected ? 0.f : 222.f;
+        self.chatRoomView.hidden = sender.isSelected ? NO : YES;
+        self.chatTextFiled.hidden = sender.isSelected ? NO : YES;
+        NSString *imageName = sender.isSelected ? @"view-close" : @"view-open";
+        [sender setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];
+        sender.selected = !sender.selected;
+    }
 }
 
 - (void)checkNeedRenderWithRole:(UserRoleType)roleType {

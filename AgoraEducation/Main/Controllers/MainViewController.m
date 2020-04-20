@@ -150,12 +150,26 @@
             [weakself getWhiteInfoWithSuccessBolck:^{
                 [weakself getRoomInfoWithSuccessBlock:^{
                     [weakself setupSignalWithSuccessBolck:^{
+                        
                         if(EduConfigModel.shareInstance.sceneType == SceneType1V1) {
-                            [weakself join1V1RoomWithIdentifier:@"oneToOneRoom"];
+                            if(IsPad){
+                                [weakself join1V1RoomWithIdentifier:@"oneToOneRoom-iPad"];
+                            } else {
+                                [weakself join1V1RoomWithIdentifier:@"oneToOneRoom"];
+                            }
                         } else if(EduConfigModel.shareInstance.sceneType == SceneTypeSmall){
-                            [weakself joinMinRoomWithIdentifier:@"mcRoom"];
+                            if(IsPad){
+                                [weakself joinMinRoomWithIdentifier:@"mcRoom-iPad"];
+                            } else {
+                                [weakself joinMinRoomWithIdentifier:@"mcRoom"];
+                            }
+                            
                         } else if(EduConfigModel.shareInstance.sceneType == SceneTypeBig){
-                            [weakself joinBigRoomWithIdentifier:@"bcroom"];
+                            if(IsPad){
+                                [weakself joinBigRoomWithIdentifier:@"bcroom-iPad"];
+                            } else {
+                                [weakself joinBigRoomWithIdentifier:@"bcroom"];
+                            }
                         }
                     }];
                 }];

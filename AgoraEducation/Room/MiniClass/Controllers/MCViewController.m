@@ -316,12 +316,14 @@
 }
 
 - (IBAction)messageViewshowAndHide:(UIButton *)sender {
-    self.infoManagerViewRightCon.constant = sender.isSelected ? 0.f : 222.f;
-    self.roomManagerView.hidden = sender.isSelected ? NO : YES;
-    self.chatTextFiled.hidden = sender.isSelected ? NO : YES;
-    NSString *imageName = sender.isSelected ? @"view-close" : @"view-open";
-    [sender setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];
-    sender.selected = !sender.selected;
+    if(!IsPad){
+        self.infoManagerViewRightCon.constant = sender.isSelected ? 0.f : 222.f;
+        self.roomManagerView.hidden = sender.isSelected ? NO : YES;
+        self.chatTextFiled.hidden = sender.isSelected ? NO : YES;
+        NSString *imageName = sender.isSelected ? @"view-close" : @"view-open";
+        [sender setImage:[UIImage imageNamed:imageName] forState:(UIControlStateNormal)];
+        sender.selected = !sender.selected;
+    }
 }
 
 - (void)checkNeedRenderWithRole:(UserRoleType)roleType {

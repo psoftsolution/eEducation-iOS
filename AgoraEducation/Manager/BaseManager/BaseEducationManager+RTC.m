@@ -138,10 +138,6 @@
             break;
     }
     
-    AgoraLogInfo(@"Agora Network Quality:%d", quality);
-    AgoraLogInfo(@"Agora Network txQuality:%d", txQuality);
-    AgoraLogInfo(@"Agora Network rxQuality:%d", rxQuality);
-    
     if([self.rtcDelegate respondsToSelector:@selector(rtcNetworkTypeGrade:)]) {
         [self.rtcDelegate rtcNetworkTypeGrade:grade];
     }
