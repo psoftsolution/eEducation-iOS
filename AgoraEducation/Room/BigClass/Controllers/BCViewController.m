@@ -91,7 +91,7 @@
     [self.educationManager getRoomInfoCompleteSuccessBlock:^(RoomInfoModel * _Nonnull roomInfoModel) {
         
         [weakself updateChatViews];
-        [weakself.educationManager disableCameraTransform:roomInfoModel.room.lockBoard];
+        [weakself disableCameraTransform:roomInfoModel.room.lockBoard];
 
         [weakself checkNeedRenderWithRole:UserRoleTypeTeacher];
         [weakself checkNeedRenderWithRole:UserRoleTypeStudent];
@@ -99,6 +99,20 @@
     } completeFailBlock:^(NSString * _Nonnull errMessage) {
  
     }];
+}
+
+- (void)disableCameraTransform:(BOOL)disableCameraTransform {
+    [self.educationManager disableCameraTransform:disableCameraTransform];
+    [self checkWhiteTouchViewVisible];
+}
+
+- (void)checkWhiteTouchViewVisible {
+    self.whiteBoardTouchView.hidden = YES;
+    
+    // follow
+    if(self.educationManager.roomModel.lockBoard) {
+        self.whiteBoardTouchView.hidden = NO;
+    }
 }
 
 - (void)setupRTC {
@@ -402,7 +416,6 @@
         [weakself showTipWithMessage:toastMessage];
     }];
     self.whiteBoardTouchView = whiteBoardTouchView;
-    self.whiteBoardTouchView.hidden = YES;
 }
 
 - (void)handleDeviceOrientationChange:(NSNotification *)notification{
@@ -544,7 +557,7 @@
     WEAK(self);
     [self.educationManager joinWhiteRoomWithBoardId:EduConfigModel.shareInstance.boardId boardToken:EduConfigModel.shareInstance.boardToken whiteWriteModel:NO completeSuccessBlock:^(WhiteRoom * _Nullable room) {
 
-        [weakself.educationManager disableCameraTransform:roomModel.lockBoard];
+        [weakself disableCameraTransform:roomModel.lockBoard];
         
     } completeFailBlock:^(NSError * _Nullable error) {
         [weakself showToast:NSLocalizedString(@"JoinWhiteErrorText", nil)];
@@ -686,15 +699,13 @@
                 NSString *toastMessage;
                 if(roomInfoModel.room.lockBoard) {
                     toastMessage = NSLocalizedString(@"LockBoardText", nil);
-                    self.whiteBoardTouchView.hidden = NO;
                 } else {
                     toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
-                    self.whiteBoardTouchView.hidden = YES;
                 }
                 [weakself showTipWithMessage:toastMessage];
                 
                 // show toast
-                [weakself.educationManager disableCameraTransform:roomInfoModel.room.lockBoard];
+                [weakself disableCameraTransform:roomInfoModel.room.lockBoard];
                 break;
             }
 

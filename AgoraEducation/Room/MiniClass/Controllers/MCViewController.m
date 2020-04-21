@@ -22,7 +22,6 @@
 #import "UIView+Toast.h"
 #import "WhiteBoardTouchView.h"
 
-#define kLandscapeViewWidth    222
 @interface MCViewController ()<UITextFieldDelegate,RoomProtocol, SignalDelegate, RTCDelegate, EEPageControlDelegate, EEWhiteboardToolDelegate, WhitePlayDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *infoManagerViewRightCon;
@@ -106,8 +105,8 @@
         [weakself updateTimeState];
         [weakself updateChatViews];
 
-        [weakself.educationManager disableCameraTransform:roomInfoModel.room.lockBoard];
-        [weakself.educationManager disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
+        [weakself disableCameraTransform:roomInfoModel.room.lockBoard];
+        [weakself disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
 
         [weakself checkNeedRenderWithRole:UserRoleTypeTeacher];
         [weakself checkNeedRenderWithRole:UserRoleTypeStudent];
@@ -115,6 +114,28 @@
     } completeFailBlock:^(NSString * _Nonnull errMessage) {
  
     }];
+}
+
+- (void)disableCameraTransform:(BOOL)disableCameraTransform {
+    [self.educationManager disableCameraTransform:disableCameraTransform];
+    [self checkWhiteTouchViewVisible];
+}
+
+- (void)checkWhiteTouchViewVisible {
+    self.whiteBoardTouchView.hidden = YES;
+    
+    // follow
+    if(self.educationManager.roomModel.lockBoard) {
+        // permission
+        if(self.educationManager.studentModel.grantBoard) {
+            self.whiteBoardTouchView.hidden = NO;
+        }
+    }
+}
+
+- (void)disableWhiteDeviceInputs:(BOOL)disable {
+    [self.educationManager disableWhiteDeviceInputs:disable];
+    [self checkWhiteTouchViewVisible];
 }
 
 - (void)setupRTC {
@@ -131,6 +152,7 @@
         [weakself checkNeedRenderWithRole:UserRoleTypeStudent];
     }];
 }
+
 
 - (void)setupSignalWithSuccessBolck:(void (^)(void))successBlock {
 
@@ -166,8 +188,8 @@
     WEAK(self);
     [self.educationManager joinWhiteRoomWithBoardId:EduConfigModel.shareInstance.boardId boardToken:EduConfigModel.shareInstance.boardToken whiteWriteModel:YES  completeSuccessBlock:^(WhiteRoom * _Nullable room) {
         
-        [weakself.educationManager disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
-        [weakself.educationManager disableCameraTransform:roomModel.lockBoard];
+        [weakself disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
+        [weakself disableCameraTransform:roomModel.lockBoard];
 
         [weakself.educationManager currentWhiteScene:^(NSInteger sceneCount, NSInteger sceneIndex) {
             weakself.sceneCount = sceneCount;
@@ -263,7 +285,6 @@
         [weakself showTipWithMessage:toastMessage];
     }];
     self.whiteBoardTouchView = whiteBoardTouchView;
-    self.whiteBoardTouchView.hidden = YES;
 }
 
 - (void)initStudentRenderBlock {
@@ -541,15 +562,13 @@
                 NSString *toastMessage;
                 if(roomInfoModel.room.lockBoard) {
                     toastMessage = NSLocalizedString(@"LockBoardText", nil);
-                    self.whiteBoardTouchView.hidden = NO;
                 } else {
                     toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
-                    self.whiteBoardTouchView.hidden = YES;
                 }
                 [weakself showTipWithMessage:toastMessage];
                 
                 // show toast
-                [weakself.educationManager disableCameraTransform:roomInfoModel.room.lockBoard];
+                [weakself disableCameraTransform:roomInfoModel.room.lockBoard];
                 break;
             }
             case SignalValueMuteBoard:
@@ -568,7 +587,7 @@
                 [self.educationManager refreshStudentModelArray];
                 [self.studentListView updateStudentArray:self.educationManager.studentListArray];
                 
-                [weakself.educationManager disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
+                [weakself disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
                 break;
             }
             case SignalValueStartCourse:
