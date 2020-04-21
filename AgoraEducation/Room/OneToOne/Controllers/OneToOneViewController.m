@@ -16,6 +16,7 @@
 #import "OTOTeacherView.h"
 #import "OTOStudentView.h"
 #import "UIView+Toast.h"
+#import "WhiteBoardTouchView.h"
 
 @interface OneToOneViewController ()<UITextFieldDelegate, RoomProtocol, SignalDelegate, RTCDelegate, EEPageControlDelegate, EEWhiteboardToolDelegate, WhitePlayDelegate>
 
@@ -45,6 +46,8 @@
 
 @property (nonatomic, assign) BOOL isChatTextFieldKeyboard;
 @property (nonatomic, assign) BOOL hasSignalReconnect;
+
+@property (nonatomic, weak) WhiteBoardTouchView *whiteBoardTouchView;
 
 @end
 
@@ -96,7 +99,7 @@
         
         [weakself updateTimeState];
         [weakself updateChatViews];
-        [weakself.educationManager disableCameraTransform:roomInfoModel.room.lockBoard];
+        [weakself disableCameraTransform:roomInfoModel.room.lockBoard];
         [weakself checkNeedRenderWithRole:UserRoleTypeTeacher];
         [weakself checkNeedRenderWithRole:UserRoleTypeStudent];
         
@@ -131,6 +134,14 @@
     
     self.tipLabel.layer.backgroundColor = [UIColor colorWithHexString:@"000000" alpha:0.7].CGColor;
     self.tipLabel.layer.cornerRadius = 6;
+    
+    WEAK(self);
+    WhiteBoardTouchView *whiteBoardTouchView = [WhiteBoardTouchView new];
+    [whiteBoardTouchView setupInView:self.boardView onTouchBlock:^{
+        NSString *toastMessage = NSLocalizedString(@"LockBoardTouchText", nil);
+        [weakself showTipWithMessage:toastMessage];
+    }];
+    self.whiteBoardTouchView = whiteBoardTouchView;
 }
 
 - (void)addNotification {
@@ -169,7 +180,7 @@
     WEAK(self);
     [self.educationManager joinWhiteRoomWithBoardId:EduConfigModel.shareInstance.boardId boardToken:EduConfigModel.shareInstance.boardToken whiteWriteModel:YES  completeSuccessBlock:^(WhiteRoom * _Nullable room) {
     
-        [weakself.educationManager disableCameraTransform:roomModel.lockBoard];
+        [weakself disableCameraTransform:roomModel.lockBoard];
         [weakself.educationManager disableWhiteDeviceInputs:NO];
         [weakself.educationManager currentWhiteScene:^(NSInteger sceneCount, NSInteger sceneIndex) {
             weakself.sceneCount = sceneCount;
@@ -182,6 +193,20 @@
         
         [weakself showToast:NSLocalizedString(@"JoinWhiteErrorText", nil)];
     }];
+}
+
+- (void)disableCameraTransform:(BOOL)disableCameraTransform {
+    [self.educationManager disableCameraTransform:disableCameraTransform];
+    [self checkWhiteTouchViewVisible];
+}
+
+- (void)checkWhiteTouchViewVisible {
+    self.whiteBoardTouchView.hidden = YES;
+    
+    // follow
+    if(self.educationManager.roomModel.lockBoard) {
+        self.whiteBoardTouchView.hidden = NO;
+    }
 }
 
 - (void)updateTeacherViews:(UserModel*)teacherModel {
@@ -503,7 +528,7 @@
                 }
                 [weakself showTipWithMessage:toastMessage];
                 
-                [weakself.educationManager disableCameraTransform:roomInfoModel.room.lockBoard];
+                [weakself disableCameraTransform:roomInfoModel.room.lockBoard];
                 break;
             }
             case SignalValueStartCourse:

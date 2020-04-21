@@ -101,6 +101,7 @@
 		78515D5523FCFEFC0015B5EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78515D4C23FCFEFC0015B5EC /* Main.storyboard */; };
 		78515D6C23FCFFB00015B5EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 78515D6E23FCFFB00015B5EC /* InfoPlist.strings */; };
 		78515D7023FCFFB70015B5EC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 78515D7223FCFFB70015B5EC /* Localizable.strings */; };
+		7858730F244E9C6E00C9A741 /* WhiteBoardTouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7858730D244E9C6D00C9A741 /* WhiteBoardTouchView.m */; };
 		786752E52431964B0070C916 /* OSSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 786752E42431964B0070C916 /* OSSManager.m */; };
 		786752E82431ACEA0070C916 /* LogParamsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 786752E72431ACE90070C916 /* LogParamsModel.m */; };
 		786752EB2431C5480070C916 /* SettingUploadViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 786752EA2431C5480070C916 /* SettingUploadViewCell.m */; };
@@ -343,6 +344,8 @@
 		78515D7423FD00350015B5EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		78515D7523FD003A0015B5EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Room.strings; sourceTree = "<group>"; };
 		78515D7823FD00E00015B5EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		7858730D244E9C6D00C9A741 /* WhiteBoardTouchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteBoardTouchView.m; sourceTree = "<group>"; };
+		7858730E244E9C6E00C9A741 /* WhiteBoardTouchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteBoardTouchView.h; sourceTree = "<group>"; };
 		786752E32431964B0070C916 /* OSSManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSSManager.h; sourceTree = "<group>"; };
 		786752E42431964B0070C916 /* OSSManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OSSManager.m; sourceTree = "<group>"; };
 		786752E62431ACE90070C916 /* LogParamsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogParamsModel.h; sourceTree = "<group>"; };
@@ -797,6 +800,8 @@
 		7844405B241AA2DE0060FB91 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7858730E244E9C6E00C9A741 /* WhiteBoardTouchView.h */,
+				7858730D244E9C6D00C9A741 /* WhiteBoardTouchView.m */,
 				78444069241AA2DE0060FB91 /* EEWhiteboardTool.h */,
 				7844405D241AA2DE0060FB91 /* EEWhiteboardTool.m */,
 				7844406C241AA2DE0060FB91 /* EEWhiteboardTool.xib */,
@@ -1409,6 +1414,7 @@
 				784440B4241AA2DF0060FB91 /* EnterRoomAllModel.m in Sources */,
 				784440EE241AA2DF0060FB91 /* ReplayViewController.m in Sources */,
 				7868BFFB242DC7AD00644807 /* fileenc.c in Sources */,
+				7858730F244E9C6E00C9A741 /* WhiteBoardTouchView.m in Sources */,
 				784440C9241AA2DF0060FB91 /* BCSegmentedView.m in Sources */,
 				784440C0241AA2DF0060FB91 /* BaseEducationManager.m in Sources */,
 				784440ED241AA2DF0060FB91 /* EduButton.m in Sources */,

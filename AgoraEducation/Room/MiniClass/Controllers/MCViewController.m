@@ -20,8 +20,8 @@
 #import <Whiteboard/Whiteboard.h>
 #import "MCStudentVideoCell.h"
 #import "UIView+Toast.h"
+#import "WhiteBoardTouchView.h"
 
-#define kLandscapeViewWidth    222
 @interface MCViewController ()<UITextFieldDelegate,RoomProtocol, SignalDelegate, RTCDelegate, EEPageControlDelegate, EEWhiteboardToolDelegate, WhitePlayDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *infoManagerViewRightCon;
@@ -51,6 +51,9 @@
 
 @property (nonatomic, assign) BOOL isChatTextFieldKeyboard;
 @property (nonatomic, assign) BOOL hasSignalReconnect;
+
+@property (nonatomic, weak) WhiteBoardTouchView *whiteBoardTouchView;
+
 @end
 
 @implementation MCViewController
@@ -103,8 +106,8 @@
         [weakself updateTimeState];
         [weakself updateChatViews];
 
-        [weakself.educationManager disableCameraTransform:roomInfoModel.room.lockBoard];
-        [weakself.educationManager disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
+        [weakself disableCameraTransform:roomInfoModel.room.lockBoard];
+        [weakself disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
 
         [weakself checkNeedRenderWithRole:UserRoleTypeTeacher];
         [weakself checkNeedRenderWithRole:UserRoleTypeStudent];
@@ -112,6 +115,28 @@
     } completeFailBlock:^(NSString * _Nonnull errMessage) {
  
     }];
+}
+
+- (void)disableCameraTransform:(BOOL)disableCameraTransform {
+    [self.educationManager disableCameraTransform:disableCameraTransform];
+    [self checkWhiteTouchViewVisible];
+}
+
+- (void)checkWhiteTouchViewVisible {
+    self.whiteBoardTouchView.hidden = YES;
+    
+    // follow
+    if(self.educationManager.roomModel.lockBoard) {
+        // permission
+        if(self.educationManager.studentModel.grantBoard) {
+            self.whiteBoardTouchView.hidden = NO;
+        }
+    }
+}
+
+- (void)disableWhiteDeviceInputs:(BOOL)disable {
+    [self.educationManager disableWhiteDeviceInputs:disable];
+    [self checkWhiteTouchViewVisible];
 }
 
 - (void)setupRTC {
@@ -163,8 +188,8 @@
     WEAK(self);
     [self.educationManager joinWhiteRoomWithBoardId:EduConfigModel.shareInstance.boardId boardToken:EduConfigModel.shareInstance.boardToken whiteWriteModel:YES  completeSuccessBlock:^(WhiteRoom * _Nullable room) {
         
-        [weakself.educationManager disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
-        [weakself.educationManager disableCameraTransform:roomModel.lockBoard];
+        [weakself disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
+        [weakself disableCameraTransform:roomModel.lockBoard];
 
         [weakself.educationManager currentWhiteScene:^(NSInteger sceneCount, NSInteger sceneIndex) {
             weakself.sceneCount = sceneCount;
@@ -252,6 +277,15 @@
     
     self.tipLabel.layer.backgroundColor = [UIColor colorWithHexString:@"000000" alpha:0.7].CGColor;
     self.tipLabel.layer.cornerRadius = 6;
+    
+    WEAK(self);
+    WhiteBoardTouchView *whiteBoardTouchView = [WhiteBoardTouchView new];
+    [whiteBoardTouchView setupInView:self.boardView onTouchBlock:^{
+        NSString *toastMessage = NSLocalizedString(@"LockBoardTouchText", nil);
+        [weakself showTipWithMessage:toastMessage];
+    }];
+    self.whiteBoardTouchView = whiteBoardTouchView;
+    self.whiteBoardTouchView.hidden = YES;
 }
 
 - (void)initStudentRenderBlock {
@@ -535,7 +569,7 @@
                 [weakself showTipWithMessage:toastMessage];
                 
                 // show toast
-                [weakself.educationManager disableCameraTransform:roomInfoModel.room.lockBoard];
+                [weakself disableCameraTransform:roomInfoModel.room.lockBoard];
                 break;
             }
             case SignalValueMuteBoard:
@@ -554,7 +588,7 @@
                 [self.educationManager refreshStudentModelArray];
                 [self.studentListView updateStudentArray:self.educationManager.studentListArray];
                 
-                [weakself.educationManager disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
+                [weakself disableWhiteDeviceInputs:!weakself.educationManager.studentModel.grantBoard];
                 break;
             }
             case SignalValueStartCourse:
