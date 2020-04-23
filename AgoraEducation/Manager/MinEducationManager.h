@@ -21,12 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) RoomModel * _Nullable roomModel;
 
 @property (nonatomic, strong) NSArray<UserModel*> *studentTotleListArray;
-@property (nonatomic, strong) NSMutableArray<UserModel*> *studentListArray;
-@property (nonatomic, strong) NSMutableSet<NSString*> *rtcUids;
 @property (nonatomic, strong) NSMutableArray<RTCVideoSessionModel*> *rtcVideoSessionModels;
-
-
-- (void)refreshStudentModelArray;
 
 /* ==================================>RTCManager<================================ */
 - (int)setRTCRemoteStreamWithUid:(NSUInteger)uid type:(RTCVideoStreamType)streamType;

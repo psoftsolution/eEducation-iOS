@@ -77,7 +77,7 @@
     if(messageModel.cellHeight > 0){
         return messageModel.cellHeight;
     }
-    NSString *str = messageModel.content;
+    NSString *str = messageModel.message;
     if(str == nil){
         str = @"";
     }

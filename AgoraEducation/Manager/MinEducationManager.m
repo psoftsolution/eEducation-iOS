@@ -16,21 +16,10 @@
 
 - (instancetype)init {
     if(self = [super init]) {
-        self.rtcUids = [NSMutableSet set];
         self.rtcVideoSessionModels = [NSMutableArray array];
         self.studentTotleListArray = [NSArray array];
-        self.studentListArray = [NSMutableArray array];
     }
     return self;
-}
-
-- (void)refreshStudentModelArray {
-    self.studentListArray = [NSMutableArray array];
-    for (UserModel *studentInfoModel in self.studentTotleListArray) {
-        if([self.rtcUids containsObject:@(studentInfoModel.uid).stringValue]){
-            [self.studentListArray addObject:[studentInfoModel yy_modelCopy]];
-        }
-    }
 }
 
 #pragma mark GlobalStates

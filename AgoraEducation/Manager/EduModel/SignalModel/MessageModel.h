@@ -14,8 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MessageInfoModel : NSObject
 
 // for message
-@property (nonatomic, strong) NSString *account;
-@property (nonatomic, strong) NSString *content;
+@property (nonatomic, strong) NSString *userId; // from
+@property (nonatomic, strong) NSString *userName;
+@property (nonatomic, strong) NSString *message;
 @property (nonatomic, assign) BOOL isSelfSend;
 @property (nonatomic, assign) CGFloat cellHeight;
 
@@ -25,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface MessageModel : NSObject
+// MessageCmdTypeChat
 @property (nonatomic, assign) MessageCmdType cmd;
 @property (nonatomic, strong) MessageInfoModel *data;
 @end

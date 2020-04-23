@@ -56,17 +56,14 @@
     NSMutableAttributedString *contentString;
 
     if(messageModel.recordId != nil && messageModel.recordId.length > 0) {
-        
-        messageModel.content = NSLocalizedString(@"ReplayRecordingText", nil);
-        
-        contentString = [[NSMutableAttributedString alloc] initWithString:messageModel.content attributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)}];
+        contentString = [[NSMutableAttributedString alloc] initWithString:messageModel.message attributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)}];
        
     } else {
-        contentString = [[NSMutableAttributedString alloc] initWithString:messageModel.content];
+        contentString = [[NSMutableAttributedString alloc] initWithString:messageModel.message];
     }
 
     if (messageModel.isSelfSend) {
-        CGSize size =  [self sizeWithContent:messageModel.content];
+        CGSize size =  [self sizeWithContent:messageModel.message];
         self.rightViewWidthCon.constant = (size.width + 25) > self.cellWidth ? self.cellWidth : size.width + 25;
         [self.rightContentLabel setAttributedText:contentString];
         self.rightView.hidden = NO;
@@ -75,7 +72,7 @@
         self.leftContentLabel.hidden = YES;
         self.nameLabel.textAlignment = NSTextAlignmentRight;
     } else {
-        CGSize size =  [self sizeWithContent: messageModel.content];
+        CGSize size =  [self sizeWithContent: messageModel.message];
         self.leftViewWidthCon.constant = size.width + 25 > self.cellWidth ? self.cellWidth : size.width +25;
         [self.leftContentLabel setAttributedText:contentString];
         self.rightView.hidden = YES;
@@ -85,7 +82,7 @@
         self.nameLabel.textAlignment = NSTextAlignmentLeft;
     }
     
-    [self.nameLabel setText:messageModel.account];
+    [self.nameLabel setText:messageModel.userName];
 }
 
 - (CGSize)sizeWithContent:(NSString *)string {

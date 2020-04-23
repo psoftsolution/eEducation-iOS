@@ -7,15 +7,17 @@
 //
 
 typedef NS_ENUM(NSInteger, MessageCmdType) {
-    MessageCmdTypeChat          = 1,
-    MessageCmdTypeUpdate        = 2, // user notice
-    MessageCmdTypeReplay        = 3,
-    MessageCmdTypeCourse        = 4, // class notice
+    MessageCmdTypeChat                  = 1,
+    MessageCmdTypeUserOnline            = 2,
+    MessageCmdTypeRoomInfo              = 3,
+    MessageCmdTypeUserInfo              = 4,
+    MessageCmdTypeReplay                = 5,
+    MessageCmdTypeShareScreen           = 6,
 };
 
-typedef NS_ENUM(NSInteger, SignalValueType) {
+typedef NS_ENUM(NSInteger, SignalType) {
     SignalValueCancelCoVideo = 108,  // 下麦
-    SignalValueAcceptCoVideo = 106,  // 授权连麦
+    SignalValueAcceptCoVideo = 106,  // 上麦
     SignalValueMuteAudio = 101,   // 禁音频
     SignalValueUnmuteAudio = 102, // 解禁音频
     SignalValueMuteVideo = 103,   // 禁视频
@@ -31,6 +33,7 @@ typedef NS_ENUM(NSInteger, SignalValueType) {
     SignalValueMuteAllChat = 501, //全员禁言
     SignalValueUnmuteAllChat = 502, //全员解除禁言
 };
+
 
 typedef NS_ENUM(NSInteger, StudentLinkState) {
     StudentLinkStateIdle,

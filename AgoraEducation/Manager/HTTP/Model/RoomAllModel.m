@@ -8,9 +8,6 @@
 
 #import "RoomAllModel.h"
 
-@implementation UserModel
-@end
-
 @implementation RoomModel
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return @{@"coVideoUsers" : [UserModel class]};

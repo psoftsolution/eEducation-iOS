@@ -18,8 +18,6 @@
 
 - (instancetype)init {
     if(self = [super init]) {
-        self.renderStudentModels = [NSMutableArray array];
-        self.rtcUids = [NSMutableSet set];
         self.rtcVideoSessionModels = [NSMutableArray array];
     }
     return self;
@@ -30,9 +28,7 @@
     
     WEAK(self);
     [super getRoomInfoCompleteSuccessBlock:^(RoomInfoModel * _Nonnull roomInfoModel) {
-        
-        weakself.renderStudentModels = [NSMutableArray array];
-        
+
         weakself.roomModel = roomInfoModel.room;
         weakself.studentModel = roomInfoModel.localUser;
         
@@ -41,7 +37,7 @@
                if(userModel.role == UserRoleTypeTeacher) {
                    weakself.teacherModel = userModel;
                } else if(userModel.role == UserRoleTypeStudent) {
-                   [weakself.renderStudentModels addObject:[userModel yy_modelCopy]];
+                   weakself.renderStudentModel = userModel;
                }
             }
         }
@@ -56,11 +52,8 @@
     WEAK(self);
     [super updateEnableChatWithValue:enableChat completeSuccessBlock:^{
         weakself.studentModel.enableChat = enableChat;
-        for (UserModel *model in weakself.renderStudentModels) {
-            if(model.uid == weakself.studentModel.uid){
-                model.enableChat = enableChat;
-                break;
-            }
+        if(weakself.renderStudentModel.uid == weakself.studentModel.uid){
+            weakself.renderStudentModel.enableChat = enableChat;
         }
         
         if(successBlock != nil) {
@@ -73,12 +66,7 @@
     WEAK(self);
     [super updateEnableVideoWithValue:enableVideo completeSuccessBlock:^{
         weakself.studentModel.enableVideo = enableVideo;
-        for (UserModel *model in weakself.renderStudentModels) {
-            if(model.uid == weakself.studentModel.uid){
-                model.enableVideo = enableVideo;
-                break;
-            }
-        }
+        weakself.renderStudentModel.enableVideo = enableVideo;
         
         if(successBlock != nil) {
             successBlock();
@@ -90,13 +78,8 @@
     WEAK(self);
     [super updateEnableAudioWithValue:enableAudio completeSuccessBlock:^{
         weakself.studentModel.enableAudio = enableAudio;
-        for (UserModel *model in weakself.renderStudentModels) {
-            if(model.uid == weakself.studentModel.uid){
-                model.enableAudio = enableAudio;
-                break;
-            }
-        }
-        
+        weakself.renderStudentModel.enableAudio = enableAudio;
+
         if(successBlock != nil) {
             successBlock();
         }
@@ -112,12 +95,10 @@
     [self updateUserInfoWithParams:params completeSuccessBlock:^{
         
         weakself.studentModel.coVideo = coVideo;
-        for (UserModel *model in weakself.renderStudentModels) {
-            if(model.uid == weakself.studentModel.uid){
-                model.coVideo = coVideo;
-                break;
-            }
+        if(weakself.renderStudentModel.uid == weakself.studentModel.uid){
+            weakself.renderStudentModel.coVideo = coVideo;
         }
+
         
         if(successBlock != nil) {
             successBlock();

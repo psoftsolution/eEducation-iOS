@@ -16,7 +16,7 @@
 
 - (instancetype)init {
     if(self = [super init]) {
-        self.rtcUids = [NSMutableSet set];
+//        self.rtcUids = [NSMutableSet set];
         self.rtcVideoSessionModels = [NSMutableArray array];
     }
     return self;

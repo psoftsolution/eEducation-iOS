@@ -7,26 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UserModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface UserModel : NSObject
-@property (nonatomic, strong) NSString *userId;
-@property (nonatomic, strong) NSString *userName;
-@property (nonatomic, assign) NSInteger role;
-@property (nonatomic, assign) NSInteger enableChat;
-@property (nonatomic, assign) NSInteger enableVideo;
-@property (nonatomic, assign) NSInteger enableAudio;
-@property (nonatomic, assign) NSInteger uid;
-@property (nonatomic, assign) NSInteger grantBoard;// 1=granted 0=no grant
-@property (nonatomic, assign) NSInteger coVideo;// 1=linked 0=no link
-
-@property (nonatomic, assign) NSInteger screenId;
-@property (nonatomic, strong) NSString *rtcToken;
-@property (nonatomic, strong) NSString *rtmToken;
-@property (nonatomic, strong) NSString *screenToken;
-
-@end
 
 @interface RoomModel : NSObject
 @property (nonatomic, strong) NSString *roomId;
