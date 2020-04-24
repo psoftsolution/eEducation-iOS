@@ -19,7 +19,8 @@ InputMessageText = " input message";
 QuitClassroomText = "quit classroom?";
 
 AcceptRequestText = "teacher accept your interactive request!";
-CancelRequestText = "teacher cancel your interactive!";
+RejectRequestText = "teacher cancel your interactive!";
+TeaCloseCoVideoText = "teacher close your interactive!";
 
 MaterialsAreaText = "Materials area";
 ChatroomText = "Chatroom";
@@ -40,6 +41,7 @@ LeftRoomFailedText = "left room failed";
 GetRoomInfoFailedText = "get room info failed";
 GetWhiteInfoFailedText = "get white info failed";
 UpdateRoomInfoFailedText = "update room info failed";
+UpdateCoVideoFailedText = "update coVideo info failed";
 RequestReplayFailedText = "request replay info failed";
 SendMessageFailedText = "send message failed";
 SendPeerMessageFailedText = "send peer message failed";

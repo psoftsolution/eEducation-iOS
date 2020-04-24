@@ -54,6 +54,10 @@ extern EnvType env;
 // /edu/v1/apps/{appId}/room/{roomId}/chat
 #define HTTP_USER_INSTANT_MESSAGE @"%@/edu/v1/apps/%@/room/%@/chat"
 
+// http: covideo
+// /edu/v1/apps/{appId}/room/{roomId}/covideo
+#define HTTP_USER_COVIDEO @"%@/edu/v1/apps/%@/room/%@/covideo"
+
 // http: get replay info
 // /edu/v1/apps/{appId}/room/{roomId}/record/{recordId}
 #define HTTP_GET_REPLAY_INFO @"%@/edu/v1/apps/%@/room/%@/record/%@"

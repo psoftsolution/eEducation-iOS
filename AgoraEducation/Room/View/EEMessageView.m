@@ -28,7 +28,6 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.backgroundColor = [UIColor yellowColor];
     UITableView *messageTableView = [[UITableView alloc] initWithFrame:CGRectZero style:(UITableViewStylePlain)];
     messageTableView.delegate = self;
     messageTableView.dataSource =self;

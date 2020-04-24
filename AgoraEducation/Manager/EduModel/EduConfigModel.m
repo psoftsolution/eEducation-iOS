@@ -61,5 +61,4 @@ static EduConfigModel *manager = nil;
     return msg;
 }
 
-
 @end

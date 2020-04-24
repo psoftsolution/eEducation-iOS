@@ -98,11 +98,6 @@
         // init role render
         [self checkNeedRenderWithRole:UserRoleTypeTeacher];
         [self checkNeedRenderWithRole:UserRoleTypeStudent];
-        
-        // init share screen
-        if(self.educationManager.teacherModel != nil && self.educationManager.teacherModel.screenId > 0) {
-            [self renderShareCanvas:self.educationManager.teacherModel.screenId];
-        }
     }
 }
 
@@ -210,15 +205,16 @@
 }
 
 - (void)updateTeacherViews:(UserModel*)teacherModel {
-    if(teacherModel == nil){
-        return;
+    if(teacherModel != nil){
+        self.teacherVideoView.defaultImageView.hidden = teacherModel.enableVideo ? YES : NO;
+        NSString *imageName = teacherModel.enableAudio ? @"icon-speaker3-max" : @"icon-speakeroff-dark";
+        [self.teacherVideoView updateSpeakerImageName: imageName];
+        [self.teacherVideoView updateUserName:teacherModel.userName];
+    } else {
+        self.teacherVideoView.defaultImageView.hidden = NO;
+        [self.teacherVideoView updateSpeakerImageName: @"icon-speakeroff-dark"];
+        [self.teacherVideoView updateUserName:@""];
     }
-    
-    // update teacher views
-    self.teacherVideoView.defaultImageView.hidden = teacherModel.enableVideo ? YES : NO;
-    NSString *imageName = teacherModel.enableAudio ? @"icon-speaker3-max" : @"icon-speakeroff-dark";
-    [self.teacherVideoView updateSpeakerImageName: imageName];
-    [self.teacherVideoView updateUserName:teacherModel.userName];
 }
 
 - (void)updateTimeState {
@@ -369,11 +365,9 @@
     
     if(roleType == UserRoleTypeTeacher) {
         UserModel *teacherModel = self.educationManager.teacherModel;
+        [self updateTeacherViews:teacherModel];
         if(teacherModel != nil) {
-            [self updateTeacherViews:teacherModel];
             [self renderTeacherCanvas:teacherModel.uid];
-        } else {
-            [self removeTeacherCanvas];
         }
     } else if(roleType == UserRoleTypeStudent) {
        [self reloadStudentViews];
@@ -388,11 +382,6 @@
     model.canvasType = RTCVideoCanvasTypeRemote;
     [self.educationManager setRTCRemoteStreamWithUid:model.uid type:RTCVideoStreamTypeLow];
     [self.educationManager setupRTCVideoCanvas:model completeBlock:nil];
-}
-
-- (void)removeTeacherCanvas {
-    self.teacherVideoView.defaultImageView.hidden = NO;
-    [self.teacherVideoView updateUserName:@""];
 }
 
 - (void)renderShareCanvas:(NSUInteger)uid {
@@ -552,12 +541,13 @@
             [currentStudentModels addObject:userModel];
         }
     }
-    self.educationManager.studentTotleListArray = [NSArray arrayWithArray:currentStudentModels];;
+    self.educationManager.studentTotleListArray = [NSArray arrayWithArray:currentStudentModels];
     
     // co
     if ((originalTeacherModel == nil && currentTeacherModel != nil)
         || (originalTeacherModel != nil && currentTeacherModel == nil)) {
-        originalTeacherModel = currentTeacherModel.yy_modelCopy;
+        self.educationManager.teacherModel = currentTeacherModel.yy_modelCopy;
+        originalTeacherModel = self.educationManager.teacherModel;
         [self checkNeedRenderWithRole:UserRoleTypeTeacher];
     }
     
@@ -575,7 +565,8 @@
     }
     
     // reload students
-    originalStudentModel = currentStudentModel.yy_modelCopy;
+    self.educationManager.studentModel = currentStudentModel.yy_modelCopy;
+    originalStudentModel = self.educationManager.studentModel;
     [self checkNeedRenderWithRole:UserRoleTypeStudent];
     
     // mute & unmute
@@ -640,8 +631,12 @@
 }
 
 #pragma mark RTCDelegate
+- (void)rtcDidJoinedOfUid:(NSUInteger)uid {
+    if(self.educationManager.teacherModel && uid == self.educationManager.teacherModel.screenId) {
+        [self renderShareCanvas: uid];
+    }
+}
 - (void)rtcNetworkTypeGrade:(RTCNetworkGrade)grade {
-    
     switch (grade) {
         case RTCNetworkGradeHigh:
             [self.navigationView updateSignalImageName:@"icon-signal3"];

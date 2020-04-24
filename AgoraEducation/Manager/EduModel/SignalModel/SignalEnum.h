@@ -34,10 +34,13 @@ typedef NS_ENUM(NSInteger, SignalType) {
     SignalValueUnmuteAllChat = 502, //全员解除禁言
 };
 
-
-typedef NS_ENUM(NSInteger, StudentLinkState) {
-    StudentLinkStateIdle,
-    StudentLinkStateApply,
-    StudentLinkStateAccept,
-    StudentLinkStateReject
+// covideo state
+typedef NS_ENUM(NSInteger, SignalLinkState) {
+    SignalLinkStateIdle             = 0,
+    SignalLinkStateApply            = 1,
+    SignalLinkStateTeaReject           = 2,
+    SignalLinkStateStuCancel        = 3, // Cancel Apply
+    SignalLinkStateTeaAccept        = 4, // linked
+    SignalLinkStateStuClose         = 5, // student close link
+    SignalLinkStateTeaClose         = 6, // teacher close link
 };

@@ -42,6 +42,7 @@
 		783FB704240D12BA007298C1 /* ConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB6FF240D12BA007298C1 /* ConfigModel.m */; };
 		783FB705240D12BA007298C1 /* RoomAllModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB700240D12BA007298C1 /* RoomAllModel.m */; };
 		7868BFC7242CC80E00644807 /* KeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7868BFC6242CC80E00644807 /* KeyCenter.m */; };
+		786B2E4B2452C72B0095FAC7 /* NSArray+Copy.m in Sources */ = {isa = PBXBuildFile; fileRef = 786B2E4A2452C72B0095FAC7 /* NSArray+Copy.m */; };
 		7878B4AF23FA655300AF1B4F /* Room.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7878B4AC23FA655300AF1B4F /* Room.storyboard */; };
 		7878B4C523FA72EE00AF1B4F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7878B4C723FA72EE00AF1B4F /* Localizable.strings */; };
 		7878B4CB23FA735700AF1B4F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7878B4CD23FA735700AF1B4F /* InfoPlist.strings */; };
@@ -244,6 +245,8 @@
 		783FB701240D12BA007298C1 /* CommonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonModel.h; sourceTree = "<group>"; };
 		7868BFC5242CC80E00644807 /* KeyCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyCenter.h; sourceTree = "<group>"; };
 		7868BFC6242CC80E00644807 /* KeyCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyCenter.m; sourceTree = "<group>"; };
+		786B2E492452C72B0095FAC7 /* NSArray+Copy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Copy.h"; sourceTree = "<group>"; };
+		786B2E4A2452C72B0095FAC7 /* NSArray+Copy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Copy.m"; sourceTree = "<group>"; };
 		7878B4AD23FA655300AF1B4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Room.storyboard; sourceTree = "<group>"; };
 		7878B4B023FA656000AF1B4F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Room.strings; sourceTree = "<group>"; };
 		7878B4B123FA656300AF1B4F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Room.strings"; sourceTree = "<group>"; };
@@ -818,6 +821,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		786B2E482452C72B0095FAC7 /* NSArray+Copy */ = {
+			isa = PBXGroup;
+			children = (
+				786B2E492452C72B0095FAC7 /* NSArray+Copy.h */,
+				786B2E4A2452C72B0095FAC7 /* NSArray+Copy.m */,
+			);
+			path = "NSArray+Copy";
+			sourceTree = "<group>";
+		};
 		7878B4A823FA655300AF1B4F /* Room */ = {
 			isa = PBXGroup;
 			children = (
@@ -1047,6 +1059,7 @@
 		78D730C423B3853200D2146C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				786B2E482452C72B0095FAC7 /* NSArray+Copy */,
 				78BEDCD1244DA82A008A2625 /* SSZipArchive */,
 				783FB6CC240D0746007298C1 /* AlertView */,
 				783FB6D2240D0746007298C1 /* Badge */,
@@ -1428,6 +1441,7 @@
 				78BEDCFD244DA82A008A2625 /* ioapi.c in Sources */,
 				78D7311523B388B100D2146C /* MCSegmentedView.m in Sources */,
 				783FB6C7240D0739007298C1 /* BaseEducationManager.m in Sources */,
+				786B2E4B2452C72B0095FAC7 /* NSArray+Copy.m in Sources */,
 				781786B62450450C00677D51 /* SignalUserModel.m in Sources */,
 				78BEDD03244DA82A008A2625 /* aescrypt.c in Sources */,
 				1AEDE5DD2338C0B40096ADEC /* EyeCareModeUtil.m in Sources */,

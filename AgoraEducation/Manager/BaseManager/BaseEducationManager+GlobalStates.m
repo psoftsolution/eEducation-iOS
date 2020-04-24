@@ -118,7 +118,41 @@
     }];
 }
 
++ (void)sendCoVideoWithType:(SignalLinkState)linkState successBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
+    
+    if(linkState == SignalLinkStateIdle) {
+        return;
+    }
+    
+    NSString *url = [NSString stringWithFormat:HTTP_USER_COVIDEO, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"type"] = @(linkState);
 
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    headers[@"token"] = EduConfigModel.shareInstance.userToken;
+    headers[@"Authorization"] = [KeyCenter authorization];
+    
+    [HttpManager post:url params:params headers:headers success:^(id responseObj) {
+        
+        CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0){
+            if(successBlock != nil){
+                successBlock();
+            }
+        } else {
+            if(failBlock != nil) {
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateCoVideoFailedText", nil) errorCode:model.code];
+                failBlock(errMsg);
+            }
+        }
+        
+    } failure:^(NSError *error) {
+        if(failBlock != nil) {
+            failBlock(error.description);
+        }
+    }];
+}
 
 + (void)leftRoomWithSuccessBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
