@@ -16,31 +16,26 @@ typedef NS_ENUM(NSInteger, MessageCmdType) {
 };
 
 typedef NS_ENUM(NSInteger, SignalType) {
-    SignalValueCancelCoVideo = 108,  // 下麦
-    SignalValueAcceptCoVideo = 106,  // 上麦
-    SignalValueMuteAudio = 101,   // 禁音频
-    SignalValueUnmuteAudio = 102, // 解禁音频
-    SignalValueMuteVideo = 103,   // 禁视频
-    SignalValueUnmuteVideo = 104, // 解禁视频
-    SignalValueMuteChat = 109,    // 禁聊天
-    SignalValueUnmuteChat = 110,  // 解禁聊天
-    SignalValueMuteBoard = 200,   // 禁白板
-    SignalValueUnmuteBoard = 201, // 解禁白板
-    SignalValueLockBoard = 301,   // 锁定白板
-    SignalValueUnlockBoard = 302, // 解锁白板
-    SignalValueStartCourse = 401, // 开始上课
-    SignalValueEndCourse = 402, //结束上课
-    SignalValueMuteAllChat = 501, //全员禁言
-    SignalValueUnmuteAllChat = 502, //全员解除禁言
+    SignalValueCoVideo,         // 上/下麦
+    SignalValueAudio,           // 禁/解禁音频
+    SignalValueVideo,           // 禁/解禁视频
+    SignalValueChat,            // 禁/解禁聊天
+    SignalValueGrantBoard,      // 禁/解禁白板
+    
+    SignalValueFollow,          // 跟随/取消白板
+    SignalValueCourse,          // 开始/结束上课
+    SignalValueAllChat,         // 全员禁言/解除
+    
+    SignalValueShareScreen,     // 开始/结束分享屏幕
 };
 
 // covideo state
 typedef NS_ENUM(NSInteger, SignalLinkState) {
     SignalLinkStateIdle             = 0,
     SignalLinkStateApply            = 1,
-    SignalLinkStateTeaReject           = 2,
+    SignalLinkStateTeaReject        = 2,
     SignalLinkStateStuCancel        = 3, // Cancel Apply
     SignalLinkStateTeaAccept        = 4, // linked
-    SignalLinkStateStuClose         = 5, // student close link
-    SignalLinkStateTeaClose         = 6, // teacher close link
+    SignalLinkStateTeaClose         = 5, // teacher close link
+    SignalLinkStateStuClose         = 6, // student close link
 };

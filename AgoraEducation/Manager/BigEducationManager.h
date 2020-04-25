@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) RoomModel * _Nullable roomModel;
 @property (nonatomic, strong) UserModel * _Nullable teacherModel;
 @property (nonatomic, strong) UserModel * _Nullable studentModel;
+@property (nonatomic, strong) SignalShareScreenInfoModel * _Nullable shareScreenInfoModel;
 
 @property (nonatomic, strong) UserModel * _Nullable renderStudentModel;
 @property (nonatomic, strong) NSMutableArray<RTCVideoSessionModel*> *rtcVideoSessionModels;

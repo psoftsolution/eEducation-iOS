@@ -41,6 +41,7 @@
 		783FB703240D12BA007298C1 /* CommonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB6FB240D12BA007298C1 /* CommonModel.m */; };
 		783FB704240D12BA007298C1 /* ConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB6FF240D12BA007298C1 /* ConfigModel.m */; };
 		783FB705240D12BA007298C1 /* RoomAllModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 783FB700240D12BA007298C1 /* RoomAllModel.m */; };
+		7866FFFC24542DCB00591088 /* SignalInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7866FFFB24542DCB00591088 /* SignalInfoModel.m */; };
 		7868BFC7242CC80E00644807 /* KeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7868BFC6242CC80E00644807 /* KeyCenter.m */; };
 		786B2E4B2452C72B0095FAC7 /* NSArray+Copy.m in Sources */ = {isa = PBXBuildFile; fileRef = 786B2E4A2452C72B0095FAC7 /* NSArray+Copy.m */; };
 		7878B4AF23FA655300AF1B4F /* Room.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7878B4AC23FA655300AF1B4F /* Room.storyboard */; };
@@ -243,6 +244,8 @@
 		783FB6FF240D12BA007298C1 /* ConfigModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigModel.m; sourceTree = "<group>"; };
 		783FB700240D12BA007298C1 /* RoomAllModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomAllModel.m; sourceTree = "<group>"; };
 		783FB701240D12BA007298C1 /* CommonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonModel.h; sourceTree = "<group>"; };
+		7866FFFA24542DCB00591088 /* SignalInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalInfoModel.h; sourceTree = "<group>"; };
+		7866FFFB24542DCB00591088 /* SignalInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SignalInfoModel.m; sourceTree = "<group>"; };
 		7868BFC5242CC80E00644807 /* KeyCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyCenter.h; sourceTree = "<group>"; };
 		7868BFC6242CC80E00644807 /* KeyCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyCenter.m; sourceTree = "<group>"; };
 		786B2E492452C72B0095FAC7 /* NSArray+Copy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Copy.h"; sourceTree = "<group>"; };
@@ -792,6 +795,8 @@
 				78E56ED0245176BA00D1D620 /* SignalShareScreenModel.m */,
 				783FB6EB240D07B3007298C1 /* SignalP2PModel.h */,
 				783FB6EE240D07B3007298C1 /* SignalP2PModel.m */,
+				7866FFFA24542DCB00591088 /* SignalInfoModel.h */,
+				7866FFFB24542DCB00591088 /* SignalInfoModel.m */,
 			);
 			path = SignalModel;
 			sourceTree = "<group>";
@@ -1455,6 +1460,7 @@
 				78D7311123B388B100D2146C /* MCStudentListView.m in Sources */,
 				787E7A3A23A9FE97005F8F0C /* SliderView.m in Sources */,
 				783FB6DF240D0746007298C1 /* NSString+MD5.m in Sources */,
+				7866FFFC24542DCB00591088 /* SignalInfoModel.m in Sources */,
 				78C127A624037EB300420E72 /* RTCReplayManager.m in Sources */,
 				78D730EC23B3889D00D2146C /* EEColorViewCell.m in Sources */,
 				783FB6DB240D0746007298C1 /* UIColor+Addition.m in Sources */,

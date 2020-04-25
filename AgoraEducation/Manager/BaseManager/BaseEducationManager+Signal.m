@@ -34,6 +34,10 @@
     [self.signalManager joinChannelWithName:channelName completeSuccessBlock:successBlock completeFailBlock:failBlock];
 }
 
+- (void)handleRTMMessage:(NSString *)messageText {
+    NSAssert(1 == 0, @"subclass must overwrite handleRTMMessage");
+}
+
 - (void)releaseSignalResources {
     AgoraLogInfo(@"releaseSignalResources");
     [self.signalManager releaseResources];
@@ -54,7 +58,7 @@
     AgoraLogInfo(@"messageReceived:%@ fromPeer:%@", message.text, peerId);
     
     NSDictionary *dict = [JsonParseUtil dictionaryWithJsonString:message.text];
-    SignalP2PModel *model = [SignalP2PModel yy_modelWithDictionary:dict];
+    SignalP2PInfoModel *model = [SignalP2PModel yy_modelWithDictionary:dict].data;
 
     if([self.signalDelegate respondsToSelector:@selector(didReceivedPeerSignal:)]) {
         [self.signalDelegate didReceivedPeerSignal:model];
@@ -64,44 +68,7 @@
 - (void)channel:(AgoraRtmChannel * _Nonnull)channel messageReceived:(AgoraRtmMessage * _Nonnull)message fromMember:(AgoraRtmMember * _Nonnull)member {
 
     AgoraLogInfo(@"messageReceived:%@", message.text);
-    
-    NSDictionary *dict = [JsonParseUtil dictionaryWithJsonString:message.text];
-    NSInteger cmd = [dict[@"cmd"] integerValue];
-    if(cmd == MessageCmdTypeChat) {
-        
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedMessage:)]) {
-            MessageModel *model = [MessageModel yy_modelWithDictionary:dict];
-            [self.signalDelegate didReceivedMessage:model.data];
-        }
-        
-    } else if(cmd == MessageCmdTypeRoomInfo) {
-        
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedRoomInfoSignal:)]) {
-            SignalRoomModel *model = [SignalRoomModel yy_modelWithDictionary:dict];
-            [self.signalDelegate didReceivedRoomInfoSignal:model.data];
-        }
-        
-    } else if(cmd == MessageCmdTypeUserInfo) {
-        
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedUserInfoSignal:)]) {
-            SignalUserModel *model = [SignalUserModel yy_modelWithDictionary:dict];
-            [self.signalDelegate didReceivedUserInfoSignal:model.data];
-        }
-        
-    } else if(cmd == MessageCmdTypeReplay) {
-           
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedReplaySignal:)]) {
-            SignalReplayModel *model = [SignalReplayModel yy_modelWithDictionary:dict];
-            [self.signalDelegate didReceivedReplaySignal:model.data];
-        }
-        
-    } else if(cmd == MessageCmdTypeShareScreen) {
-        
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedShareScreenSignal:)]) {
-            SignalShareScreenModel *model = [SignalShareScreenModel yy_modelWithDictionary:dict];
-            [self.signalDelegate didReceivedShareScreenSignal:model.data];
-        }
-    }
+    [self handleRTMMessage:message.text];
 }
 
 @end

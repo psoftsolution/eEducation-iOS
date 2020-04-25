@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UserModel : NSObject
+
 @property (nonatomic, strong) NSString *userId;
 @property (nonatomic, strong) NSString *userName;
 @property (nonatomic, assign) NSInteger role;
@@ -25,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *rtcToken;
 @property (nonatomic, strong) NSString *rtmToken;
 @property (nonatomic, strong) NSString *screenToken;
+
+- (BOOL)isEqualToModel:(UserModel *)model;
 
 @end
 

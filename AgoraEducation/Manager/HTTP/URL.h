@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, EnvType) {
 extern EnvType env;
 
 #define HTTP_BASE_URL (env == EnvTypeTest ? \
-                            @"http://115.231.168.26:8088" : \
+                            @"https://api-solutions-dev.sh.agoralab.co" : \
                             (env == EnvTypePre ? \
                                 @"https://solutions-api-pre.sh.agoralab.co" : \
                                 @"https://solutions-api.sh.agoralab.co") \

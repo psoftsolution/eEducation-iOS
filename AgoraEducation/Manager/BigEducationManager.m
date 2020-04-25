@@ -23,6 +23,170 @@
     return self;
 }
 
+- (void)handleRTMMessage:(NSString *)messageText {
+    
+    NSDictionary *dict = [JsonParseUtil dictionaryWithJsonString:messageText];
+    NSInteger cmd = [dict[@"cmd"] integerValue];
+    
+    if(cmd == MessageCmdTypeChat) {
+        
+        if([self.signalDelegate respondsToSelector:@selector(didReceivedMessage:)]) {
+            MessageInfoModel *model = [MessageModel yy_modelWithDictionary:dict].data;
+            
+            if(![model.userId isEqualToString:self.studentModel.userId]) {
+                model.isSelfSend = NO;
+                [self.signalDelegate didReceivedMessage:model];
+            }
+        }
+        
+    } else if(cmd == MessageCmdTypeRoomInfo) {
+        
+        if([self.signalDelegate respondsToSelector:@selector(didReceivedSignal:)]) {
+            
+            SignalRoomInfoModel *model = [SignalRoomModel yy_modelWithDictionary:dict].data;
+            
+            SignalInfoModel *signalInfoModel = [SignalInfoModel new];
+            
+            RoomModel *originalModel = self.roomModel;
+            if (originalModel.muteAllChat != model.muteAllChat) {
+                originalModel.muteAllChat = model.muteAllChat;
+                
+                signalInfoModel.signalType = SignalValueAllChat;
+                [self.signalDelegate didReceivedSignal:signalInfoModel];
+            }
+            if (originalModel.lockBoard != model.lockBoard) {
+                originalModel.lockBoard = model.lockBoard;
+                
+                signalInfoModel.signalType = SignalValueFollow;
+                [self.signalDelegate didReceivedSignal:signalInfoModel];
+            }
+        }
+        
+    } else if(cmd == MessageCmdTypeUserInfo) {
+        
+        if([self.signalDelegate respondsToSelector:@selector(didReceivedSignal:)]) {
+            NSArray<UserModel*> *userModels = [SignalUserModel yy_modelWithDictionary:dict].data;
+            
+            SignalInfoModel *signalInfoModel = [SignalInfoModel new];
+            
+            UserModel *originalTeacherModel = self.teacherModel;
+            UserModel *originalStudentModel = self.studentModel;
+            UserModel *originalRenderModel = self.renderStudentModel;
+            
+            UserModel *currentTeacherModel;
+            UserModel *currentStudentModel = self.studentModel;
+            UserModel *currentRenderModel;
+            for(UserModel *userModel in userModels) {
+                if(userModel.role == UserRoleTypeTeacher) {
+                    currentTeacherModel = userModel;
+                } else if(userModel.role == UserRoleTypeStudent) {
+                    currentRenderModel = userModel;
+                    if(userModel.uid == originalStudentModel.uid) {
+                        currentStudentModel = userModel;
+                    }
+                }
+            }
+            
+            // co
+            if ((originalTeacherModel == nil && currentTeacherModel != nil)
+                || (originalTeacherModel != nil && currentTeacherModel == nil)) {
+                self.teacherModel = currentTeacherModel.yy_modelCopy;
+                originalTeacherModel = self.teacherModel;
+                
+                signalInfoModel.signalType = SignalValueCoVideo;
+                signalInfoModel.uid = originalTeacherModel.uid;
+                [self.signalDelegate didReceivedSignal:signalInfoModel];
+            }
+            if ((originalRenderModel == nil && currentRenderModel != nil)
+                || (originalRenderModel != nil && currentRenderModel == nil)) {
+                
+                if(currentRenderModel == nil) {
+                    signalInfoModel.signalType = SignalValueCoVideo;
+                    signalInfoModel.uid = originalRenderModel.uid;
+                } else {
+                    signalInfoModel.signalType = SignalValueCoVideo;
+                    signalInfoModel.uid = currentRenderModel.uid;
+                }
+                self.renderStudentModel = currentRenderModel.yy_modelCopy;
+                [self.signalDelegate didReceivedSignal:signalInfoModel];
+            }
+            
+            // tea mute & unmute
+            if (originalTeacherModel.enableAudio != currentTeacherModel.enableAudio) {
+                originalTeacherModel.enableAudio = currentTeacherModel.enableAudio;
+                
+                signalInfoModel.signalType = SignalValueAudio;
+                signalInfoModel.uid = originalTeacherModel.uid;
+                [self.signalDelegate didReceivedSignal:signalInfoModel];
+            }
+            if (originalTeacherModel.enableVideo != currentTeacherModel.enableVideo) {
+                originalTeacherModel.enableVideo = currentTeacherModel.enableVideo;
+                
+                signalInfoModel.signalType = SignalValueVideo;
+                signalInfoModel.uid = originalTeacherModel.uid;
+                [self.signalDelegate didReceivedSignal:signalInfoModel];
+            }
+            
+            // stu mute & unmute
+            if (originalRenderModel.enableAudio != currentRenderModel.enableAudio) {
+                originalRenderModel.enableAudio = currentRenderModel.enableAudio;
+                if(originalStudentModel.uid == originalRenderModel.uid){
+                    currentStudentModel.enableAudio = originalRenderModel.enableAudio;
+                }
+                
+                signalInfoModel.signalType = SignalValueAudio;
+                signalInfoModel.uid = originalStudentModel.uid;
+                [self.signalDelegate didReceivedSignal:signalInfoModel];
+            }
+            if (originalRenderModel.enableVideo != currentRenderModel.enableVideo) {
+                originalRenderModel.enableVideo = currentRenderModel.enableVideo;
+                if(originalStudentModel.uid == originalRenderModel.uid){
+                    currentStudentModel.enableVideo = originalRenderModel.enableVideo;
+                }
+                
+                signalInfoModel.signalType = SignalValueVideo;
+                signalInfoModel.uid = originalStudentModel.uid;
+                [self.signalDelegate didReceivedSignal:signalInfoModel];
+            }
+
+            // chat & unchat
+            if (originalStudentModel.enableChat != currentStudentModel.enableChat) {
+                originalStudentModel.enableChat = currentStudentModel.enableChat;
+                if(originalStudentModel.uid == originalRenderModel.uid){
+                    originalRenderModel.enableChat = currentStudentModel.enableChat;
+                }
+                
+                signalInfoModel.signalType = SignalValueChat;
+                signalInfoModel.uid = originalStudentModel.uid;
+                [self.signalDelegate didReceivedSignal:signalInfoModel];
+            }
+        }
+        
+    } else if(cmd == MessageCmdTypeReplay) {
+        
+        if([self.signalDelegate respondsToSelector:@selector(didReceivedMessage:)]) {
+            SignalReplayModel *model = [SignalReplayModel yy_modelWithDictionary:dict];
+            
+            MessageInfoModel *messageModel = [MessageInfoModel new];
+            messageModel.userName = self.teacherModel.userName;
+            messageModel.message = NSLocalizedString(@"ReplayRecordingText", nil);
+            messageModel.recordId = model.data.recordId;
+            messageModel.isSelfSend = NO;
+            [self.signalDelegate didReceivedMessage:messageModel];
+        }
+    } else if(cmd == MessageCmdTypeShareScreen) {
+        
+        if([self.signalDelegate respondsToSelector:@selector(didReceivedShareScreenSignal:)]) {
+            self.shareScreenInfoModel = [SignalShareScreenModel yy_modelWithDictionary:dict].data;
+            
+            SignalInfoModel *signalInfoModel = [SignalInfoModel new];
+            signalInfoModel.signalType = SignalValueShareScreen;
+            [self.signalDelegate didReceivedSignal:signalInfoModel];
+        }
+    }
+}
+
+
 #pragma mark GlobalStates
 - (void)getRoomInfoCompleteSuccessBlock:(void (^ _Nullable) (RoomInfoModel * roomInfoModel))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
@@ -142,7 +306,7 @@
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uid == %d", uid];
     NSArray<RTCVideoSessionModel *> *filteredArray = [self.rtcVideoSessionModels filteredArrayUsingPredicate:predicate];
-    if(filteredArray > 0) {
+    if(filteredArray.count > 0) {
         RTCVideoSessionModel *model = filteredArray.firstObject;
         model.videoCanvas.view = nil;
         if(uid == self.signalManager.messageModel.uid.integerValue) {

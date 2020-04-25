@@ -19,7 +19,7 @@ InputMessageText = " 说点什么";
 
 QuitClassroomText = "退出教室？";
 AcceptRequestText = "老师接受了你的连麦申请!";
-RejectRequestText = "老师取消你的连麦!";
+RejectRequestText = "老师拒绝了你的连麦申请!";
 TeaCloseCoVideoText = "老师关闭了你的连麦!";
 
 MaterialsAreaText = "教材区";

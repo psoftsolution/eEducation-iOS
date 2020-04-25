@@ -154,8 +154,7 @@
     }];
 }
 
-
-- (void)setupSignalWithSuccessBolck:(void (^)(void))successBlock {
+- (void)setupSignalWithSuccessBlock:(void (^)(void))successBlock {
 
     NSString *appid = EduConfigModel.shareInstance.appId;
     NSString *appToken = EduConfigModel.shareInstance.rtmToken;
@@ -489,107 +488,78 @@
 }
     
 #pragma mark SignalDelegate
-- (void)didReceivedMessage:(MessageInfoModel *)model {
-    if(![model.userId isEqualToString:EduConfigModel.shareInstance.userId]) {
-        model.isSelfSend = NO;
-        [self.messageView addMessageModel:model];
-    }
-}
-- (void)didReceivedRoomInfoSignal:(SignalRoomInfoModel *)model {
-    
-    RoomModel *originalModel = self.educationManager.roomModel;
-    if (originalModel.muteAllChat != model.muteAllChat) {
-        originalModel.muteAllChat = model.muteAllChat;
-        [self updateChatViews];
-    }
-    if (originalModel.lockBoard != model.lockBoard) {
-        originalModel.lockBoard = model.lockBoard;
-        
-        NSString *toastMessage;
-        if(model.lockBoard) {
-            toastMessage = NSLocalizedString(@"LockBoardText", nil);
-        } else {
-            toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
-        }
-        [self showTipWithMessage:toastMessage];
-        
-        [self disableCameraTransform:model.lockBoard];
-    }
-    if (originalModel.courseState != model.courseState) {
-        originalModel.courseState = model.courseState;
-        [self updateTimeState];
-    }
-}
-- (void)didReceivedUserInfoSignal:(NSArray<UserModel *> * _Nonnull)model {
-    if(model == nil){
-        return;
-    }
-    
-    UserModel *originalTeacherModel = self.educationManager.teacherModel;
-    UserModel *originalStudentModel = self.educationManager.studentModel;
-    
-    UserModel *currentTeacherModel;
-    UserModel *currentStudentModel;
-    NSMutableArray<UserModel *> *currentStudentModels = [NSMutableArray array];
-    for(UserModel *userModel in model) {
-        if(userModel.role == UserRoleTypeTeacher) {
-            currentTeacherModel = userModel;
-        } else if(userModel.role == UserRoleTypeStudent) {
-            if(userModel.uid == originalStudentModel.uid) {
-                currentStudentModel = userModel;
+- (void)didReceivedSignal:(SignalInfoModel *)signalInfoModel {
+    switch (signalInfoModel.signalType) {
+        case SignalValueCoVideo: {
+            if(signalInfoModel.uid == self.educationManager.teacherModel.uid) {
+                [self checkNeedRenderWithRole:UserRoleTypeTeacher];
+            } else {
+                [self checkNeedRenderWithRole:UserRoleTypeStudent];
             }
-            [currentStudentModels addObject:userModel];
         }
-    }
-    self.educationManager.studentTotleListArray = [NSArray arrayWithArray:currentStudentModels];
-    
-    // co
-    if ((originalTeacherModel == nil && currentTeacherModel != nil)
-        || (originalTeacherModel != nil && currentTeacherModel == nil)) {
-        self.educationManager.teacherModel = currentTeacherModel.yy_modelCopy;
-        originalTeacherModel = self.educationManager.teacherModel;
-        [self checkNeedRenderWithRole:UserRoleTypeTeacher];
-    }
-    
-    // board permission
-    if(originalStudentModel.grantBoard != currentStudentModel.grantBoard){
-        
-        NSString *toastMessage;
-        if(currentStudentModel.grantBoard) {
-            toastMessage = NSLocalizedString(@"UnMuteBoardText", nil);
-        } else {
-            toastMessage = NSLocalizedString(@"MuteBoardText", nil);
+            break;
+        case SignalValueAudio:
+        case SignalValueVideo:
+            if(signalInfoModel.uid == self.educationManager.teacherModel.uid) {
+                [self updateTeacherViews:self.educationManager.teacherModel];
+            } else {
+                [self reloadStudentViews];
+            }
+            break;
+        case SignalValueChat: {
+             [self updateChatViews];
         }
-        [self showTipWithMessage:toastMessage];
-        [self disableWhiteDeviceInputs:!currentStudentModel.grantBoard];
-    }
-    
-    // reload students
-    self.educationManager.studentModel = currentStudentModel.yy_modelCopy;
-    originalStudentModel = self.educationManager.studentModel;
-    [self checkNeedRenderWithRole:UserRoleTypeStudent];
-    
-    // mute & unmute
-    if ((originalTeacherModel.enableAudio != currentTeacherModel.enableAudio)
-        || (originalTeacherModel.enableVideo != currentTeacherModel.enableVideo)) {
-        originalTeacherModel.enableAudio = currentTeacherModel.enableAudio;
-        originalTeacherModel.enableVideo = currentTeacherModel.enableVideo;
-        [self updateTeacherViews:originalTeacherModel];
-    }
-    
-    // chat & unchat
-    if (originalStudentModel.enableChat != currentStudentModel.enableChat) {
-        originalStudentModel.enableChat = currentStudentModel.enableChat;
-        [self updateChatViews];
+            break;
+        case SignalValueGrantBoard: {
+            
+            if(signalInfoModel.uid == self.educationManager.studentModel.uid) {
+                NSString *toastMessage;
+                BOOL grantBoard = self.educationManager.studentModel.grantBoard;
+                 if(grantBoard) {
+                     toastMessage = NSLocalizedString(@"UnMuteBoardText", nil);
+                 } else {
+                     toastMessage = NSLocalizedString(@"MuteBoardText", nil);
+                 }
+                 [self showTipWithMessage:toastMessage];
+                 [self disableWhiteDeviceInputs:!grantBoard];
+            }
+            [self.studentListView updateStudentArray:self.educationManager.studentTotleListArray];
+        }
+            break;
+        case SignalValueFollow: {
+            NSString *toastMessage;
+            BOOL lockBoard = self.educationManager.roomModel.lockBoard;
+            if(lockBoard) {
+                toastMessage = NSLocalizedString(@"LockBoardText", nil);
+            } else {
+                toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
+            }
+            [self showTipWithMessage:toastMessage];
+            [self disableCameraTransform:lockBoard];
+        }
+            break;
+        case SignalValueCourse: {
+            [self updateTimeState];
+        }
+            break;
+        case SignalValueAllChat: {
+            [self updateChatViews];
+        }
+            break;
+        case SignalValueShareScreen: {
+            if(self.educationManager.shareScreenInfoModel.type == 1) {
+                [self renderShareCanvas:self.educationManager.shareScreenInfoModel.screenId];
+            } else {
+                [self removeShareCanvas];
+            }
+        }
+            break;
+        default:
+            break;
     }
 }
-- (void)didReceivedReplaySignal:(SignalReplayInfoModel*)model {
-    MessageInfoModel *messageModel = [MessageInfoModel new];
-    messageModel.userName = self.educationManager.teacherModel.userName;
-    messageModel.message = NSLocalizedString(@"ReplayRecordingText", nil);
-    messageModel.recordId = model.recordId;
-    messageModel.isSelfSend = NO;
-    [self.messageView addMessageModel:messageModel];
+- (void)didReceivedMessage:(MessageInfoModel * _Nonnull)model {
+    [self.messageView addMessageModel:model];
 }
 - (void)didReceivedShareScreenSignal:(SignalShareScreenInfoModel * _Nonnull)model {
     if (model.type == 1) {

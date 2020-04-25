@@ -147,7 +147,7 @@
 - (IBAction)joinRoom:(UIButton *)sender {
 
     self.userNameTextFiled.text = @"Jerry";
-    self.classNameTextFiled.text = @"adfsafd";
+    self.classNameTextFiled.text = @"adfsafd1";
     
     NSString *userName = self.userNameTextFiled.text;
     NSString *className = self.classNameTextFiled.text;
@@ -185,7 +185,7 @@
         [weakself getEntryInfoWithSuccessBolck:^{
             [weakself getWhiteInfoWithSuccessBolck:^{
                 [weakself getRoomInfoWithSuccessBlock:^{
-                    [weakself setupSignalWithSuccessBolck:^{
+                    [weakself setupSignalWithSuccessBlock:^{
                         if(sceneType == SceneType1V1) {
                             if(IsPad){
                                 [weakself join1V1RoomWithIdentifier:@"oneToOneRoom-iPad"];
@@ -333,7 +333,7 @@
     }];
 }
 
-- (void)setupSignalWithSuccessBolck:(void (^)(void))successBlock {
+- (void)setupSignalWithSuccessBlock:(void (^)(void))successBlock {
 
     NSString *appid = EduConfigModel.shareInstance.appId;
     NSString *appToken = EduConfigModel.shareInstance.rtmToken;

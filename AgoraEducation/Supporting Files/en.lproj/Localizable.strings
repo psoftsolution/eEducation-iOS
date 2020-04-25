@@ -19,7 +19,7 @@ InputMessageText = " input message";
 QuitClassroomText = "quit classroom?";
 
 AcceptRequestText = "teacher accept your interactive request!";
-RejectRequestText = "teacher cancel your interactive!";
+RejectRequestText = "teacher reject your interactive request!";
 TeaCloseCoVideoText = "teacher close your interactive!";
 
 MaterialsAreaText = "Materials area";

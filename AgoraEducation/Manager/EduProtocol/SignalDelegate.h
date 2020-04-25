@@ -14,17 +14,18 @@
 #import "SignalShareScreenModel.h"
 #import "SignalP2PModel.h"
 
+#import "SignalInfoModel.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol SignalDelegate <NSObject>
 
 @optional
-- (void)didReceivedRoomInfoSignal:(SignalRoomInfoModel * _Nonnull)model;
-- (void)didReceivedUserInfoSignal:(NSArray<UserModel *> * _Nonnull)model;
+
+- (void)didReceivedPeerSignal:(SignalP2PInfoModel * _Nonnull)model;
+- (void)didReceivedSignal:(SignalInfoModel *)signalInfoModel;
+
 - (void)didReceivedMessage:(MessageInfoModel * _Nonnull)model;
-- (void)didReceivedReplaySignal:(SignalReplayInfoModel * _Nonnull)model;
-- (void)didReceivedShareScreenSignal:(SignalShareScreenInfoModel * _Nonnull)model;
-- (void)didReceivedPeerSignal:(SignalP2PModel * _Nonnull)model;
 
 - (void)didReceivedConnectionStateChanged:(AgoraRtmConnectionState)state;
 

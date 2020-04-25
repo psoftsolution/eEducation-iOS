@@ -234,6 +234,7 @@
     [self.educationManager setupRTCVideoCanvas:model completeBlock:nil];
 
     if(!remote){
+        self.linkState = SignalLinkStateTeaAccept;
         [self.educationManager setRTCClientRole:RTCClientRoleBroadcaster];
     }
 }
@@ -412,6 +413,13 @@
             } completeFailBlock:^(NSString * _Nonnull errMessage) {
                 [weakself showToast:errMessage];
             }];
+            if(linkState == SignalLinkStateStuCancel){
+                self.linkState = linkState;
+                [self.handUpButton setBackgroundImage:[UIImage imageNamed:@"icon-handup"] forState:(UIControlStateNormal)];
+            } else if(linkState == SignalLinkStateStuClose){
+                self.linkState = linkState;
+                [self removeStudentCanvas:self.educationManager.renderStudentModel.uid];
+            }
         }
             break;
             
@@ -535,7 +543,7 @@
 }
 
 #pragma mark SignalDelegate
-- (void)didReceivedPeerSignal:(SignalP2PModel *)model {
+- (void)didReceivedPeerSignal:(SignalP2PInfoModel *)model {
     switch (model.type) {
         case SignalLinkStateTeaReject:
             [self showTipWithMessage:NSLocalizedString(@"RejectRequestText", nil)];
@@ -551,117 +559,70 @@
     }
     self.linkState = model.type;
 }
-- (void)didReceivedMessage:(MessageInfoModel *)model {
-    if(![model.userId isEqualToString:self.educationManager.studentModel.userId]) {
-        model.isSelfSend = NO;
-        [self.messageView addMessageModel:model];
-        
-        if (self.messageView.hidden == YES) {
-            self.unreadMessageCount = self.unreadMessageCount + 1;
-            [self.segmentedView showBadgeWithCount:(self.unreadMessageCount)];
-        }
-    }
-}
-- (void)didReceivedRoomInfoSignal:(SignalRoomInfoModel *)model {
-    
-    RoomModel *originalModel = self.educationManager.roomModel;
-    if (originalModel.muteAllChat != model.muteAllChat) {
-        originalModel.muteAllChat = model.muteAllChat;
-        [self updateChatViews];
-    }
-    if (originalModel.lockBoard != model.lockBoard) {
-        originalModel.lockBoard = model.lockBoard;
-        
-        NSString *toastMessage;
-        if(model.lockBoard) {
-            toastMessage = NSLocalizedString(@"LockBoardText", nil);
-        } else {
-            toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
-        }
-        [self showTipWithMessage:toastMessage];
-        
-        [self disableCameraTransform:model.lockBoard];
-    }
-}
-- (void)didReceivedUserInfoSignal:(NSArray<UserModel *> * _Nonnull)model {
-    if(model == nil){
-        return;
-    }
-    
-    UserModel *originalTeacherModel = self.educationManager.teacherModel;
-    UserModel *originalStudentModel = self.educationManager.studentModel;
-    UserModel *originalRenderModel = self.educationManager.renderStudentModel;
-    
-    UserModel *currentTeacherModel;
-    UserModel *currentStudentModel = self.educationManager.studentModel;
-    UserModel *currentRenderModel;
-    for(UserModel *userModel in model) {
-        if(userModel.role == UserRoleTypeTeacher) {
-            currentTeacherModel = userModel;
-        } else if(userModel.role == UserRoleTypeStudent) {
-            currentRenderModel = userModel;
-            if(userModel.uid == originalStudentModel.uid) {
-                currentStudentModel = userModel;
+- (void)didReceivedSignal:(SignalInfoModel *)signalInfoModel {
+    switch (signalInfoModel.signalType) {
+        case SignalValueCoVideo: {
+            if(signalInfoModel.uid == self.educationManager.teacherModel.uid) {
+                [self checkNeedRenderWithRole:UserRoleTypeTeacher];
+            } else {
+                if(self.educationManager.renderStudentModel == nil){
+                    [self removeStudentCanvas:signalInfoModel.uid];
+                }
+                [self checkNeedRenderWithRole:UserRoleTypeStudent];
             }
         }
-    }
-
-    // co
-    if ((originalTeacherModel == nil && currentTeacherModel != nil)
-        || (originalTeacherModel != nil && currentTeacherModel == nil)) {
-        self.educationManager.teacherModel = currentTeacherModel.yy_modelCopy;
-        originalTeacherModel = self.educationManager.teacherModel;
-        [self checkNeedRenderWithRole:UserRoleTypeTeacher];
-    }
-    if ((originalRenderModel == nil && currentRenderModel != nil)
-        || (originalRenderModel != nil && currentRenderModel == nil)) {
-        
-        if(currentRenderModel == nil) {
-            [self removeStudentCanvas:originalRenderModel.uid];
+            break;
+        case SignalValueAudio:
+        case SignalValueVideo:
+            if(signalInfoModel.uid == self.educationManager.teacherModel.uid) {
+                [self updateTeacherViews:self.educationManager.teacherModel];
+            } else {
+                if(signalInfoModel.uid == self.educationManager.studentModel.uid) {
+                    [self updateStudentViews:self.educationManager.renderStudentModel remoteVideo:NO];
+                } else {
+                    [self updateStudentViews:self.educationManager.renderStudentModel remoteVideo:YES];
+                }
+            }
+            break;
+        case SignalValueChat: {
+             [self updateChatViews];
         }
-        self.educationManager.renderStudentModel = currentRenderModel.yy_modelCopy;
-        originalRenderModel = self.educationManager.renderStudentModel;
-        [self checkNeedRenderWithRole:UserRoleTypeStudent];
-    }
-    
-    // mute & unmute
-    if ((originalTeacherModel.enableAudio != currentTeacherModel.enableAudio)
-        || (originalTeacherModel.enableVideo != currentTeacherModel.enableVideo)) {
-        originalTeacherModel.enableAudio = currentTeacherModel.enableAudio;
-        originalTeacherModel.enableVideo = currentTeacherModel.enableVideo;
-        [self updateTeacherViews:originalTeacherModel];
-    }
-    if ((originalStudentModel.enableAudio != currentStudentModel.enableAudio)
-        || (originalStudentModel.enableVideo != currentStudentModel.enableVideo)) {
-        originalStudentModel.enableAudio = currentStudentModel.enableAudio;
-        originalStudentModel.enableVideo = currentStudentModel.enableVideo;
-        [self updateStudentViews:originalStudentModel remoteVideo:NO];
-    }
-    
-    // chat & unchat
-    if (originalStudentModel.enableChat != currentStudentModel.enableChat) {
-        originalStudentModel.enableChat = currentStudentModel.enableChat;
-        [self updateChatViews];
+            break;
+        case SignalValueFollow: {
+            NSString *toastMessage;
+            BOOL lockBoard = self.educationManager.roomModel.lockBoard;
+            if(lockBoard) {
+                toastMessage = NSLocalizedString(@"LockBoardText", nil);
+            } else {
+                toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
+            }
+            [self showTipWithMessage:toastMessage];
+            [self disableCameraTransform:lockBoard];
+        }
+            break;
+        case SignalValueAllChat: {
+            [self updateChatViews];
+        }
+            break;
+        case SignalValueShareScreen: {
+            if(self.educationManager.shareScreenInfoModel.type == 1) {
+                [self renderShareCanvas:self.educationManager.shareScreenInfoModel.screenId];
+            } else {
+                [self removeShareCanvas];
+            }
+        }
+            break;
+        default:
+            break;
     }
 }
-- (void)didReceivedReplaySignal:(SignalReplayInfoModel*)model {
-    MessageInfoModel *messageModel = [MessageInfoModel new];
-    messageModel.userName = self.educationManager.teacherModel.userName;
-    messageModel.message = NSLocalizedString(@"ReplayRecordingText", nil);
-    messageModel.recordId = model.recordId;
-    messageModel.isSelfSend = NO;
-    [self.messageView addMessageModel:messageModel];
+
+- (void)didReceivedMessage:(MessageInfoModel *)model {
+    [self.messageView addMessageModel:model];
     
     if (self.messageView.hidden == YES) {
         self.unreadMessageCount = self.unreadMessageCount + 1;
         [self.segmentedView showBadgeWithCount:(self.unreadMessageCount)];
-    }
-}
-- (void)didReceivedShareScreenSignal:(SignalShareScreenInfoModel * _Nonnull)model {
-    if (model.type == 1) {
-        [self renderShareCanvas:model.screenId];
-    } else {
-        [self removeShareCanvas];
     }
 }
 - (void)didReceivedConnectionStateChanged:(AgoraRtmConnectionState)state {
