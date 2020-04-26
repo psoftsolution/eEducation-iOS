@@ -103,6 +103,7 @@
             }
             if (originalModel.courseState != model.courseState) {
                 originalModel.courseState = model.courseState;
+                originalModel.startTime = model.startTime;
                 
                 signalInfoModel.signalType = SignalValueCourse;
                 [self.signalDelegate didReceivedSignal:signalInfoModel];
@@ -239,7 +240,7 @@
         }
     } else if(cmd == MessageCmdTypeShareScreen) {
         
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedShareScreenSignal:)]) {
+        if([self.signalDelegate respondsToSelector:@selector(didReceivedSignal:)]) {
             self.shareScreenInfoModel = [SignalShareScreenModel yy_modelWithDictionary:dict].data;
             
             SignalInfoModel *signalInfoModel = [SignalInfoModel new];

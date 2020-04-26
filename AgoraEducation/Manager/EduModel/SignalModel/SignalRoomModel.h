@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger muteAllChat;
 @property (nonatomic, assign) NSInteger lockBoard;
 @property (nonatomic, assign) NSInteger courseState;
+@property (nonatomic, assign) NSInteger startTime;
+
 @end
 
 @interface SignalRoomModel : NSObject

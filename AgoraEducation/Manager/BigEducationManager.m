@@ -176,7 +176,7 @@
         }
     } else if(cmd == MessageCmdTypeShareScreen) {
         
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedShareScreenSignal:)]) {
+        if([self.signalDelegate respondsToSelector:@selector(didReceivedSignal:)]) {
             self.shareScreenInfoModel = [SignalShareScreenModel yy_modelWithDictionary:dict].data;
             
             SignalInfoModel *signalInfoModel = [SignalInfoModel new];
