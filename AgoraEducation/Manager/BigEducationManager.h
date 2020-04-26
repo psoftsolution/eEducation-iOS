@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UserModel * _Nullable renderStudentModel;
 @property (nonatomic, strong) NSMutableArray<RTCVideoSessionModel*> *rtcVideoSessionModels;
 
+- (void)removeRTCVideoCanvas:(NSUInteger) uid;
+
 - (void)releaseResources;
 
 @end

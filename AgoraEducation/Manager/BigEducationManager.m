@@ -176,7 +176,7 @@
         }
     } else if(cmd == MessageCmdTypeShareScreen) {
         
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedShareScreenSignal:)]) {
+        if([self.signalDelegate respondsToSelector:@selector(didReceivedSignal:)]) {
             self.shareScreenInfoModel = [SignalShareScreenModel yy_modelWithDictionary:dict].data;
             
             SignalInfoModel *signalInfoModel = [SignalInfoModel new];
@@ -185,7 +185,6 @@
         }
     }
 }
-
 
 #pragma mark GlobalStates
 - (void)getRoomInfoCompleteSuccessBlock:(void (^ _Nullable) (RoomInfoModel * roomInfoModel))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {

@@ -129,7 +129,7 @@
 }
 
 - (IBAction)joinRoom:(UIButton *)sender {
-    
+
     NSString *userName = self.userNameTextFiled.text;
     NSString *password = self.passwordTextFiled.text;
     
