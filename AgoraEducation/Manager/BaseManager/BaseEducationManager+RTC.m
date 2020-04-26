@@ -66,10 +66,6 @@
     }
 }
 
-- (void)removeRTCVideoCanvas:(NSUInteger) uid {
-    NSAssert(1 == 0, @"subclass must overwrite removeRTCVideoCanvas");
-}
-
 - (void)setRTCClientRole:(RTCClientRole)role {
     if(role == RTCClientRoleAudience){
         [self.rtcManager setClientRole:(AgoraClientRoleAudience)];
@@ -104,8 +100,6 @@
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nullable)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
     
     AgoraLogInfo(@"didOfflineOfUid: %lu", (unsigned long)uid);
-    [self removeRTCVideoCanvas:uid];
-    
     if([self.rtcDelegate respondsToSelector:@selector(rtcDidOfflineOfUid:)]) {
         [self.rtcDelegate rtcDidOfflineOfUid:uid];
     }

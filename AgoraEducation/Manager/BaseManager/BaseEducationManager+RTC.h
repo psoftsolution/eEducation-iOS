@@ -26,8 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (int)muteRTCLocalVideo:(BOOL) mute;
 - (int)muteRTCLocalAudio:(BOOL) mute;
 
-- (void)removeRTCVideoCanvas:(NSUInteger) uid;
-
 - (void)releaseRTCResources;
 
 @end
