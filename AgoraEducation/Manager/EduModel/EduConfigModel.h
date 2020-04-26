@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shareInstance;
 
 // HTTP Config
-@property (nonatomic, strong) NSString *httpBaseURL;
 @property (nonatomic, strong) MultiLanguageModel *multiLanguage;
 
 // user & room info
@@ -32,11 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString* rtmToken;
 @property (nonatomic, strong) NSString* boardId;
 @property (nonatomic, strong) NSString* boardToken;
-
-// api account limit
-@property (nonatomic, assign) NSInteger oneToOneStudentLimit;
-@property (nonatomic, assign) NSInteger smallClassStudentLimit;
-@property (nonatomic, assign) NSInteger largeClassStudentLimit;
 
 // local data
 @property (nonatomic, strong) NSString* userName;

@@ -26,7 +26,6 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.backgroundColor = [UIColor yellowColor];
     UITableView *studentTableView = [[UITableView alloc] initWithFrame:CGRectZero style:(UITableViewStylePlain)];
     studentTableView.delegate = self;
     studentTableView.dataSource =self;

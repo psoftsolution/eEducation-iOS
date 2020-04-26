@@ -16,17 +16,12 @@
 @implementation BaseEducationManager (GlobalStates)
 
 + (void)getConfigWithSuccessBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
-    
+
     [HttpManager getAppConfigWithSuccess:^(id responseObj) {
         
         ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
         if(model.code == 0) {
             
-            EduConfigModel.shareInstance.oneToOneStudentLimit = model.data.configInfoModel.oneToOneStudentLimit.integerValue;
-            EduConfigModel.shareInstance.smallClassStudentLimit = model.data.configInfoModel.smallClassStudentLimit.integerValue;
-            EduConfigModel.shareInstance.largeClassStudentLimit = model.data.configInfoModel.largeClassStudentLimit.integerValue;
-            
-            EduConfigModel.shareInstance.httpBaseURL = model.data.apiHost;
             EduConfigModel.shareInstance.multiLanguage = model.data.configInfoModel.multiLanguage;
             
             if(successBlock != nil){
@@ -46,8 +41,8 @@
 }
 
 + (void)enterRoomWithUserName:(NSString *)userName password:(NSString *)password successBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
-    
-    NSString *url = [NSString stringWithFormat:HTTP_ENTER_ROOM, EduConfigModel.shareInstance.httpBaseURL];
+
+    NSString *url = [NSString stringWithFormat:HTTP_ENTER_ROOM, HTTP_BASE_URL];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"userName"] = userName;
@@ -55,13 +50,15 @@
     // student
     params[@"role"] = @(2);
     params[@"userUuid"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
-    
+
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];
+
     [HttpManager post:url params:params headers:headers success:^(id responseObj) {
         
         EnterRoomAllModel *model = [EnterRoomAllModel yy_modelWithDictionary:responseObj];
         if(model.code == 0){
+            
             EduConfigModel.shareInstance.appId = model.data.room.appId;
             EduConfigModel.shareInstance.userToken = model.data.user.userToken;
             EduConfigModel.shareInstance.roomId = model.data.room.roomId;
@@ -70,7 +67,7 @@
             
             EduConfigModel.shareInstance.uid = model.data.user.uid;
             EduConfigModel.shareInstance.rtmToken = model.data.user.rtmToken;
-            
+
             if(successBlock != nil){
                 successBlock();
             }
@@ -88,17 +85,85 @@
     }];
 }
 
++ (void)sendMessageWithType:(MessageType)messageType message:(NSString *)message successBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
+    
+    NSString *url = [NSString stringWithFormat:HTTP_USER_INSTANT_MESSAGE, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"type"] = @(messageType);
+    params[@"message"] = message;
+    
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];
+    
+    [HttpManager post:url params:params headers:headers success:^(id responseObj) {
+        
+        CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0){
+            if(successBlock != nil){
+                successBlock();
+            }
+        } else {
+            if(failBlock != nil) {
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"SendMessageFailedText", nil) errorCode:model.code];
+                failBlock(errMsg);
+            }
+        }
+        
+    } failure:^(NSError *error) {
+        if(failBlock != nil) {
+            failBlock(error.description);
+        }
+    }];
+}
+
++ (void)sendCoVideoWithType:(SignalLinkState)linkState successBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
+    
+    if(linkState == SignalLinkStateIdle) {
+        return;
+    }
+    
+    NSString *url = [NSString stringWithFormat:HTTP_USER_COVIDEO, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"type"] = @(linkState);
+
+    NSMutableDictionary *headers = [NSMutableDictionary dictionary];
+    [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];
+    
+    [HttpManager post:url params:params headers:headers success:^(id responseObj) {
+        
+        CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];
+        if(model.code == 0){
+            if(successBlock != nil){
+                successBlock();
+            }
+        } else {
+            if(failBlock != nil) {
+                NSString *errMsg = [EduConfigModel generateHttpErrorMessageWithDescribe:NSLocalizedString(@"UpdateCoVideoFailedText", nil) errorCode:model.code];
+                failBlock(errMsg);
+            }
+        }
+        
+    } failure:^(NSError *error) {
+        if(failBlock != nil) {
+            failBlock(error.description);
+        }
+    }];
+}
+
 + (void)leftRoomWithSuccessBolck:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
     if(EduConfigModel.shareInstance.appId == nil || EduConfigModel.shareInstance.roomId == nil) {
         return;
     }
-
-    NSString *url = [NSString stringWithFormat:HTTP_LEFT_ROOM, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
     
+    NSString *url = [NSString stringWithFormat:HTTP_LEFT_ROOM, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
+
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
     [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];
+    
     [HttpManager post:url params:nil headers:headers success:^(id responseObj) {
         
         CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];
@@ -119,7 +184,6 @@
         }
     }];
 }
-
 
 - (void)updateEnableChatWithValue:(BOOL)enableChat completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
@@ -146,11 +210,12 @@
 
 - (void)getRoomInfoCompleteSuccessBlock:(void (^ _Nullable) (RoomInfoModel * roomInfoModel))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
  
-    NSString *url = [NSString stringWithFormat:HTTP_ROOM_INFO, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
+    NSString *url = [NSString stringWithFormat:HTTP_ROOM_INFO, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId];
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
     [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];
+    
     [HttpManager get:url params:nil headers:headers success:^(id responseObj) {
         
         RoomAllModel *model = [RoomAllModel yy_modelWithDictionary:responseObj];
@@ -160,7 +225,7 @@
             EduConfigModel.shareInstance.channelName = model.data.room.channelName;
             
             EduConfigModel.shareInstance.rtcToken = model.data.localUser.rtcToken;
-
+      
             if(successBlock != nil) {
                 successBlock(model.data);
             }
@@ -205,14 +270,14 @@
     }];
 }
 
-
 - (void)updateUserInfoWithParams:(NSDictionary*)params completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
-    NSString *url = [NSString stringWithFormat:HTTP_UPDATE_USER_INFO, EduConfigModel.shareInstance.httpBaseURL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId, EduConfigModel.shareInstance.userId];
+    NSString *url = [NSString stringWithFormat:HTTP_UPDATE_USER_INFO, HTTP_BASE_URL, EduConfigModel.shareInstance.appId, EduConfigModel.shareInstance.roomId, EduConfigModel.shareInstance.userId];
     
     NSMutableDictionary *headers = [NSMutableDictionary dictionary];
     headers[@"token"] = EduConfigModel.shareInstance.userToken;
     [headers addEntriesFromDictionary:[EduConfigModel generateHttpAuthHeader]];
+    
     [HttpManager post:url params:params headers:headers success:^(id responseObj) {
         
         CommonModel *model = [CommonModel yy_modelWithDictionary:responseObj];

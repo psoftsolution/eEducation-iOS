@@ -34,27 +34,6 @@ static EduConfigModel *manager = nil;
     return manager;
 }
 
-- (instancetype)init{
-    @synchronized(self) {
-        if(self = [super init]) {
-            self.httpBaseURL = HTTP_BASE_URL;
-        }
-    }
-    return self;
-}
-
-- (void)setHttpBaseURL:(NSString *)url {
-    if(url != nil && url.length > 0) {
-        _httpBaseURL = url;
-        NSString *lastString = [url substringFromIndex:url.length-1];
-        if([lastString isEqualToString:@"/"]) {
-            _httpBaseURL = [url substringWithRange:NSMakeRange(0, [url length] - 1)];
-        }
-    } else {
-        self.httpBaseURL = HTTP_BASE_URL;
-    }
-}
-
 #pragma mark Private
 + (NSString *)generateHttpErrorMessageWithDescribe:(NSString *)des errorCode:(NSInteger)errorCode {
     

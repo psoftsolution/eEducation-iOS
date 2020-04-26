@@ -7,21 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-
-typedef NS_ENUM(NSInteger, SignalP2PType) {
-    SignalP2PTypeHand          = 1,
-};
-
-typedef NS_ENUM(NSInteger, SignalP2PCmdType) {
-    SignalP2PCmdTypeApply          = 105,
-    SignalP2PCmdTypeReject         = 107,
-};
+#import "SignalEnum.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface SignalP2PInfoModel : NSObject
+@property (nonatomic, copy) NSString *userId;
+@property (nonatomic, copy) NSString *userName;
+@property (nonatomic, assign) SignalLinkState type;
+@end
+
 @interface SignalP2PModel : NSObject
-@property (nonatomic, assign) SignalP2PCmdType cmd;
-@property (nonatomic, copy) NSString *text;
+@property (nonatomic, assign) NSInteger cmd;
+@property (nonatomic, strong) SignalP2PInfoModel *data;
 @end
 
 NS_ASSUME_NONNULL_END

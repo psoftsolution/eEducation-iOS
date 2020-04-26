@@ -8,6 +8,7 @@
 
 #import "MCStudentVideoListView.h"
 #import "MCStudentVideoCell.h"
+#import "NSArray+Copy.h"
 
 @interface MCStudentVideoListView ()<UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic, strong) UICollectionView *videoListView;
@@ -83,10 +84,9 @@
 - (void)updateStudentArray:(NSArray<UserModel*> *)studentArray {
     
     if(studentArray.count == 0 || self.studentArray.count != studentArray.count) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.studentArray = [NSArray arrayWithArray:studentArray];
-            [self.videoListView reloadData];
-        });
+        self.studentArray = [studentArray deepCopy];
+        [self.videoListView reloadData];
+
     } else {
         NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
 
@@ -94,8 +94,7 @@
         for(NSInteger i = 0; i < count; i++) {
             UserModel *sourceModel = [self.studentArray objectAtIndex:i];
             UserModel *currentModel = [studentArray objectAtIndex:i];
-            if(sourceModel.uid != currentModel.uid || ![sourceModel yy_modelIsEqual:currentModel]) {
-
+            if(![sourceModel yy_modelIsEqual:currentModel]) {
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
                 [indexPaths addObject:indexPath];
             }

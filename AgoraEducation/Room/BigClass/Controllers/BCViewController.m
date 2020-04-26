@@ -37,7 +37,7 @@
 @property (nonatomic, weak) WhiteBoardView *boardView;
 @property (nonatomic, assign) NSInteger segmentedIndex;
 @property (nonatomic, assign) NSInteger unreadMessageCount;
-@property (nonatomic, assign) StudentLinkState linkState;
+@property (nonatomic, assign) SignalLinkState linkState;
 @property (nonatomic, assign) BOOL isChatTextFieldKeyboard;
 @property (nonatomic, assign) BOOL isLandscape;
 @property (nonatomic, assign) BOOL isRenderShare;
@@ -55,13 +55,15 @@
     [self setupView];
     [self initData];
     [self addNotification];
+    
+    [self handleDeviceOrientationChange];
 }
 
 -(void)initData {
     
     self.isRenderShare = NO;
     self.hasSignalReconnect = NO;
-    self.linkState = StudentLinkStateIdle;
+    self.linkState = SignalLinkStateIdle;
     
     self.segmentedView.delegate = self;
     self.studentVideoView.delegate = self;
@@ -77,15 +79,18 @@
         [self setupRTC];
         [self setupWhiteBoard];
         [self updateChatViews];
+        
+        // init role render
+        [self checkNeedRenderWithRole:UserRoleTypeTeacher];
+        [self checkNeedRenderWithRole:UserRoleTypeStudent];
     }
 }
 
 - (void)updateViewOnReconnected {
     WEAK(self);
     
-    if(self.educationManager.renderStudentModels.count > 0){
-        UserModel *renderStudentModel = [self.educationManager.renderStudentModels firstObject];
-        [self removeStudentCanvas:renderStudentModel.uid];
+    if(self.educationManager.renderStudentModel != nil){
+        [self removeStudentCanvas:self.educationManager.renderStudentModel.uid];
     }
     
     [self.educationManager getRoomInfoCompleteSuccessBlock:^(RoomInfoModel * _Nonnull roomInfoModel) {
@@ -123,36 +128,7 @@
     
     WEAK(self);
     [self.educationManager joinRTCChannelByToken:configModel.rtcToken channelId:configModel.channelName info:nil uid:configModel.uid joinSuccess:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) {
-        
-        NSString *uidStr = [NSString stringWithFormat:@"%lu", (unsigned long)uid];
-        [weakself.educationManager.rtcUids addObject:uidStr];
         [weakself checkNeedRenderWithRole:UserRoleTypeStudent];
-    }];
-}
-
-- (void)setupSignalWithSuccessBolck:(void (^)(void))successBlock {
-
-    NSString *appid = EduConfigModel.shareInstance.appId;
-    NSString *appToken = EduConfigModel.shareInstance.rtmToken;
-    NSString *uid = @(EduConfigModel.shareInstance.uid).stringValue;
-    
-    WEAK(self);
-    [self.educationManager initSignalWithAppid:appid appToken:appToken userId:uid dataSourceDelegate:self completeSuccessBlock:^{
-        
-        NSString *channelName = EduConfigModel.shareInstance.channelName;
-        [weakself.educationManager joinSignalWithChannelName:channelName completeSuccessBlock:^{
-            if(successBlock != nil){
-                successBlock();
-            }
-            
-        } completeFailBlock:^(NSInteger errorCode) {
-            NSString *errMsg = [NSString stringWithFormat:@"%@:%ld", NSLocalizedString(@"JoinSignalFailedText", nil), (long)errorCode];
-            [weakself showToast:errMsg];
-        }];
-        
-    } completeFailBlock:^(NSInteger errorCode) {
-        NSString *errMsg = [NSString stringWithFormat:@"%@:%ld", NSLocalizedString(@"InitSignalFailedText", nil), (long)errorCode];
-        [weakself showToast:errMsg];
     }];
 }
 
@@ -160,39 +136,21 @@
     
     AgoraLogInfo(@"large muteVideoStream:%d", mute);
     
-    if(self.educationManager.renderStudentModels.count == 0) {
+    if(self.educationManager.renderStudentModel == nil) {
         return;
     }
     
     WEAK(self);
     [self.educationManager updateEnableVideoWithValue:!mute completeSuccessBlock:^{
         
-        UserModel *renderModel = weakself.educationManager.renderStudentModels.firstObject;
+        UserModel *renderModel = weakself.educationManager.renderStudentModel;
         [weakself updateStudentViews:renderModel remoteVideo:NO];
-        
-        [weakself sendSignalWithType:SignalValueMuteVideo success:nil];
         
     } completeFailBlock:^(NSString * _Nonnull errMessage) {
         
         [weakself showToast:errMessage];
-        UserModel *renderModel = weakself.educationManager.renderStudentModels.firstObject;
+        UserModel *renderModel = weakself.educationManager.renderStudentModel;
         [weakself updateStudentViews:renderModel remoteVideo:NO];
-    }];
-}
-
-- (void)sendSignalWithType:(SignalValueType)type success:(void (^ _Nullable) (void))successBlock {
-    
-    SignalMessageInfoModel *model = [SignalMessageInfoModel new];
-    model.uid = EduConfigModel.shareInstance.uid;
-    model.account = EduConfigModel.shareInstance.userName;
-    model.signalValueType = type;
-    
-    WEAK(self);
-    [self.educationManager sendSignalWithModel:model completeSuccessBlock:successBlock completeFailBlock:^(NSInteger errorCode) {
-        
-        NSString *errMsg = [NSString stringWithFormat:@"%@:%ld", NSLocalizedString(@"SendMessageFailedText", nil), (long)errorCode];
-        [weakself showToast:errMsg];
-        
     }];
 }
 
@@ -200,62 +158,41 @@
 
     AgoraLogInfo(@"large muteAudioStream:%d", mute);
     
-    if(self.educationManager.renderStudentModels.count == 0) {
+   if(self.educationManager.renderStudentModel == nil) {
        return;
-    }
-
-    WEAK(self);
-    [self.educationManager updateEnableAudioWithValue:!mute completeSuccessBlock:^{
+   }
+   
+   WEAK(self);
+   [self.educationManager updateEnableAudioWithValue:!mute completeSuccessBlock:^{
        
-       UserModel *renderModel = weakself.educationManager.renderStudentModels.firstObject;
+       UserModel *renderModel = weakself.educationManager.renderStudentModel;
        [weakself updateStudentViews:renderModel remoteVideo:NO];
-      
-       [weakself sendSignalWithType:SignalValueMuteAudio success: nil];
-       
-    } completeFailBlock:^(NSString * _Nonnull errMessage) {
+
+   } completeFailBlock:^(NSString * _Nonnull errMessage) {
        
        [weakself showToast:errMessage];
-       UserModel *renderModel = weakself.educationManager.renderStudentModels.firstObject;
+       UserModel *renderModel = weakself.educationManager.renderStudentModel;
        [weakself updateStudentViews:renderModel remoteVideo:NO];
-    }];
+   }];
 }
 
 - (void)checkNeedRenderWithRole:(UserRoleType)roleType {
     
     if(roleType == UserRoleTypeTeacher) {
-        if(self.educationManager.teacherModel != nil) {
-            NSInteger teacherUid = self.educationManager.teacherModel.uid;
-            if([self.educationManager.rtcUids containsObject:@(teacherUid).stringValue]){
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uid == %d", teacherUid];
-                NSArray<RTCVideoSessionModel *> *filteredArray = [self.educationManager.rtcVideoSessionModels filteredArrayUsingPredicate:predicate];
-                if(filteredArray.count == 0){
-                    [self renderTeacherCanvas:teacherUid];
-                }
-                [self updateTeacherViews:self.educationManager.teacherModel];
-            } else {
-                [self removeTeacherCanvas];
-            }
-        } else {
-            [self removeTeacherCanvas];
+        UserModel *teacherModel = self.educationManager.teacherModel;
+        [self updateTeacherViews: teacherModel];
+        if(teacherModel != nil) {
+            [self renderTeacherCanvas:teacherModel.uid];
         }
     } else if(roleType == UserRoleTypeStudent) {
-        if(self.educationManager.renderStudentModels.count > 0) {
-            UserModel *renderModel = self.educationManager.renderStudentModels.firstObject;
-            NSInteger studentUid = renderModel.uid;
-            if([self.educationManager.rtcUids containsObject:@(studentUid).stringValue]){
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uid == %d", studentUid];
-                NSArray<RTCVideoSessionModel *> *filteredArray = [self.educationManager.rtcVideoSessionModels filteredArrayUsingPredicate:predicate];
-                
-                BOOL remote = NO;
-                if(filteredArray.count == 0){
-                    if (studentUid == EduConfigModel.shareInstance.uid) {
-                        [self renderStudentCanvas:studentUid remoteVideo:remote];
-                    } else {
-                        remote = YES;
-                        [self renderStudentCanvas:studentUid remoteVideo:remote];
-                    }
-                }
-                [self updateStudentViews:renderModel remoteVideo:remote];
+        UserModel *renderModel = self.educationManager.renderStudentModel;
+        if(renderModel != nil) {
+            if (renderModel.uid == self.educationManager.studentModel.uid) {
+                [self renderStudentCanvas:renderModel.uid remoteVideo:NO];
+                [self updateStudentViews:renderModel remoteVideo:NO];
+            } else {
+                [self renderStudentCanvas:renderModel.uid remoteVideo:YES];
+                [self updateStudentViews:renderModel remoteVideo:YES];
             }
         }
     }
@@ -268,16 +205,6 @@
     model.renderMode = RTCVideoRenderModeHidden;
     model.canvasType = RTCVideoCanvasTypeRemote;
     [self.educationManager setupRTCVideoCanvas: model completeBlock:nil];
-}
-
-- (void)removeTeacherCanvas {
-
-    if (self.segmentedIndex == 0) {
-        self.handUpButton.hidden = YES;
-    }
-    [self.teactherVideoView updateSpeakerImageWithMuted:YES];
-    self.teactherVideoView.defaultImageView.hidden = NO;
-    [self.teactherVideoView updateAndsetTeacherName:@""];
 }
 
 - (void)renderShareCanvas:(NSUInteger)uid {
@@ -307,19 +234,16 @@
     [self.educationManager setupRTCVideoCanvas:model completeBlock:nil];
 
     if(!remote){
+        self.linkState = SignalLinkStateTeaAccept;
         [self.educationManager setRTCClientRole:RTCClientRoleBroadcaster];
     }
 }
 
 - (void)removeStudentCanvas:(NSUInteger)uid {
     
-    NSString *uidStr = [NSString stringWithFormat:@"%lu", (unsigned long)uid];
-    [self.educationManager.rtcUids removeObject: uidStr];
-    
-    if(self.educationManager.studentModel.uid == uid) {
+    if(self.educationManager.studentModel.uid == uid){
         [self.educationManager setRTCClientRole:RTCClientRoleAudience];
     }
-
     [self.educationManager removeRTCVideoCanvas: uid];
     self.studentVideoView.defaultImageView.hidden = NO;
     self.studentVideoView.hidden = YES;
@@ -328,17 +252,21 @@
 
 - (void)updateTeacherViews:(UserModel*)teacherModel {
     
-    if(teacherModel == nil){
-        return;
+    if(teacherModel != nil){
+        if (self.segmentedIndex == 0) {
+            self.handUpButton.hidden = NO;
+        }
+        [self.teactherVideoView updateSpeakerImageWithMuted:!teacherModel.enableAudio];
+        self.teactherVideoView.defaultImageView.hidden = teacherModel.enableVideo ? YES : NO;
+        [self.teactherVideoView updateAndsetTeacherName: teacherModel.userName];
+    } else {
+        if (self.segmentedIndex == 0) {
+            self.handUpButton.hidden = YES;
+        }
+        [self.teactherVideoView updateSpeakerImageWithMuted:YES];
+        self.teactherVideoView.defaultImageView.hidden = NO;
+        [self.teactherVideoView updateAndsetTeacherName:@""];
     }
-    
-    // update teacher views
-    if (self.segmentedIndex == 0) {
-        self.handUpButton.hidden = NO;
-    }
-    [self.teactherVideoView updateSpeakerImageWithMuted:!teacherModel.enableAudio];
-    self.teactherVideoView.defaultImageView.hidden = teacherModel.enableVideo ? YES : NO;
-    [self.teactherVideoView updateAndsetTeacherName: teacherModel.userName];
 }
 
 - (void)updateChatViews {
@@ -403,7 +331,7 @@
     self.tipLabel.layer.backgroundColor = [UIColor colorWithHexString:@"000000" alpha:0.7].CGColor;
     self.tipLabel.layer.cornerRadius = 6;
     
-    if (IsPad) {
+    if(IsPad) {
         [self stateBarHidden:YES];
         self.chatTextFiled.hidden = NO;
         self.messageView.hidden = NO;
@@ -419,7 +347,7 @@
     self.whiteBoardTouchView = whiteBoardTouchView;
 }
 
-- (void)handleDeviceOrientationChange:(NSNotification *)notification{
+- (void)handleDeviceOrientationChange {
 
     UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
     switch (deviceOrientation) {
@@ -449,62 +377,59 @@
 }
 
 - (IBAction)handUpEvent:(UIButton *)sender {
-    if(self.educationManager.renderStudentModels.firstObject != nil) {
-        UserModel *renderModel = self.educationManager.renderStudentModels.firstObject;
-        if(renderModel.uid != EduConfigModel.shareInstance.uid) {
-            return;
-        }
+    
+    UserModel *renderModel = self.educationManager.renderStudentModel;
+    if(renderModel != nil && renderModel.uid != self.educationManager.studentModel.uid) {
+        return;
     }
     
-    
     switch (self.linkState) {
-        case StudentLinkStateIdle:
-            [self studentApplyLink];
+        case SignalLinkStateIdle:
+        case SignalLinkStateTeaReject:
+        case SignalLinkStateStuCancel:
+        case SignalLinkStateStuClose:
+        case SignalLinkStateTeaClose:
+            [self coVideoStateChanged: SignalLinkStateApply];
             break;
-        case StudentLinkStateAccept:
-            [self studentCancelLink];
+        case SignalLinkStateApply:
+            [self coVideoStateChanged: SignalLinkStateStuCancel];
             break;
-        case StudentLinkStateApply:
-            [self studentApplyLink];
-            break;
-        case StudentLinkStateReject:
-            [self studentApplyLink];
+        case SignalLinkStateTeaAccept:
+            [self coVideoStateChanged: SignalLinkStateStuClose];
             break;
         default:
             break;
     }
 }
 
-- (void)studentApplyLink {
-    WEAK(self);
-    [self.educationManager sendPeerSignalWithModel:SignalP2PCmdTypeApply completeSuccessBlock:^{
-        weakself.linkState = StudentLinkStateApply;
-    } completeFailBlock:^(NSInteger errorCode) {
-        NSString *errMsg = [NSString stringWithFormat:@"%@:%ld", NSLocalizedString(@"SendPeerMessageFailedText", nil), (long)errorCode];
-        [weakself showToast:errMsg];
-    }];
-}
-
-- (void)studentCancelLink {
-    
-    WEAK(self);
-    [self.educationManager updateLinkStateWithValue:NO completeSuccessBlock:^{
-        
-        weakself.linkState = StudentLinkStateIdle;
-        if(weakself.educationManager.renderStudentModels != nil) {
-            UserModel *renderModel = weakself.educationManager.renderStudentModels.firstObject;
-            [weakself removeStudentCanvas: renderModel.uid];
+- (void)coVideoStateChanged:(SignalLinkState) linkState {
+    switch (linkState) {
+        case SignalLinkStateApply:
+        case SignalLinkStateStuCancel:
+        case SignalLinkStateStuClose:{
+            WEAK(self);
+            [BaseEducationManager sendCoVideoWithType:linkState successBolck:^{
+                weakself.linkState = linkState;
+            } completeFailBlock:^(NSString * _Nonnull errMessage) {
+                [weakself showToast:errMessage];
+            }];
+            if(linkState == SignalLinkStateStuCancel){
+                self.linkState = linkState;
+                [self.handUpButton setBackgroundImage:[UIImage imageNamed:@"icon-handup"] forState:(UIControlStateNormal)];
+            } else if(linkState == SignalLinkStateStuClose){
+                self.linkState = linkState;
+                [self removeStudentCanvas:self.educationManager.renderStudentModel.uid];
+            }
         }
-        
-        [weakself sendSignalWithType:SignalValueCancelCoVideo success:nil];
-        
-    } completeFailBlock:^(NSString * _Nonnull errMessage) {
-        [weakself showToast:errMessage];
-    }];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)landscapeScreenConstraints {
-    if (!IsPad) {
+    if(!IsPad) {
         [self stateBarHidden:YES];
 
         self.handUpButton.hidden = self.educationManager.teacherModel ? NO: YES;
@@ -514,7 +439,7 @@
 }
 
 - (void)verticalScreenConstraints {
-    if (!IsPad) {
+    if(!IsPad) {
         [self stateBarHidden:NO];
         self.chatTextFiled.hidden = self.segmentedIndex == 0 ? YES : NO;
         self.messageView.hidden = self.segmentedIndex == 0 ? YES : NO;
@@ -530,7 +455,8 @@
 - (void)addNotification {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShow:) name:UIKeyboardDidShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHidden:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleDeviceOrientationChange) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)keyboardWasShow:(NSNotification *)notification {
@@ -551,10 +477,11 @@
 - (void)setupWhiteBoard {
     
     [self.educationManager initWhiteSDK:self.boardView dataSourceDelegate:self];
-    
+
     RoomModel *roomModel = self.educationManager.roomModel;
+    
     WEAK(self);
-    [self.educationManager joinWhiteRoomWithBoardId:EduConfigModel.shareInstance.boardId boardToken:EduConfigModel.shareInstance.boardToken whiteWriteModel:NO  completeSuccessBlock:^(WhiteRoom * _Nullable room) {
+    [self.educationManager joinWhiteRoomWithBoardId:EduConfigModel.shareInstance.boardId boardToken:EduConfigModel.shareInstance.boardToken whiteWriteModel:NO completeSuccessBlock:^(WhiteRoom * _Nullable room) {
 
         [weakself disableCameraTransform:roomModel.lockBoard];
         
@@ -616,117 +543,83 @@
 }
 
 #pragma mark SignalDelegate
-- (void)didReceivedPeerSignal:(SignalP2PModel *)model {
-    switch (model.cmd) {
-        case SignalP2PCmdTypeReject:
-        {
-            self.linkState = StudentLinkStateReject;
+- (void)didReceivedPeerSignal:(SignalP2PInfoModel *)model {
+    switch (model.type) {
+        case SignalLinkStateTeaReject:
+            [self showTipWithMessage:NSLocalizedString(@"RejectRequestText", nil)];
+            break;
+        case SignalLinkStateTeaAccept:
+            [self showTipWithMessage:NSLocalizedString(@"AcceptRequestText", nil)];
+            break;
+        case SignalLinkStateTeaClose:
+            [self showTipWithMessage:NSLocalizedString(@"TeaCloseCoVideoText", nil)];
+            break;
+        default:
+            break;
+    }
+    self.linkState = model.type;
+}
+- (void)didReceivedSignal:(SignalInfoModel *)signalInfoModel {
+    switch (signalInfoModel.signalType) {
+        case SignalValueCoVideo: {
+            if(signalInfoModel.uid == self.educationManager.teacherModel.uid) {
+                [self checkNeedRenderWithRole:UserRoleTypeTeacher];
+            } else {
+                if(self.educationManager.renderStudentModel == nil){
+                    [self removeStudentCanvas:signalInfoModel.uid];
+                }
+                [self checkNeedRenderWithRole:UserRoleTypeStudent];
+            }
+        }
+            break;
+        case SignalValueAudio:
+        case SignalValueVideo:
+            if(signalInfoModel.uid == self.educationManager.teacherModel.uid) {
+                [self updateTeacherViews:self.educationManager.teacherModel];
+            } else {
+                if(signalInfoModel.uid == self.educationManager.studentModel.uid) {
+                    [self updateStudentViews:self.educationManager.renderStudentModel remoteVideo:NO];
+                } else {
+                    [self updateStudentViews:self.educationManager.renderStudentModel remoteVideo:YES];
+                }
+            }
+            break;
+        case SignalValueChat: {
+             [self updateChatViews];
+        }
+            break;
+        case SignalValueFollow: {
+            NSString *toastMessage;
+            BOOL lockBoard = self.educationManager.roomModel.lockBoard;
+            if(lockBoard) {
+                toastMessage = NSLocalizedString(@"LockBoardText", nil);
+            } else {
+                toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
+            }
+            [self showTipWithMessage:toastMessage];
+            [self disableCameraTransform:lockBoard];
+        }
+            break;
+        case SignalValueAllChat: {
+            [self updateChatViews];
+        }
+            break;
+        case SignalValueShareScreen: {
+            if(self.educationManager.shareScreenInfoModel.type == 1) {
+                [self renderShareCanvas:self.educationManager.shareScreenInfoModel.screenId];
+            } else {
+                [self removeShareCanvas];
+            }
         }
             break;
         default:
             break;
     }
 }
-- (void)didReceivedSignal:(SignalMessageInfoModel *)model {
-    
-    WEAK(self);
-    [self.educationManager getRoomInfoCompleteSuccessBlock:^(RoomInfoModel * _Nonnull roomInfoModel) {
-        
-        switch (model.signalValueType) {
-            case SignalValueCancelCoVideo:
-            {
-                if(model.uid == weakself.educationManager.studentModel.uid) {
-                    [weakself showTipWithMessage:NSLocalizedString(@"CancelRequestText", nil)];
-                    
-                    weakself.linkState = StudentLinkStateIdle;
-                    [weakself.handUpButton setBackgroundImage:[UIImage imageNamed:@"icon-handup"] forState:(UIControlStateNormal)];
-                    
-                    [weakself.educationManager.rtcUids removeObject:@(model.uid).stringValue];
-                }
-                [weakself removeStudentCanvas: EduConfigModel.shareInstance.uid];
-            }
-                break;
-            case SignalValueAcceptCoVideo:
-            {
-                if(model.uid == weakself.educationManager.teacherModel.uid) {
-                    
-                    [weakself checkNeedRenderWithRole:UserRoleTypeTeacher];
-                    
-                } else {
 
-                    if(model.uid == weakself.educationManager.studentModel.uid) {
-                        weakself.linkState = StudentLinkStateAccept;
-                        [weakself showTipWithMessage:NSLocalizedString(@"AcceptRequestText", nil)];
-                    }
-                    
-                    [weakself.educationManager.rtcUids addObject:@(model.uid).stringValue];
-                    [weakself checkNeedRenderWithRole:UserRoleTypeStudent];
-                }
-            }
-                break;
-            case SignalValueMuteAudio:
-            case SignalValueUnmuteAudio:
-            case SignalValueMuteVideo:
-            case SignalValueUnmuteVideo:
-            {
-               if(model.uid == weakself.educationManager.teacherModel.uid) {
-                   
-                    [weakself updateTeacherViews:self.educationManager.teacherModel];
-                   
-                } else if(model.uid == weakself.educationManager.studentModel.uid) {
-                    
-                    [weakself updateStudentViews:weakself.educationManager.studentModel remoteVideo:NO];
-                    
-                } else {
-                    if(weakself.educationManager.renderStudentModels.count > 0) {
-                        [weakself updateStudentViews:weakself.educationManager.renderStudentModels.firstObject remoteVideo:NO];
-                    }
-                }
-                break;
-            }
-            case SignalValueMuteChat:
-            case SignalValueUnmuteChat:
-            case SignalValueMuteAllChat:
-            case SignalValueUnmuteAllChat:
-            {
-                [weakself updateChatViews];
-                break;
-            }
-            case SignalValueLockBoard:
-            case SignalValueUnlockBoard:
-            {
-                NSString *toastMessage;
-                if(roomInfoModel.room.lockBoard) {
-                    toastMessage = NSLocalizedString(@"LockBoardText", nil);
-                } else {
-                    toastMessage = NSLocalizedString(@"UnlockBoardText", nil);
-                }
-                [weakself showTipWithMessage:toastMessage];
-                
-                // show toast
-                [weakself disableCameraTransform:roomInfoModel.room.lockBoard];
-                break;
-            }
-
-            default:
-                break;
-        }
-        
-    } completeFailBlock:^(NSString * _Nonnull errMessage) {
-        
-        [weakself showToast:errMessage];
-        
-    }];
-}
 - (void)didReceivedMessage:(MessageInfoModel *)model {
     [self.messageView addMessageModel:model];
-    if (self.messageView.hidden == YES) {
-        self.unreadMessageCount = self.unreadMessageCount + 1;
-        [self.segmentedView showBadgeWithCount:(self.unreadMessageCount)];
-    }
-}
-- (void)didReceivedReplaySignal:(MessageInfoModel *)model {
-    [self.messageView addMessageModel:model];
+    
     if (self.messageView.hidden == YES) {
         self.unreadMessageCount = self.unreadMessageCount + 1;
         [self.segmentedView showBadgeWithCount:(self.unreadMessageCount)];
@@ -765,45 +658,11 @@
 
 #pragma mark RTCDelegate
 - (void)rtcDidJoinedOfUid:(NSUInteger)uid {
-
     if(self.educationManager.teacherModel && uid == self.educationManager.teacherModel.screenId) {
-        
         [self renderShareCanvas: uid];
-        
-    } else {
-        
-        NSString *uidStr = [NSString stringWithFormat:@"%lu", (unsigned long)uid];
-        [self.educationManager.rtcUids addObject:uidStr];
-        
-        if(self.educationManager.teacherModel && uid == self.educationManager.teacherModel.uid) {
-            [self checkNeedRenderWithRole:UserRoleTypeTeacher];
-        } else {
-            [self checkNeedRenderWithRole:UserRoleTypeStudent];
-        }
     }
 }
-
-- (void)rtcDidOfflineOfUid:(NSUInteger)uid {
-    
-    if (self.educationManager.teacherModel && uid == self.educationManager.teacherModel.screenId) {
-        
-        [self removeShareCanvas];
-        
-    } else if (self.educationManager.teacherModel && uid == self.educationManager.teacherModel.uid) {
-        
-        NSString *uidStr = [NSString stringWithFormat:@"%lu", (unsigned long)uid];
-        [self.educationManager.rtcUids removeObject:uidStr];
-        [self removeTeacherCanvas];
-        
-    } else {
-        NSString *uidStr = [NSString stringWithFormat:@"%lu", (unsigned long)uid];
-        [self.educationManager.rtcUids removeObject:uidStr];
-        [self removeStudentCanvas: uid];
-    }
-}
-
 - (void)rtcNetworkTypeGrade:(RTCNetworkGrade)grade {
-    
     switch (grade) {
         case RTCNetworkGradeHigh:
             [self.navigationView updateSignalImageName:@"icon-signal3"];
@@ -835,16 +694,15 @@
     
     NSString *content = textField.text;
     if (content.length > 0) {
-        MessageInfoModel *model = [MessageInfoModel new];
-        model.account = EduConfigModel.shareInstance.userName;
-        model.content = content;
-        model.isSelfSend = YES;
         WEAK(self);
-        [self.educationManager sendMessageWithModel:model completeSuccessBlock:^{
+        [BaseEducationManager sendMessageWithType:MessageTypeText message:content successBolck:^{
+            MessageInfoModel *model = [MessageInfoModel new];
+            model.userName = EduConfigModel.shareInstance.userName;
+            model.message = content;
+            model.isSelfSend = YES;
             [weakself.messageView addMessageModel:model];
-        } completeFailBlock:^(NSInteger errorCode) {
-            NSString *errMsg = [NSString stringWithFormat:@"%@:%ld", NSLocalizedString(@"SendMessageFailedText", nil), (long)errorCode];
-            [weakself showToast:errMsg];
+        } completeFailBlock:^(NSString * _Nonnull errMessage) {
+            [weakself showToast:errMessage];
         }];
     }
     textField.text = nil;

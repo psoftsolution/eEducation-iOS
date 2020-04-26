@@ -7,34 +7,35 @@
 //
 
 typedef NS_ENUM(NSInteger, MessageCmdType) {
-    MessageCmdTypeChat          = 1,
-    MessageCmdTypeUpdate        = 2, // user notice
-    MessageCmdTypeReplay        = 3,
-    MessageCmdTypeCourse        = 4, // class notice
+    MessageCmdTypeChat                  = 1,
+    MessageCmdTypeUserOnline            = 2,
+    MessageCmdTypeRoomInfo              = 3,
+    MessageCmdTypeUserInfo              = 4,
+    MessageCmdTypeReplay                = 5,
+    MessageCmdTypeShareScreen           = 6,
 };
 
-typedef NS_ENUM(NSInteger, SignalValueType) {
-    SignalValueCancelCoVideo = 108,  // 下麦
-    SignalValueAcceptCoVideo = 106,  // 授权连麦
-    SignalValueMuteAudio = 101,   // 禁音频
-    SignalValueUnmuteAudio = 102, // 解禁音频
-    SignalValueMuteVideo = 103,   // 禁视频
-    SignalValueUnmuteVideo = 104, // 解禁视频
-    SignalValueMuteChat = 109,    // 禁聊天
-    SignalValueUnmuteChat = 110,  // 解禁聊天
-    SignalValueMuteBoard = 200,   // 禁白板
-    SignalValueUnmuteBoard = 201, // 解禁白板
-    SignalValueLockBoard = 301,   // 锁定白板
-    SignalValueUnlockBoard = 302, // 解锁白板
-    SignalValueStartCourse = 401, // 开始上课
-    SignalValueEndCourse = 402, //结束上课
-    SignalValueMuteAllChat = 501, //全员禁言
-    SignalValueUnmuteAllChat = 502, //全员解除禁言
+typedef NS_ENUM(NSInteger, SignalType) {
+    SignalValueCoVideo,         // 上/下麦
+    SignalValueAudio,           // 禁/解禁音频
+    SignalValueVideo,           // 禁/解禁视频
+    SignalValueChat,            // 禁/解禁聊天
+    SignalValueGrantBoard,      // 禁/解禁白板
+    
+    SignalValueFollow,          // 跟随/取消白板
+    SignalValueCourse,          // 开始/结束上课
+    SignalValueAllChat,         // 全员禁言/解除
+    
+    SignalValueShareScreen,     // 开始/结束分享屏幕
 };
 
-typedef NS_ENUM(NSInteger, StudentLinkState) {
-    StudentLinkStateIdle,
-    StudentLinkStateApply,
-    StudentLinkStateAccept,
-    StudentLinkStateReject
+// covideo state
+typedef NS_ENUM(NSInteger, SignalLinkState) {
+    SignalLinkStateIdle             = 0,
+    SignalLinkStateApply            = 1,
+    SignalLinkStateTeaReject        = 2,
+    SignalLinkStateStuCancel        = 3, // Cancel Apply
+    SignalLinkStateTeaAccept        = 4, // linked
+    SignalLinkStateTeaClose         = 5, // teacher close link
+    SignalLinkStateStuClose         = 6, // student close link
 };

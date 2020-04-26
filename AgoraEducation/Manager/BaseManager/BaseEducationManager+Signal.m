@@ -34,61 +34,8 @@
     [self.signalManager joinChannelWithName:channelName completeSuccessBlock:successBlock completeFailBlock:failBlock];
 }
 
-- (void)sendSignalWithModel:(SignalMessageInfoModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock {
-    
-    NSMutableDictionary *dataParams = [NSMutableDictionary dictionary];
-    dataParams[@"uid"] = @(model.uid);
-    dataParams[@"account"] = model.account;
-    dataParams[@"operate"] = @(model.signalValueType);
-        
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"cmd"] = @(MessageCmdTypeUpdate);
-    params[@"data"] = dataParams;
-    
-    AgoraLogInfo(@"send signal params:%@", params);
-    
-    NSString *messageBody = [JsonParseUtil dictionaryToJson:params];
-    [self.signalManager sendMessage:messageBody completeSuccessBlock:^{
-      
-        AgoraLogInfo(@"send signal success");
-        if(successBlock != nil){
-            successBlock();
-        }
-        
-    } completeFailBlock:^(NSInteger errorCode) {
-        AgoraLogInfo(@"send signal fail errorCode:%ld", (long)errorCode);
-        if(failBlock != nil){
-            failBlock(errorCode);
-        }
-    }];
-}
-
-- (void)sendMessageWithModel:(MessageInfoModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock {
-    
-    NSMutableDictionary *dataParams = [NSMutableDictionary dictionary];
-    dataParams[@"account"] = model.account;
-    dataParams[@"content"] = model.content;
-    
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"cmd"] = @(MessageCmdTypeChat);
-    params[@"data"] = dataParams;
-    
-    AgoraLogInfo(@"send message params:%@", params);
-    
-    NSString *messageBody = [JsonParseUtil dictionaryToJson:params];
-    [self.signalManager sendMessage:messageBody completeSuccessBlock:^{
-        
-        AgoraLogInfo(@"send message success");
-        if(successBlock != nil){
-            successBlock();
-        }
-
-    } completeFailBlock:^(NSInteger errorCode) {
-        AgoraLogInfo(@"send message fail errorCode:%ld", (long)errorCode);
-        if(failBlock != nil){
-            failBlock(errorCode);
-        }
-    }];
+- (void)handleRTMMessage:(NSString *)messageText {
+    NSAssert(1 == 0, @"subclass must overwrite handleRTMMessage");
 }
 
 - (void)releaseSignalResources {
@@ -111,7 +58,7 @@
     AgoraLogInfo(@"messageReceived:%@ fromPeer:%@", message.text, peerId);
     
     NSDictionary *dict = [JsonParseUtil dictionaryWithJsonString:message.text];
-    SignalP2PModel *model = [SignalP2PModel yy_modelWithDictionary:dict];
+    SignalP2PInfoModel *model = [SignalP2PModel yy_modelWithDictionary:dict].data;
 
     if([self.signalDelegate respondsToSelector:@selector(didReceivedPeerSignal:)]) {
         [self.signalDelegate didReceivedPeerSignal:model];
@@ -121,34 +68,7 @@
 - (void)channel:(AgoraRtmChannel * _Nonnull)channel messageReceived:(AgoraRtmMessage * _Nonnull)message fromMember:(AgoraRtmMember * _Nonnull)member {
 
     AgoraLogInfo(@"messageReceived:%@", message.text);
-    
-    NSDictionary *dict = [JsonParseUtil dictionaryWithJsonString:message.text];
-    
-    if([dict[@"cmd"] integerValue] == MessageCmdTypeChat) {
-        
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedMessage:)]) {
-            
-            MessageModel *model = [MessageModel yy_modelWithDictionary:dict];
-            model.data.isSelfSend = NO;
-            [self.signalDelegate didReceivedMessage:model.data];
-        }
-        
-    } else if([dict[@"cmd"] integerValue] == MessageCmdTypeUpdate || [dict[@"cmd"] integerValue] == MessageCmdTypeCourse) {
-        
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedSignal:)]) {
-            
-            SignalMessageModel *model = [SignalMessageModel yy_modelWithDictionary:dict];
-            [self.signalDelegate didReceivedSignal:model.data];
-        }
-        
-    } else if([dict[@"cmd"] integerValue] == MessageCmdTypeReplay) {
-        
-        if([self.signalDelegate respondsToSelector:@selector(didReceivedReplaySignal:)]) {
-            
-            MessageModel *model = [MessageModel yy_modelWithDictionary:dict];
-            [self.signalDelegate didReceivedReplaySignal:model.data];
-        }
-    }
+    [self handleRTMMessage:message.text];
 }
 
 @end

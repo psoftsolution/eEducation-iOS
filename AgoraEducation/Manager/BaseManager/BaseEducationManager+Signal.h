@@ -20,9 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)joinSignalWithChannelName:(NSString *)channelName completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock;
 
-- (void)sendSignalWithModel:(SignalMessageInfoModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock;
-
-- (void)sendMessageWithModel:(MessageInfoModel *)model completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock;
+- (void)handleRTMMessage:(NSString *)messageText;
 
 - (void)releaseSignalResources;
 

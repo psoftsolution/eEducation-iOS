@@ -8,6 +8,10 @@
 
 #import "SignalP2PModel.h"
 
+@implementation SignalP2PInfoModel
+
+@end
+
 @implementation SignalP2PModel
 
 @end

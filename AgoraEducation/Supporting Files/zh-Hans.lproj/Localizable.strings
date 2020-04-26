@@ -20,7 +20,8 @@ InputMessageText = " 说点什么";
 
 QuitClassroomText = "退出教室？";
 AcceptRequestText = "老师接受了你的连麦申请!";
-CancelRequestText = "老师取消你的连麦!";
+RejectRequestText = "老师拒绝了你的连麦申请!";
+TeaCloseCoVideoText = "老师关闭了你的连麦!";
 
 MaterialsAreaText = "教材区";
 ChatroomText = "聊天室";
@@ -42,6 +43,7 @@ GetRoomInfoFailedText = "获取房间信息失败";
 GetWhiteInfoFailedText = "获取白板信息失败";
 
 UpdateRoomInfoFailedText = "更新房间信息失败";
+UpdateCoVideoFailedText = "更新连麦信息失败";
 RequestReplayFailedText = "获取回放信息失败";
 SendMessageFailedText = "消息发送失败";
 SendPeerMessageFailedText = "点对点消息发送失败";

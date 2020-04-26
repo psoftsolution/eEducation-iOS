@@ -19,15 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) RoomModel * _Nullable roomModel;
 @property (nonatomic, strong) UserModel * _Nullable teacherModel;
 @property (nonatomic, strong) UserModel * _Nullable studentModel;
-@property (nonatomic, strong) NSMutableArray<UserModel *> *renderStudentModels;
-@property (nonatomic, strong) NSMutableSet<NSString*> *rtcUids;
+@property (nonatomic, strong) SignalShareScreenInfoModel * _Nullable shareScreenInfoModel;
+
+@property (nonatomic, strong) UserModel * _Nullable renderStudentModel;
 @property (nonatomic, strong) NSMutableArray<RTCVideoSessionModel*> *rtcVideoSessionModels;
-
-/* ==================================>HTTPManager<================================ */
-- (void)updateLinkStateWithValue:(BOOL)coVideo completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock;
-
-/* ==================================>SignalManager<================================ */
-- (void)sendPeerSignalWithModel:(SignalP2PCmdType)type completeSuccessBlock:(void (^ _Nullable) (void))successBlock completeFailBlock:(void (^ _Nullable) (NSInteger errorCode))failBlock;
 
 - (void)releaseResources;
 
