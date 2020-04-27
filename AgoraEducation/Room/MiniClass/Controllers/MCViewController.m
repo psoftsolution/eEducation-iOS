@@ -546,27 +546,12 @@
             [self updateChatViews];
         }
             break;
-        case SignalValueShareScreen: {
-            if(self.educationManager.shareScreenInfoModel.type == 1) {
-                [self renderShareCanvas:self.educationManager.shareScreenInfoModel.screenId];
-            } else {
-                [self removeShareCanvas];
-            }
-        }
-            break;
         default:
             break;
     }
 }
 - (void)didReceivedMessage:(MessageInfoModel * _Nonnull)model {
     [self.messageView addMessageModel:model];
-}
-- (void)didReceivedShareScreenSignal:(SignalShareScreenInfoModel * _Nonnull)model {
-    if (model.type == 1) {
-        [self renderShareCanvas:model.screenId];
-    } else {
-        [self removeShareCanvas];
-    }
 }
 - (void)didReceivedConnectionStateChanged:(AgoraRtmConnectionState)state {
     if(state == AgoraRtmConnectionStateConnected) {
@@ -604,6 +589,11 @@
 - (void)rtcDidJoinedOfUid:(NSUInteger)uid {
     if(self.educationManager.teacherModel && uid == self.educationManager.teacherModel.screenId) {
         [self renderShareCanvas: uid];
+    }
+}
+- (void)rtcDidOfflineOfUid:(NSUInteger)uid {
+    if(self.educationManager.teacherModel && uid == self.educationManager.teacherModel.screenId) {
+        [self removeShareCanvas];
     }
 }
 - (void)rtcNetworkTypeGrade:(RTCNetworkGrade)grade {
