@@ -654,6 +654,11 @@
         [self renderShareCanvas: uid];
     }
 }
+- (void)rtcDidOfflineOfUid:(NSUInteger)uid {
+    if(self.educationManager.teacherModel && uid == self.educationManager.teacherModel.screenId) {
+        [self removeShareCanvas];
+    }
+}
 - (void)rtcNetworkTypeGrade:(RTCNetworkGrade)grade {
     switch (grade) {
         case RTCNetworkGradeHigh:
