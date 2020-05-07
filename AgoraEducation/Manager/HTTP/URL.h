@@ -7,20 +7,7 @@
 //
 
 
-typedef NS_ENUM(NSInteger, EnvType) {
-    EnvTypeTest = 1,
-    EnvTypePre = 2,
-    EnvTypeFormal = 3,
-};
-
-extern EnvType env;
-
-#define HTTP_BASE_URL (env == EnvTypeTest ? \
-                            @"https://api-solutions-dev.sh.agoralab.co" : \
-                            (env == EnvTypePre ? \
-                                @"https://solutions-api-pre.sh.agoralab.co" : \
-                                @"https://solutions-api.sh.agoralab.co") \
-                       )
+#define HTTP_BASE_URL @"https://api.agora.io/"
 
 #define HTTP_GET_LANGUAGE @"%@/edu/v1/multi/language"
 
@@ -41,7 +28,7 @@ extern EnvType env;
 // /edu/v1/apps/{appId}/room/{roomId}
 #define HTTP_ROOM_INFO @"%@/edu/v1/apps/%@/room/%@"
 
-#warning You need to use your own backend service API
+#warning if you want to configure your own whiteboard information，you need to use your own backend service API
 // http: get white board keys in room
 // /edu/v1/apps/{appId}/room/{roomId}
 #define HTTP_WHITE_ROOM_INFO @"%@/edu/v1/apps/%@/room/%@/board"

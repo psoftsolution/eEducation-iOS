@@ -44,8 +44,6 @@
 
 @property (nonatomic, assign) BOOL hasSignalReconnect;
 
-@property (nonatomic, weak) WhiteBoardTouchView *whiteBoardTouchView;
-
 @end
 
 @implementation BCViewController
@@ -108,16 +106,6 @@
 
 - (void)disableCameraTransform:(BOOL)disableCameraTransform {
     [self.educationManager disableCameraTransform:disableCameraTransform];
-    [self checkWhiteTouchViewVisible];
-}
-
-- (void)checkWhiteTouchViewVisible {
-    self.whiteBoardTouchView.hidden = YES;
-    
-    // follow
-    if(self.educationManager.roomModel.lockBoard) {
-        self.whiteBoardTouchView.hidden = NO;
-    }
 }
 
 - (void)setupRTC {
@@ -337,14 +325,6 @@
         self.messageView.hidden = NO;
         self.handUpButton.hidden = NO;
     }
-    
-    WEAK(self);
-    WhiteBoardTouchView *whiteBoardTouchView = [WhiteBoardTouchView new];
-    [whiteBoardTouchView setupInView:self.boardView onTouchBlock:^{
-        NSString *toastMessage = NSLocalizedString(@"LockBoardTouchText", nil);
-        [weakself showTipWithMessage:toastMessage];
-    }];
-    self.whiteBoardTouchView = whiteBoardTouchView;
 }
 
 - (void)handleDeviceOrientationChange {

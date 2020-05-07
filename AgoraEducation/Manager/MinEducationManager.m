@@ -210,14 +210,14 @@
                             filterUserModel.enableAudio = currentModel.enableAudio;
                             
                             signalInfoModel.signalType = SignalValueAudio;
-                            signalInfoModel.uid = originalTeacherModel.uid;
+                            signalInfoModel.uid = filterUserModel.uid;
                             [self.signalDelegate didReceivedSignal:signalInfoModel];
                         }
-                        if (originalTeacherModel.enableVideo != currentTeacherModel.enableVideo) {
-                            originalTeacherModel.enableVideo = currentTeacherModel.enableVideo;
+                        if (filterUserModel.enableVideo != currentModel.enableVideo) {
+                            filterUserModel.enableVideo = currentModel.enableVideo;
                             
                             signalInfoModel.signalType = SignalValueVideo;
-                            signalInfoModel.uid = originalTeacherModel.uid;
+                            signalInfoModel.uid = filterUserModel.uid;
                             [self.signalDelegate didReceivedSignal:signalInfoModel];
                         }
                         [originalStudentModels removeObjectsInArray:filteredArray];

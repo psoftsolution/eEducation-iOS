@@ -20,7 +20,7 @@
 }
 
 + (NSString *)boardInfoApiURL {
-    return <#Your Board Info Api URL#>;
+    return HTTP_WHITE_ROOM_INFO;
 }
 
 @end

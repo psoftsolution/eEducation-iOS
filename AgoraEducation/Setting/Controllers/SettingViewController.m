@@ -9,8 +9,6 @@
 #import "SettingViewController.h"
 #import "SettingViewCell.h"
 #import "EyeCareModeUtil.h"
-#import "URL.h"
-#import "HttpManager.h"
 #import "SettingUploadViewCell.h"
 
 @interface SettingViewController ()<UITableViewDelegate,UITableViewDataSource,SettingCellDelegate>
@@ -25,63 +23,6 @@
     self.navigationController.navigationBarHidden = NO;
     self.title = NSLocalizedString(@"SettingText", nil);
     [self setUpView];
-    [self setupGestureRecognizer];
-}
-
-- (void)setupGestureRecognizer {
-    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
-    gr.numberOfTapsRequired = 5;
-    [self.view addGestureRecognizer:gr];
-}
-
-- (void)onTap:(UITapGestureRecognizer *)gr {
-    
-    NSString *currentEnv = @"当前测试环境";
-    if(env == EnvTypeTest) {
-        currentEnv = @"当前测试环境";
-    } else if(env == EnvTypePre) {
-        currentEnv = @"当前预发布环境";
-    } else if(env == EnvTypeFormal) {
-        currentEnv = @"当前正式环境";
-    }
-    
-    UIAlertController *alertController = [[UIAlertController alloc] init];
-    UIAlertAction *test = [UIAlertAction actionWithTitle:@"测试环境" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        env = EnvTypeTest;
-        AgoraLogInfo(@"切换 测试环境");
-    }];
-    UIAlertAction *pre = [UIAlertAction actionWithTitle:@"预发布环境" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        env = EnvTypePre;
-        AgoraLogInfo(@"切换 预发布环境");
-    }];
-    UIAlertAction *formal = [UIAlertAction actionWithTitle:@"正式环境" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        env = EnvTypeFormal;
-        AgoraLogInfo(@"切换 正式环境");
-    }];
-    
-    UIPopoverPresentationController *popover = alertController.popoverPresentationController;
-    if (popover) {
-        popover.sourceView = self.view;
-        popover.sourceRect = CGRectMake(0, 0, 500, 500);
-        popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
-    }
-     
-    if(IsPad) {
-        UIAlertAction *current = [UIAlertAction actionWithTitle:currentEnv style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-
-        }];
-        [alertController addAction:current];
-    } else {
-        UIAlertAction *cancle = [UIAlertAction actionWithTitle:currentEnv style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        }];
-        [alertController addAction:cancle];
-    }
-
-    [alertController addAction:test];
-    [alertController addAction:pre];
-    [alertController addAction:formal];
-    
-    [self presentViewController:alertController animated:true completion:nil];
 }
 
 - (void)setUpView {

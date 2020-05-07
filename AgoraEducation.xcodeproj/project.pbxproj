@@ -81,7 +81,6 @@
 		78C127A324037E2100420E72 /* CombineReplayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C127A224037E2100420E72 /* CombineReplayManager.m */; };
 		78C127A624037EB300420E72 /* RTCReplayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C127A524037EB300420E72 /* RTCReplayManager.m */; };
 		78C127A924037ECD00420E72 /* WhiteReplayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C127A824037ECD00420E72 /* WhiteReplayManager.m */; };
-		78C1E85924480B8D00F611F9 /* URL.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C1E85824480B8D00F611F9 /* URL.m */; };
 		78C1E85C24480D6B00F611F9 /* WhiteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C1E85B24480D6B00F611F9 /* WhiteModel.m */; };
 		78D7307223B3638B00D2146C /* SignalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306423B3638B00D2146C /* SignalManager.m */; };
 		78D7307423B3638B00D2146C /* RTCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7306723B3638B00D2146C /* RTCManager.m */; };
@@ -328,7 +327,6 @@
 		78C127A724037ECD00420E72 /* WhiteReplayManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteReplayManager.h; sourceTree = "<group>"; };
 		78C127A824037ECD00420E72 /* WhiteReplayManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteReplayManager.m; sourceTree = "<group>"; };
 		78C1E85724480AF700F611F9 /* URL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = URL.h; sourceTree = "<group>"; };
-		78C1E85824480B8D00F611F9 /* URL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URL.m; sourceTree = "<group>"; };
 		78C1E85A24480D6B00F611F9 /* WhiteModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteModel.h; sourceTree = "<group>"; };
 		78C1E85B24480D6B00F611F9 /* WhiteModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteModel.m; sourceTree = "<group>"; };
 		78D7305B23B35ADB00D2146C /* AgoraEducation.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraEducation.pch; sourceTree = "<group>"; };
@@ -1056,7 +1054,6 @@
 				78D730C123B384D400D2146C /* HttpManager.h */,
 				78D730C223B384D400D2146C /* HttpManager.m */,
 				78C1E85724480AF700F611F9 /* URL.h */,
-				78C1E85824480B8D00F611F9 /* URL.m */,
 			);
 			path = HTTP;
 			sourceTree = "<group>";
@@ -1368,7 +1365,6 @@
 				78D7311323B388B100D2146C /* MCStudentViewCell.m in Sources */,
 				78D7313E23B38B5700D2146C /* EEClassRoomTypeView.m in Sources */,
 				783FB704240D12BA007298C1 /* ConfigModel.m in Sources */,
-				78C1E85924480B8D00F611F9 /* URL.m in Sources */,
 				783FB6C8240D0739007298C1 /* BaseEducationManager+Signal.m in Sources */,
 				787E7A3823A9FE97005F8F0C /* LoadingView.m in Sources */,
 				78D730FE23B388A400D2146C /* OTOTeacherView.m in Sources */,
@@ -1675,7 +1671,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 152;
+				CURRENT_PROJECT_VERSION = 153;
 				DEVELOPMENT_TEAM = SW3CA7M752;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1713,7 +1709,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 152;
+				CURRENT_PROJECT_VERSION = 153;
 				DEVELOPMENT_TEAM = 48TB6ZZL5S;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1875,7 +1871,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 152;
+				CURRENT_PROJECT_VERSION = 153;
 				DEVELOPMENT_TEAM = SW3CA7M752;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2002,7 +1998,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 152;
+				CURRENT_PROJECT_VERSION = 153;
 				DEVELOPMENT_TEAM = 7289G77ZF3;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
