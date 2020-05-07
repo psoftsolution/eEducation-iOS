@@ -16,7 +16,7 @@
 
 + (void)showAlertWithController:(UIViewController *)viewController title:(NSString *)title sureHandler:(KAlertHandler)sureHandler {
     
-    [AlertViewUtil showAlertWithController:viewController title:title message:nil cancelText:nil sureText:NSLocalizedString(@"OKText", nil) cancelHandler:nil sureHandler:sureHandler];
+    [AlertViewUtil showAlertWithController:viewController title:title message:nil cancelText:NSLocalizedString(@"CancelText", nil) sureText:NSLocalizedString(@"OKText", nil) cancelHandler:nil sureHandler:sureHandler];
 }
 
 + (void)showAlertWithController:(UIViewController *)viewController title:(NSString *)title cancelHandler:(KAlertHandler)cancelHandler {

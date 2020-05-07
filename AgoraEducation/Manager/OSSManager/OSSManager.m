@@ -16,10 +16,10 @@
 static OSSManager *manager = nil;
 
 @interface OSSManager()
-@property(nonatomic, strong)OSSClient *ossClient;
 
-@property(nonatomic, assign)EnvType currentEnv;
+@property(nonatomic, strong)OSSClient *ossClient;
 @property(nonatomic, strong)NSString *endpoint;
+@property(nonatomic, assign)BOOL initOSSAuthClient;
 
 @end
 
@@ -29,6 +29,7 @@ static OSSManager *manager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[self alloc] init];
+        manager.initOSSAuthClient = NO;
     });
     return manager;
 }
@@ -43,8 +44,8 @@ static OSSManager *manager = nil;
 
 + (void)uploadOSSWithBucketName:(NSString *)bucketName objectKey:(NSString *)objectKey callbackBody:(NSString *)callbackBody callbackBodyType:(NSString *)callbackBodyType endpoint:(NSString*)endpoint fileURL:(NSURL *)fileURL completeSuccessBlock:(void (^ _Nullable) (NSString *uploadSerialNumber))successBlock completeFailBlock:(void (^ _Nullable) (NSString *errMessage))failBlock {
     
-    if([OSSManager shareManager].currentEnv != env || [OSSManager shareManager].ossClient == nil){
-        [OSSManager shareManager].currentEnv = env;
+    if(!OSSManager.shareManager.initOSSAuthClient){
+        OSSManager.shareManager.initOSSAuthClient = YES;
         NSString *stsURL = [NSString stringWithFormat:HTTP_OSS_STS, HTTP_BASE_URL];
         [OSSManager initOSSAuthClientWithSTSURL:stsURL endpoint:endpoint];
     }

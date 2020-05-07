@@ -15,7 +15,6 @@
 #import "BCNavigationView.h"
 #import "EEMessageView.h"
 #import "UIView+Toast.h"
-#import "WhiteBoardTouchView.h"
 
 @interface BCViewController ()<BCSegmentedDelegate, UITextFieldDelegate, RoomProtocol, SignalDelegate, RTCDelegate, WhitePlayDelegate>
 
@@ -43,8 +42,6 @@
 @property (nonatomic, assign) BOOL isRenderShare;
 
 @property (nonatomic, assign) BOOL hasSignalReconnect;
-
-@property (nonatomic, weak) WhiteBoardTouchView *whiteBoardTouchView;
 
 @end
 
@@ -108,16 +105,6 @@
 
 - (void)disableCameraTransform:(BOOL)disableCameraTransform {
     [self.educationManager disableCameraTransform:disableCameraTransform];
-    [self checkWhiteTouchViewVisible];
-}
-
-- (void)checkWhiteTouchViewVisible {
-    self.whiteBoardTouchView.hidden = YES;
-    
-    // follow
-    if(self.educationManager.roomModel.lockBoard) {
-        self.whiteBoardTouchView.hidden = NO;
-    }
 }
 
 - (void)setupRTC {
@@ -337,14 +324,6 @@
         self.messageView.hidden = NO;
         self.handUpButton.hidden = NO;
     }
-    
-    WEAK(self);
-    WhiteBoardTouchView *whiteBoardTouchView = [WhiteBoardTouchView new];
-    [whiteBoardTouchView setupInView:self.boardView onTouchBlock:^{
-        NSString *toastMessage = NSLocalizedString(@"LockBoardTouchText", nil);
-        [weakself showTipWithMessage:toastMessage];
-    }];
-    self.whiteBoardTouchView = whiteBoardTouchView;
 }
 
 - (void)handleDeviceOrientationChange {

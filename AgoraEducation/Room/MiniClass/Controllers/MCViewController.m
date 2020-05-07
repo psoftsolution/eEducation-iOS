@@ -379,7 +379,6 @@
     model.videoView = self.teacherVideoView.videoRenderView;
     model.renderMode = RTCVideoRenderModeHidden;
     model.canvasType = RTCVideoCanvasTypeRemote;
-    [self.educationManager setRTCRemoteStreamWithUid:model.uid type:RTCVideoStreamTypeLow];
     [self.educationManager setupRTCVideoCanvas:model completeBlock:nil];
 }
 

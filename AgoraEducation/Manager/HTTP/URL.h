@@ -6,21 +6,7 @@
 //  Copyright © 2020 yangmoumou. All rights reserved.
 //
 
-
-typedef NS_ENUM(NSInteger, EnvType) {
-    EnvTypeTest = 1,
-    EnvTypePre = 2,
-    EnvTypeFormal = 3,
-};
-
-extern EnvType env;
-
-#define HTTP_BASE_URL (env == EnvTypeTest ? \
-                            @"https://api-solutions-dev.sh.agoralab.co" : \
-                            (env == EnvTypePre ? \
-                                @"https://solutions-api-pre.sh.agoralab.co" : \
-                                @"https://solutions-api.sh.agoralab.co") \
-                       )
+#define HTTP_BASE_URL @"https://api.agora.io"
 
 #define HTTP_GET_CONFIG @"%@/edu/v1/app/version"
 
