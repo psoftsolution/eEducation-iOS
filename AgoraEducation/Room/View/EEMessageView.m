@@ -28,7 +28,6 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.backgroundColor = [UIColor yellowColor];
     UITableView *messageTableView = [[UITableView alloc] initWithFrame:CGRectZero style:(UITableViewStylePlain)];
     messageTableView.delegate = self;
     messageTableView.dataSource =self;
@@ -101,7 +100,7 @@
     if(messageModel.cellHeight > 0){
         return messageModel.cellHeight;
     }
-    NSString *str = messageModel.content;
+    NSString *str = messageModel.message;
     if(str == nil){
         str = @"";
     }

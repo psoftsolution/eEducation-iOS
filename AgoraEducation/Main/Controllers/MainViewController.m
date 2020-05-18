@@ -7,39 +7,25 @@
 //
 
 #import "MainViewController.h"
-#import "EEClassRoomTypeView.h"
 #import "SettingViewController.h"
-#import "GenerateSignalBody.h"
 #import "EyeCareModeUtil.h"
-
-#import "MinEducationManager.h"
-#import "BigEducationManager.h"
+#import "NSString+MD5.h"
+#import "UIView+Toast.h"
 
 #import "OneToOneViewController.h"
 #import "MCViewController.h"
 #import "BCViewController.h"
 
-#import "NSString+MD5.h"
-#import "KeyCenter.h"
-
-#import "HttpManager.h"
-#import "ConfigModel.h"
-#import "EnterRoomAllModel.h"
-#import "UIView+Toast.h"
-#import "AppUpdateManager.h"
-
-@interface MainViewController ()<EEClassRoomTypeDelegate, SignalDelegate, UITextFieldDelegate>
+@interface MainViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *baseView;
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextFiled;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextFiled;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewBottomCon;
 @property (weak, nonatomic) IBOutlet UIButton *joinButton;
 
-@property (nonatomic, strong) UIActivityIndicatorView * activityIndicator;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
-@property (nonatomic, strong) ConfigInfoModel *configInfoModel;
-@property (nonatomic, strong) EnterRoomInfoModel *enterRoomInfoModel;
-
+@property (nonatomic, strong) BaseEducationManager *educationManager;
 @end
 
 @implementation MainViewController
@@ -49,78 +35,8 @@
     [super viewDidLoad];
     
     [self setupView];
-    [self setupConfigWithSuccessBolck:nil];
     [self addTouchedRecognizer];
     [self addNotification];
-}
-
-- (void)setupConfigWithSuccessBolck:(void (^)(void))successBlock {
-    
-    WEAK(self);
-    [self.activityIndicator startAnimating];
-    [self.joinButton setEnabled:NO];
-    
-    [HttpManager getAppConfigWithSuccess:^(id responseObj) {
-        
-        [weakself.activityIndicator stopAnimating];
-        [weakself.joinButton setEnabled:YES];
-        
-        ConfigModel *model = [ConfigModel yy_modelWithDictionary:responseObj];
-        
-        if(model.code == 0 && model.data != nil){
-            
-            [HttpManager setHttpBaseUrl:model.data.apiHost];
-            
-            [AppUpdateManager.shareManager checkAppUpdateWithModel:model];
-            
-            weakself.configInfoModel = model.data.config;
-            [KeyCenter setAgoraAppid:weakself.configInfoModel.appId];
-            
-            if(successBlock != nil){
-                successBlock();
-            }
-        } else {
-            NSString *msg = [weakself generateHttpErrorMessage: model.code];
-            [weakself showToast: msg];
-        }
-        
-    } failure:^(NSError *error) {
-        
-        [weakself.activityIndicator stopAnimating];
-        [weakself.joinButton setEnabled:YES];
-        
-        [weakself showToast:NSLocalizedString(@"RequestFailedText", nil)];
-        NSLog(@"HTTP GET CONFIG ERROR:%@", error.description);
-    }];
-}
-
-- (NSString *)generateHttpErrorMessage:(NSInteger)errorCode {
-    
-    if(self.configInfoModel == nil) {
-        return NSLocalizedString(@"RequestFailedText", nil);
-    }
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray<NSString*> *allLanguages = [defaults objectForKey:@"AppleLanguages"];
-    NSString *preferredLang = [allLanguages objectAtIndex:0];
-    NSString *msg = @"";
-    if([preferredLang containsString:@"zh-Hans"]) {
-        msg = [self.configInfoModel.multiLanguage.cn valueForKey:@(errorCode).stringValue];
-    } else {
-        msg = [self.configInfoModel.multiLanguage.en valueForKey:@(errorCode).stringValue];
-    }
-    
-    if(msg == nil || msg.length == 0) {
-        msg = [NSString stringWithFormat:@"%@：%ld", NSLocalizedString(@"RequestFailedText", nil), (long)errorCode];
-    }
-    return msg;
-}
-
-- (void)showToast:(NSString *)title {
-    if(title == nil || title.length == 0){
-        title = NSLocalizedString(@"RequestFailedText", nil);
-    }
-    [self.view makeToast:title];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -165,8 +81,6 @@
     self.activityIndicator.backgroundColor = [UIColor whiteColor];
     self.activityIndicator.hidesWhenStopped = YES;
     
-    self.joinButton.layer.cornerRadius = 20;
-    
     self.userNameTextFiled.delegate = self;
     self.passwordTextFiled.delegate = self;
 }
@@ -195,11 +109,10 @@
     self.textViewBottomCon.constant = 261;
 }
 
-- (BOOL)checkUserNameText:(NSString *)text {
-    
+- (BOOL)checkFieldText:(NSString *)text {
     int strlength = 0;
     char *p = (char *)[text cStringUsingEncoding:NSUnicodeStringEncoding];
-    for (int i=0; i < [text lengthOfBytesUsingEncoding:NSUnicodeStringEncoding]; i++) {
+    for (int i = 0; i < [text lengthOfBytesUsingEncoding:NSUnicodeStringEncoding]; i++) {
         if (*p) {
             p++;
             strlength++;
@@ -208,7 +121,6 @@
             p++;
         }
     }
-    
     if(strlength <= 20){
         return YES;
     } else {
@@ -216,80 +128,64 @@
     }
 }
 
-#pragma mark Click Event
 - (IBAction)joinRoom:(UIButton *)sender {
 
-    if (self.userNameTextFiled.text.length == 0 || self.passwordTextFiled.text.length == 0 || ![self checkUserNameText:self.userNameTextFiled.text]) {
+    NSString *userName = self.userNameTextFiled.text;
+    NSString *password = self.passwordTextFiled.text;
+    
+    if (userName.length <= 0
+        || password.length <= 0
+        || ![self checkFieldText:userName]) {
         
         [AlertViewUtil showAlertWithController:self title:NSLocalizedString(@"UserNameVerifyText", nil)];
         return;
     }
-    
+
+    EduConfigModel.shareInstance.userName = userName;
+    EduConfigModel.shareInstance.password = password;
+
     WEAK(self);
-    if([KeyCenter agoraAppid].length == 0){
-        [self setupConfigWithSuccessBolck:^{
-            [weakself enterRoom];
+    [self getConfigWithSuccessBolck:^{
+        [weakself getEntryInfoWithSuccessBolck:^{
+            [weakself getWhiteInfoWithSuccessBolck:^{
+                [weakself getRoomInfoWithSuccessBlock:^{
+                    [weakself setupSignalWithSuccessBolck:^{
+                        
+                        if(EduConfigModel.shareInstance.sceneType == SceneType1V1) {
+                            if(IsPad){
+                                [weakself join1V1RoomWithIdentifier:@"oneToOneRoom-iPad"];
+                            } else {
+                                [weakself join1V1RoomWithIdentifier:@"oneToOneRoom"];
+                            }
+                        } else if(EduConfigModel.shareInstance.sceneType == SceneTypeSmall){
+                            if(IsPad){
+                                [weakself joinMinRoomWithIdentifier:@"mcRoom-iPad"];
+                            } else {
+                                [weakself joinMinRoomWithIdentifier:@"mcRoom"];
+                            }
+                            
+                        } else if(EduConfigModel.shareInstance.sceneType == SceneTypeBig){
+                            if(IsPad){
+                                [weakself joinBigRoomWithIdentifier:@"bcroom-iPad"];
+                            } else {
+                                [weakself joinBigRoomWithIdentifier:@"bcroom"];
+                            }
+                        }
+                    }];
+                }];
+            }];
         }];
-    } else {
-        [self enterRoom];
-    }
+    }];
 }
 
-- (void)enterRoom {
-    
-    [self.activityIndicator startAnimating];
-    [self.joinButton setEnabled:YES];
-    
-    NSString *url = [NSString stringWithFormat:HTTP_POST_ENTER_ROOM, HttpManager.getHttpBaseUrl, [KeyCenter agoraAppid]];
-    
-    NSDictionary *headers = @{
-        @"Authorization" : self.configInfoModel.authorization,
-    };
-    
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"userName"] = self.userNameTextFiled.text;
-    params[@"password"] = self.passwordTextFiled.text;
-    params[@"role"] = @(2);
-    params[@"uuid"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
-    
-    WEAK(self);
-    [HttpManager post:url params:params headers:headers success:^(id responseObj) {
-        
-        EnterRoomAllModel *model = [EnterRoomAllModel yy_modelWithDictionary:responseObj];
-        if(model.code == 0){
-            
-            weakself.enterRoomInfoModel = model.data;
-            [KeyCenter setWhiteBoardId:weakself.enterRoomInfoModel.room.boardId];
-            [KeyCenter setWhiteBoardToken:weakself.enterRoomInfoModel.room.boardToken];
-            [KeyCenter setAgoraRTMToken:weakself.enterRoomInfoModel.user.rtmToken];
-            [KeyCenter setAgoraRTCToken:weakself.enterRoomInfoModel.user.rtcToken];
-            
-            if (weakself.enterRoomInfoModel.room.type == 0) {
-                [weakself join1V1RoomWithIdentifier:@"oneToOneRoom"];
-            } else if (weakself.enterRoomInfoModel.room.type == 1){
-                [weakself joinMinRoomWithIdentifier:@"mcRoom"];
-            } else if (weakself.enterRoomInfoModel.room.type == 2){
-                [weakself joinBigRoomWithIdentifier:@"bcroom"];
-            } else {
-                [weakself showToast:NSLocalizedString(@"RoomTypeVerifyText", nil)];
-            }
-            
-        } else {
-            [weakself.activityIndicator stopAnimating];
-            [weakself.joinButton setEnabled:YES];
-            
-            NSString *msg = [weakself generateHttpErrorMessage: model.code];
-            [weakself showToast:msg];
-        }
-        
-    } failure:^(NSError *error) {
-        
-        [weakself.activityIndicator stopAnimating];
-        [weakself.joinButton setEnabled:YES];
-        
-        [weakself showToast:NSLocalizedString(@"RequestFailedText", nil)];
-        NSLog(@"HTTP GET CONFIG ERROR:%@", error.description);
-    }];
+- (void)setLoadingVisible:(BOOL)show {
+    if(show) {
+        [self.activityIndicator startAnimating];
+        [self.joinButton setEnabled:NO];
+    } else {
+        [self.activityIndicator stopAnimating];
+        [self.joinButton setEnabled:YES];
+    }
 }
 
 - (IBAction)settingAction:(UIButton *)sender {
@@ -298,175 +194,134 @@
 }
 
 - (void)join1V1RoomWithIdentifier:(NSString*)identifier {
-    
-    NSInteger maxCount = self.configInfoModel.oneToOneStudentLimit.integerValue;
-    NSString *channelName = self.enterRoomInfoModel.room.channelName;
-    NSString *uid = @(self.enterRoomInfoModel.user.uid).stringValue;
-    
-    WEAK(self);
-    SignalModel *model = [SignalModel new];
-    model.appId = [KeyCenter agoraAppid];
-    model.token = [KeyCenter agoraRTMToken];
-    model.uid = uid;
-    OneToOneEducationManager *educationManager = [OneToOneEducationManager new];
-    [educationManager initSignalWithModel:model dataSourceDelegate:nil completeSuccessBlock:^{
-        
-        [educationManager queryOnlineStudentCountWithChannelName:channelName maxCount:maxCount excludeUids:@[uid] completeSuccessBlock:^(NSInteger count) {
-            
-            [weakself.activityIndicator stopAnimating];
-            [weakself.joinButton setEnabled:YES];
-            
-            if (count < maxCount) {
-                VCParamsModel *paramsModel = [weakself generateVCParamsModel];
-                UIStoryboard *story = [UIStoryboard storyboardWithName:@"Room" bundle:[NSBundle mainBundle]];
-                OneToOneViewController *vc = [story instantiateViewControllerWithIdentifier:identifier];
-                vc.modalPresentationStyle = UIModalPresentationFullScreen;
-                vc.educationManager = educationManager;
-                vc.paramsModel = paramsModel;
-                [weakself presentViewController:vc animated:YES completion:nil];
-                
-            } else {
-                [AlertViewUtil showAlertWithController:self title:NSLocalizedString(@"RoomCountVerifyText", nil)];
-            }
-            
-        } completeFailBlock:^{
-            [weakself showToast:NSLocalizedString(@"QueryOnlineErrorText", nil)];
-            
-            [weakself.activityIndicator stopAnimating];
-            [weakself.joinButton setEnabled:YES];
-        }];
-        
-    } completeFailBlock:^{
-        
-        [weakself showToast:NSLocalizedString(@"InitSignalErrorText", nil)];
-        
-        [weakself.activityIndicator stopAnimating];
-        [weakself.joinButton setEnabled:YES];
-    }];
+    UIStoryboard *story = [UIStoryboard storyboardWithName:@"Room" bundle:[NSBundle mainBundle]];
+    OneToOneViewController *vc = [story instantiateViewControllerWithIdentifier:identifier];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    vc.educationManager = (OneToOneEducationManager*)self.educationManager;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)joinMinRoomWithIdentifier:(NSString*)identifier {
-    
-    NSInteger maxCount = self.configInfoModel.smallClassStudentLimit.integerValue;
-    NSString *channelName = self.enterRoomInfoModel.room.channelName;
-    NSString *uid = [NSNumber numberWithInteger:self.enterRoomInfoModel.user.uid].stringValue;
-    
-    WEAK(self);
-    SignalModel *model = [SignalModel new];
-    model.appId = [KeyCenter agoraAppid];
-    model.token = [KeyCenter agoraRTMToken];
-    model.uid = uid;
-    MinEducationManager *educationManager = [MinEducationManager new];
-    [educationManager initSignalWithModel:model dataSourceDelegate:nil completeSuccessBlock:^{
-        
-        [educationManager queryOnlineStudentCountWithChannelName:channelName maxCount:maxCount excludeUids:@[uid] completeSuccessBlock:^(NSInteger count) {
-            
-            [weakself.activityIndicator stopAnimating];
-            [weakself.joinButton setEnabled:YES];
-            
-            if (count < maxCount) {
-                VCParamsModel *paramsModel = [weakself generateVCParamsModel];
-                UIStoryboard *story = [UIStoryboard storyboardWithName:@"Room" bundle:[NSBundle mainBundle]];
-                MCViewController *vc = [story instantiateViewControllerWithIdentifier:identifier];
-                vc.modalPresentationStyle = UIModalPresentationFullScreen;
-                vc.educationManager = educationManager;
-                vc.paramsModel = paramsModel;
-                [weakself presentViewController:vc animated:YES completion:nil];
-                
-            } else {
-                [AlertViewUtil showAlertWithController:self title:NSLocalizedString(@"RoomCountVerifyText", nil)];
-            }
-            
-        } completeFailBlock:^{
-            [weakself showToast:NSLocalizedString(@"QueryOnlineErrorText", nil)];
-            
-            [weakself.activityIndicator stopAnimating];
-            [weakself.joinButton setEnabled:YES];
-        }];
-        
-    } completeFailBlock:^{
-        
-        [weakself showToast:NSLocalizedString(@"InitSignalErrorText", nil)];
-        
-        [weakself.activityIndicator stopAnimating];
-        [weakself.joinButton setEnabled:YES];
-    }];
+    UIStoryboard *story = [UIStoryboard storyboardWithName:@"Room" bundle:[NSBundle mainBundle]];
+    MCViewController *vc = [story instantiateViewControllerWithIdentifier:identifier];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    vc.educationManager = (MinEducationManager*)self.educationManager;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)joinBigRoomWithIdentifier:(NSString*)identifier {
-    
-    NSInteger maxCount = self.configInfoModel.largeClassStudentLimit.integerValue;
-    NSString *channelName = self.enterRoomInfoModel.room.channelName;
-    NSString *uid = [NSNumber numberWithInteger:self.enterRoomInfoModel.user.uid].stringValue;
-    
-    WEAK(self);
-    SignalModel *model = [SignalModel new];
-    model.appId = [KeyCenter agoraAppid];
-    model.token = [KeyCenter agoraRTMToken];
-    model.uid = uid;
-    BigEducationManager *educationManager = [BigEducationManager new];
-    
-    [educationManager initSignalWithModel:model dataSourceDelegate:nil completeSuccessBlock:^{
-        
-        [educationManager queryOnlineStudentCountWithChannelName:channelName maxCount:maxCount excludeUids:@[uid] completeSuccessBlock:^(NSInteger count) {
-            
-            [weakself.activityIndicator stopAnimating];
-            [weakself.joinButton setEnabled:YES];
-            
-            if (count < maxCount) {
-                VCParamsModel *paramsModel = [weakself generateVCParamsModel];
-                UIStoryboard *story = [UIStoryboard storyboardWithName:@"Room" bundle:[NSBundle mainBundle]];
-                BCViewController *vc = [story instantiateViewControllerWithIdentifier:identifier];
-                vc.modalPresentationStyle = UIModalPresentationFullScreen;
-                vc.educationManager = educationManager;
-                vc.paramsModel = paramsModel;vc.paramsModel = paramsModel;
-                [weakself presentViewController:vc animated:YES completion:nil];
-                
-            } else {
-                [AlertViewUtil showAlertWithController:self title:NSLocalizedString(@"RoomCountVerifyText", nil)];
-            }
-            
-        } completeFailBlock:^{
-            [weakself showToast:NSLocalizedString(@"QueryOnlineErrorText", nil)];
-
-            [weakself.activityIndicator stopAnimating];
-            [weakself.joinButton setEnabled:YES];
-        }];
-        
-    } completeFailBlock:^{
-        
-        [weakself showToast:NSLocalizedString(@"InitSignalErrorText", nil)];
-
-        [weakself.activityIndicator stopAnimating];
-        [weakself.joinButton setEnabled:YES];
-    }];
-}
-
-- (VCParamsModel*)generateVCParamsModel {
-    
-    NSString *className = self.enterRoomInfoModel.room.roomName;
-    NSString *userName = self.userNameTextFiled.text;
-    
-    NSString *channelName = self.enterRoomInfoModel.room.channelName;
-    NSString *uid = [NSNumber numberWithInteger:self.enterRoomInfoModel.user.uid].stringValue;
-    NSString *userToken = self.enterRoomInfoModel.user.userToken;
-    NSString *roomid = @(self.enterRoomInfoModel.room.roomId).stringValue;
-    
-    VCParamsModel *paramsModel = [VCParamsModel new];
-    paramsModel.className = className;
-    paramsModel.userName = userName;
-    paramsModel.channelName = channelName;
-    paramsModel.uid = uid;
-    paramsModel.userToken = userToken;
-    paramsModel.roomId = roomid;
-    
-    return paramsModel;
+    UIStoryboard *story = [UIStoryboard storyboardWithName:@"Room" bundle:[NSBundle mainBundle]];
+    BCViewController *vc = [story instantiateViewControllerWithIdentifier:identifier];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    vc.educationManager = (BigEducationManager*)self.educationManager;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
+}
+
+#pragma mark EnterClassProcess
+- (void)getConfigWithSuccessBolck:(void (^)(void))successBlock {
+    
+    WEAK(self);
+    [self setLoadingVisible:YES];
+    [BaseEducationManager getConfigWithSuccessBolck:^{
+        [weakself setLoadingVisible:NO];
+        if(successBlock != nil){
+            successBlock();
+        }
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
+        [weakself.view makeToast:errMessage];
+        [weakself setLoadingVisible:NO];
+    }];
+}
+
+- (void)getEntryInfoWithSuccessBolck:(void (^)(void))successBlock {
+    WEAK(self);
+    [self setLoadingVisible:YES];
+    
+    NSString *userName = EduConfigModel.shareInstance.userName;
+    NSString *password = EduConfigModel.shareInstance.password;
+    
+    [BaseEducationManager enterRoomWithUserName:userName password:password successBolck:^{
+        
+        [weakself setLoadingVisible:NO];
+        
+        if(EduConfigModel.shareInstance.sceneType == SceneType1V1) {
+            weakself.educationManager = [OneToOneEducationManager new];
+        } else if(EduConfigModel.shareInstance.sceneType == SceneTypeSmall){
+            weakself.educationManager = [MinEducationManager new];
+        } else if(EduConfigModel.shareInstance.sceneType == SceneTypeBig){
+            weakself.educationManager = [BigEducationManager new];
+        }
+        if(successBlock != nil){
+            successBlock();
+        }
+
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
+        [weakself.view makeToast:errMessage];
+        [weakself setLoadingVisible:NO];
+    }];
+}
+
+- (void)getWhiteInfoWithSuccessBolck:(void (^)(void))successBlock {
+    WEAK(self);
+    [self setLoadingVisible:YES];
+    [self.educationManager getWhiteInfoCompleteSuccessBlock:^{
+        [weakself setLoadingVisible:NO];
+        if(successBlock != nil){
+            successBlock();
+        }
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
+        [weakself.view makeToast:errMessage];
+        [weakself setLoadingVisible:NO];
+    }];
+}
+
+
+- (void)getRoomInfoWithSuccessBlock:(void (^)(void))successBlock {
+    WEAK(self);
+    [self setLoadingVisible:YES];
+    [self.educationManager getRoomInfoCompleteSuccessBlock:^(RoomInfoModel * _Nonnull roomInfoModel) {
+        
+        [weakself setLoadingVisible:NO];
+        if(successBlock != nil){
+            successBlock();
+        }
+        
+    } completeFailBlock:^(NSString * _Nonnull errMessage) {
+        [weakself.view makeToast:errMessage];
+        [weakself setLoadingVisible:NO];
+    }];
+}
+
+- (void)setupSignalWithSuccessBolck:(void (^)(void))successBlock {
+
+    NSString *appid = EduConfigModel.shareInstance.appId;
+    NSString *appToken = EduConfigModel.shareInstance.rtmToken;
+    NSString *uid = @(EduConfigModel.shareInstance.uid).stringValue;
+    
+    WEAK(self);
+    [self.educationManager initSignalWithAppid:appid appToken:appToken userId:uid dataSourceDelegate:nil completeSuccessBlock:^{
+        
+        NSString *channelName = EduConfigModel.shareInstance.channelName;
+        [weakself.educationManager joinSignalWithChannelName:channelName completeSuccessBlock:^{
+            if(successBlock != nil){
+                successBlock();
+            }
+            
+        } completeFailBlock:^(NSInteger errorCode) {
+            NSString *errMsg = [NSString stringWithFormat:@"%@:%ld", NSLocalizedString(@"JoinSignalFailedText", nil), (long)errorCode];
+            [weakself.view makeToast:errMsg];
+        }];
+        
+    } completeFailBlock:^(NSInteger errorCode){
+        NSString *errMsg = [NSString stringWithFormat:@"%@:%ld", NSLocalizedString(@"InitSignalFailedText", nil), (long)errorCode];
+        [weakself.view makeToast:errMsg];
+    }];
 }
 
 @end

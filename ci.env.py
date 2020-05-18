@@ -2,35 +2,35 @@
 # -*- coding: UTF-8 -*-
 import re
 import os
+import sys
 
 def main():
     os.system("pod install")
 
-    agoraAppId = ""
-    agoraRTCToken = ""
-    agoraRTMToken = ""
-    whiteBoardToken = ""
-    if "AGORA_APP_ID" in os.environ:
-        agoraAppId = os.environ["AGORA_APP_ID"]
-    if "AGORA_RTC_TOKEN" in os.environ:
-        agoraRTCToken = os.environ["AGORA_RTC_TOKEN"]
-    if "AGORA_RTM_TOKEN" in os.environ:
-        agoraRTMToken = os.environ["AGORA_RTM_TOKEN"]
-    if "WHITE_BOARD_TOKEN" in os.environ:
-        whiteBoardToken = os.environ["WHITE_BOARD_TOKEN"]
-
-    f = open("./AgoraEducation/KeyCenter.m", 'r+')
+    agoraHost = ""
+    
+    env = sys.argv[1]
+    if (env != "1" and env != "2" and env != "3"):
+        env = 1
+    if env == 1:
+        if "host_debug" in os.environ:
+            agoraHost = os.environ["host_debug"]
+            agoraHost = agoraHost[:-1]
+    if env == 2:
+        if "host_pre" in os.environ:
+            agoraHost = os.environ["host_pre"]
+            agoraHost = agoraHost[:-1]
+    if env == 3:
+        if "host_release" in os.environ:
+            agoraHost = os.environ["host_release"]
+            agoraHost = agoraHost[:-1]
+    
+    f = open("./AgoraEducation/Manager/HTTP/URL.h", 'r+')
     content = f.read()
-    agoraAppIdString = "@\"" + agoraAppId + "\""
-    agoraRTCTokenString = "@\"" + agoraRTCToken + "\""
-    agoraRTMTokenString = "@\"" + agoraRTMToken + "\""
-    whiteBoardTokenString = "@\"" + whiteBoardToken + "\""
+    agoraHostString = agoraHost
     
-    contentNew = re.sub(r'<#Your Agora App Id#>', agoraAppIdString, content)
-    contentNew = re.sub(r'<#Your Agora RTC Token#>', agoraRTCTokenString, contentNew)
-    contentNew = re.sub(r'<#Your Agora RTM Token#>', agoraRTMTokenString, contentNew)
-    contentNew = re.sub(r'<#Your White Token#>', whiteBoardTokenString, contentNew)
-    
+    contentNew = re.sub(r'https://api.agora.io', agoraHostString, content)
+
     f.seek(0)
     f.write(contentNew)
     f.truncate()

@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *authorization;
 
 @property (nonatomic, strong) NSString* version;
-@property (nonatomic, strong) NSString* appId;
 
 @property (nonatomic, strong) NSString* oneToOneTeacherLimit;
 @property (nonatomic, strong) NSString* smallClassTeacherLimit;

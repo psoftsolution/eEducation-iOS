@@ -11,7 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EnterRoomModel :NSObject
-@property (nonatomic, assign) NSInteger roomId;
+@property (nonatomic, copy) NSString *roomId;
+@property (nonatomic, copy) NSString *appId;
 @property (nonatomic, copy) NSString *roomName;
 @property (nonatomic, copy) NSString *channelName;
 @property (nonatomic, assign) NSInteger type;

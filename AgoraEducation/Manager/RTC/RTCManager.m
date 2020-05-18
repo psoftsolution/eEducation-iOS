@@ -15,6 +15,11 @@
 @implementation RTCManager
 - (void)initEngineKit:(NSString *)appid {
     self.rtcEngineKit = [AgoraRtcEngineKit sharedEngineWithAppId:appid delegate:self];
+    NSString *logFilePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"/AgoraEducation/agoraRTC.log"];
+    [self.rtcEngineKit setLogFile:logFilePath];
+    [self.rtcEngineKit setLogFileSize:512];
+    [self.rtcEngineKit setLogFilter:AgoraLogFilterInfo];
+
 }
 
 - (int)joinChannelByToken:(NSString * _Nullable)token channelId:(NSString * _Nonnull)channelId info:(NSString * _Nullable)info uid:(NSUInteger)uid joinSuccess:(void(^ _Nullable)(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed))joinSuccessBlock {
@@ -24,6 +29,10 @@
 
 - (void)setChannelProfile:(AgoraChannelProfile)channelProfile {
     [self.rtcEngineKit setChannelProfile: channelProfile];
+}
+
+- (void)setVideoEncoderConfiguration:(AgoraVideoEncoderConfiguration*)configuration {
+    [self.rtcEngineKit setVideoEncoderConfiguration: configuration];
 }
 
 - (void)setClientRole:(AgoraClientRole)clientRole {
